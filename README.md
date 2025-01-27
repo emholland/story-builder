@@ -9,6 +9,35 @@
 
 </div>
 
+## Authors
+
+Chiku
+Cole
+Chloe
+Ethan
+Elisa
+Felix
+Sharron
+
+### Release Date
+01-27-25
+
+### Version
+v0.0.0
+
+## Table Of Contents
+
+## Revision History
+
+## Document Overview
+
+## Body
+
+## References
+
+## Glossary
+
+## Figures and Tables
 
 ## Keywords
 
