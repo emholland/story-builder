@@ -13,10 +13,15 @@
 
 Chiku \
 Cole \
+
 Chloe \ 
+
 Ethan \ 
+
 Elisa \
+
 Felix \
+
 Sharron \
 
 ### Release Date
