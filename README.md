@@ -11,7 +11,7 @@
 
 ## Authors
 
-Chiku
+Chiku\
 Cole
 Chloe 
 Ethan 
