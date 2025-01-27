@@ -11,17 +11,13 @@
 
 ## Authors
 
-Chiku \ Cole
-
-Chloe \ 
-
-Ethan \ 
-
-Elisa \
-
-Felix \
-
-Sharron \
+Chiku
+Cole
+Chloe 
+Ethan 
+Elisa 
+Felix 
+Sharron 
 
 ### Release Date
 01-27-25
