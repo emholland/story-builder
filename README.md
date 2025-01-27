@@ -1,7 +1,7 @@
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=17857564)
 <div align="center">
 
-# Story Builder - Team II
+# Story Builder Project - Team II
 [![Report Issue on Jira](https://img.shields.io/badge/Report%20Issues-Jira-0052CC?style=flat&logo=jira-software)](https://temple-cis-projects-in-cs.atlassian.net/jira/software/c/projects/DT/issues)
 [![Deploy Docs](https://github.com/ApplebaumIan/tu-cis-4398-docs-template/actions/workflows/deploy.yml/badge.svg)](https://github.com/ApplebaumIan/tu-cis-4398-docs-template/actions/workflows/deploy.yml)
 [![Documentation Website Link](https://img.shields.io/badge/-Documentation%20Website-brightgreen)](https://applebaumian.github.io/tu-cis-4398-docs-template/)
@@ -13,12 +13,11 @@
 
 Chiku\
 Cole\
-Chloe\ 
-Ethan\ 
-Elisa\ 
-Felix\ 
-Sharron\ 
-
+Chloe\
+Ethan\
+Elisa\
+Felix\
+Sharron
 ### Release Date
 01-27-25
 
@@ -30,6 +29,7 @@ v0.0.0
 ## Revision History
 
 ## Document Overview
+This document will show the proccess and procedures of using the web application 'Story Builder.'
 
 ## Body
 
@@ -41,19 +41,18 @@ v0.0.0
 
 ## Keywords
 
-Section #, as well as any words that quickly give your peers insights into the application like programming language, development platform, type of application, etc.
+#Web Application, #AI, #React, #Story-Building, #Javascript
 
 ## Project Abstract
 
-This document proposes a novel application of a text message (SMS or Email) read-out and hands-free call interacted between an Android Smartphone and an infotainment platform (headunit) in a car environment. When a phone receives an SMS or Email, the text message is transferred from the phone to the headunit through a Bluetooth connection. On the headunit, user can control which and when the received SMS or E-mail to be read out through the in-vehicle audio system. The user may press one button on the headunit to activate the hands-free feature to call back the SMS sender.
+This document proposes a web application in which AI-agents interact with each other to flesh out a prompt given by the user.
 
 ## High Level Requirement
 
-Describe the requirements – i.e., what the product does and how it does it from a user point of view – at a high level.
+This is a web application that users can use to create a story. It can create many AI-agents that acts as authors that the user gives them and tell them to write out a full story based on a prompt or genre given to them. They will create their version, vote for the best, critique the work, make a goal, and continue to write the story. This process will repeat until the final draft of the story is written. User have the chance to veto the decisions as well as have input during the progression of the story.
 
 ## Conceptual Design
 
-Describe the initial design concept: Hardware/software architecture, programming language, operating system, etc.
 
 ## Background
 
@@ -61,7 +60,15 @@ The background will contain a more detailed description of the product and a com
 
 ## Required Resources
 
-Discuss what you need to develop this project. This includes background information you will need to acquire, hardware resources, and software resources. If these are not part of the standard Computer Science Department lab resources, these must be identified early and discussed with the instructor.
+For this project, developers needs the following background:
+### Software:
+Front End:
+- Javascript
+Back End:
+- React/Flask
+- Java
+- Javascript
+
 
 ## Collaborators
 
@@ -75,13 +82,7 @@ Discuss what you need to develop this project. This includes background informat
             <sub><b>Ian Tyler Applebaum</b></sub>
         </a>
     </td>
-    <td align="center">
-        <a href="https://github.com/leighflagg">
-            <img src="https://avatars.githubusercontent.com/u/77810293?v=4" width="100;" alt="leighflagg"/>
-            <br />
-            <sub><b>Null</b></sub>
-        </a>
-    </td></tr>
+    </tr>
 </table>
 
 [//]: # ( readme: collaborators -end )
