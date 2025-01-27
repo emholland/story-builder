@@ -11,8 +11,7 @@
 
 ## Authors
 
-Chiku \
-Cole \
+Chiku \ Cole
 
 Chloe \ 
 
