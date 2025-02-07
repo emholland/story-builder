@@ -4,6 +4,9 @@ sidebar_position: 2
 
 # System Block Diagram
 
+[View the System Block Diagram](../../static/img/SystemBlockDiagram.pdf)
+=======
+
 ```mermaid
 graph TD
     A[User Interface] --> |Login/Sign up| B[Authentication System]
@@ -28,3 +31,4 @@ graph TD
     O -->|Yes| H
     O -->|No| Q[End]
 ```
+
