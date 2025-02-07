@@ -7,6 +7,7 @@
 [![Documentation Website Link](https://img.shields.io/badge/-Documentation%20Website-brightgreen)](https://capstone-projects-2025-spring.github.io/project-003-story-builder-team-2/)
 
 
+
 </div>
 
 ## Authors
