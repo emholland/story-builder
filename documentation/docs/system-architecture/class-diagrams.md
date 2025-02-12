@@ -1,6 +1,6 @@
 ```mermaid
 ---
-title: Server Class Diagram 
+title: Backend Class Diagram 
 ---
 
 classDiagram
