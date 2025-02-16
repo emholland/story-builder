@@ -16,6 +16,17 @@ For each component provide class diagrams showing the classes to be developed (o
 
 Sequence diagrams showing the data flow for _all_ use cases. One sequence diagram corresponds to one use case and different use cases should have different corresponding sequence diagrams.
 
+Use Case 1: ![image](https://github.com/user-attachments/assets/c206541e-89a9-4677-9078-6e35f7ac2ccd)
+Use Case 2: ![image](https://github.com/user-attachments/assets/80036676-7917-4de5-8cf7-cfc37068f1a0)
+Use Case 3: ![image](https://github.com/user-attachments/assets/e838f7d0-f528-42fb-863c-e9cd9323bfd0)
+Use Case 4: ![image](https://github.com/user-attachments/assets/798665fc-c9c6-42fb-96de-73869a193e46)
+Use Case 5: ![image](https://github.com/user-attachments/assets/4397b5bc-f3e2-44dc-82b2-9588ec83cae8)
+
+
+
+
+
+
 Describe algorithms employed in your project, e.g. neural network paradigm, training and training data set, etc.
 
 If there is a database:
