@@ -77,4 +77,4 @@ classDiagram
         +validate(String username, String password): boolean
     }
     ```
-![Table Description](documentation/static/img/table-des.jpeg)
+![Table Description](/img/table-des.jpeg)
