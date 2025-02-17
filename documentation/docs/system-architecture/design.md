@@ -14,26 +14,6 @@ For each component provide class diagrams showing the classes to be developed (o
 
 Sequence diagrams showing the data flow for _all_ use cases. One sequence diagram corresponds to one use case and different use cases should have different corresponding sequence diagrams.
 
-# Components
-
-Provided below are descriptions of the different components and their interfaces.
-
-#### Client
-
-This is a React-based web application that will require the use of a login page, a homeboard page, and a couple other accompanying pages (determined by the features added). The client will be connected to the server via a WebSocket connection that will allow for communication between the two components.
-
-#### Server
-
-The server will be hosted in AWS. It will link to the database.
-
-#### Database
-
-Firebase is used to store all of the necessary information generated and needed by the system to create the storyboard and drive user interaction. The database will contain information about chapters in the story, user data, and the generated critiques, goals, and votes.
-
-#### LLM
-
-The OpenAI API is used to generate content. It is connected to the Agents who request data for transmission and generation.
-
 Use Case 1:
 ![image](https://github.com/user-attachments/assets/c206541e-89a9-4677-9078-6e35f7ac2ccd)
 
@@ -68,9 +48,25 @@ Use Case 11:
 ![Use Case 11](https://github.com/user-attachments/assets/9976e4cd-aeb7-4af7-94f7-15b6cc23b8b2)
 
 
+# Components
 
+Provided below are descriptions of the different components and their interfaces.
 
+#### Client
 
+This is a React-based web application that will require the use of a login page, a homeboard page, and a couple other accompanying pages (determined by the features added). The client will be connected to the server via a WebSocket connection that will allow for communication between the two components.
+
+#### Server
+
+The server will be hosted in AWS. It will link to the database.
+
+#### Database
+
+Firebase is used to store all of the necessary information generated and needed by the system to create the storyboard and drive user interaction. The database will contain information about chapters in the story, user data, and the generated critiques, goals, and votes.
+
+#### LLM
+
+The OpenAI API is used to generate content. It is connected to the Agents who request data for transmission and generation.
 
 Describe algorithms employed in your project, e.g. neural network paradigm, training and training data set, etc.
 
