@@ -79,5 +79,6 @@ If there is a database:
 Entity-relation diagram.
 
 Table design.
+![Table Description](documentation/static/img/table-des.jpeg)
 
 A check list for architecture design is attached here [architecture\_design\_checklist.pdf](https://templeu.instructure.com/courses/106563/files/16928870/download?wrap=1 "architecture_design_checklist.pdf")  and should be used as a guidance.
