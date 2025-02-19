@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5173
 
 # Command to start the application (for Vite)
-CMD ["npm", "run", "dev", "--", "--host","0.0.0.0"]
+CMD ["npx","npm", "run", "dev", "--", "--host","0.0.0.0"]
