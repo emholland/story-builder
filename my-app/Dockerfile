@@ -1,20 +1,20 @@
-# Use an official Node.js image as a base
+# Use full Node.js image (not Alpine) to avoid missing dependencies
 FROM node:18
 
-# Set working directory
+# Set the correct working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to leverage Docker caching
+# Copy only package.json and package-lock.json first (to leverage Docker caching)
 COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm install
+# Install all dependencies including devDependencies
+RUN npm install --legacy-peer-deps
 
 # Copy the rest of the application files
 COPY . .
 
-# Expose the port React runs on
+# Expose the Vite.js default port
 EXPOSE 5173
 
-# Command to start the application (for Vite)
-CMD ["npx","npm", "run", "dev", "--", "--host","0.0.0.0"]
+# Start the app properly
+CMD ["sh", "-c", "cd /app && npx concurrently \"vite\" \"nodemon server.js\" --host 0.0.0.0"]
