@@ -1,4 +1,5 @@
 ---
+title: System Block Diagram
 sidebar_position: 2
 ---
 
@@ -6,7 +7,7 @@ sidebar_position: 2
 
 ![View the System Block Diagram](/img/SystemBlockDiagram.jpg)
 
-The StoryBuilder system implements a client-server model. Figure 1 demonstrates the system at a higher level. It is composed of smaller blocks: User, Frontend, Backend, Agents, OpenAI API, and a Firebase database. The User interacts with the frontend client/webpage, where they will configure and mold a story to their liking. The client will communicate with a backend server. The server manages both a database and a connection to the AI agents. The AI agents will utilize both the database and communications with the OpenAI API, which generates content via requests, to update their context (what their current state of information is) and to generate information for the story and story building process. 
+**Figure 1.1** The StoryBuilder system implements a client-server model. Figure 1 demonstrates the system at a higher level. It is composed of smaller blocks: User, Frontend, Backend, Agents, OpenAI API, and a Firebase database. The User interacts with the frontend client/webpage, where they will configure and mold a story to their liking. The client will communicate with a backend server. The server manages both a database and a connection to the AI agents. The AI agents will utilize both the database and communications with the OpenAI API, which generates content via requests, to update their context (what their current state of information is) and to generate information for the story and story building process. 
 
 ## Description of Each Block
 
