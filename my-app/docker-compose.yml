@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app:
+    image: sbuilder06/storybuilder1:latest  # Replace with your app's image
+    ports:
+      - "80:5173"
+    restart: always
+    environment:
+      - ENV_VAR=example
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

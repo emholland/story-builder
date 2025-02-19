@@ -1,20 +1,25 @@
-# Use full Node.js image (not Alpine) to avoid missing dependencies
-FROM node:18
+# Use a lightweight Node.js image for building the frontend
+FROM node:18-alpine AS build
 
-# Set the correct working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy only package.json and package-lock.json first (to leverage Docker caching)
+# Copy package.json and install dependencies
 COPY package.json package-lock.json ./
+RUN npm install
 
-# Install all dependencies including devDependencies
-RUN npm install --legacy-peer-deps
-
-# Copy the rest of the application files
+# Copy the entire project
 COPY . .
 
-# Expose the Vite.js default port
-EXPOSE 5173
+# Build the Vite app (this compiles the frontend for production)
+RUN npm run build
 
-# Start the app properly
-CMD ["sh", "-c", "cd /app && npx concurrently \"vite\" \"nodemon server.js\" --host 0.0.0.0"]
+# Use Nginx to serve the built frontend
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
