@@ -1,5 +1,5 @@
 # Use an official Node.js image as a base
-FROM node:18-alpine
+FROM node:18-alpine AS build
 
 # Set working directory
 WORKDIR /app
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 5173
 
 # Command to start the application (for Vite)
-CMD ["npm", "run", "dev", "--", "--host"]
+CMD ["npm", "run", "dev", "--", "--host","0.0.0.0"]
