@@ -1,8 +1,10 @@
 ---
+title: Features and Requirements
 sidebar_position: 4
 ---
 
 # Features and Requirements
+
 ## Functional Requirements
 
 * Users can create accounts.  
@@ -17,6 +19,13 @@ sidebar_position: 4
 * The user can see their account history with previously written stories that can be opened in reading mode.
 * While writing a story, the user can go back to previous chapters that did not get chosen and continue writing with that chapter.
 * The user's session is saved.
+
+- ***add more Function Requirements***
+- ***describe what each functional requirement does in detail***
+- ***EXAMPLE: User must login...***
+  - ***does the login interface have anything different?***
+  - ***is their session saved?***
+  - ***this is the specfics needed that I mentioned earlier***
 
 ## Non-Functional Requirements
 
