@@ -32,10 +32,10 @@ const openai = new OpenAI({
 async function runChatGPT() {
     try {
         const completion = await openai.chat.completions.create({
-            model: "gpt-4o",
+            model: "gpt-4o-mini",
             messages: [
                 { role: "system", content: "You are a helpful assistant." },
-                { role: "user", content: "Write a haiku about recursion in programming." },
+                { role: "user", content: "Write a sentence about recursion in programming." },
             ],
         });
 
@@ -44,7 +44,4 @@ async function runChatGPT() {
         console.error("Error fetching completion:", error);
     }
 }
-
-// Run the function
-runChatGPT();
 
