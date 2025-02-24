@@ -8,13 +8,13 @@ The project, Story Builder, is a web application that will be accessible through
 
 
 Story Builder will be supported on the following 
-### Browsers: <br>
+### Browsers: </br>
 + **Google Chrome:** 133.0.6943.127 or later
 + **Mozilla Firefox:** 135.0.1 or later
 + **Microsoft Edge:** 133.0.3065.82 or later
-+ **Safari:** 18.3 or later <br>
++ **Safari:** 18.3 or later </br>
 
-### Platform and Devices: <br>
+### Platform and Devices: </br>
 + **Windows:** Windows 11
 + **macOS:** Sequoia 15.3
 
