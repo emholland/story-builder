@@ -103,6 +103,44 @@ classDiagram
 
 **Figure 1.1** blah blah blah description
 
+
+# Agent Class 
+## Data Fields: 
+    - 'String persona' : Stores speficifed infornation about the agents character like an author to imitate
+    - 'String chapter' : Stores most recently generated chapter 
+    - 'String aiInstance' : Stores connection to AI 
+
+## Methods: 
+    - `generateChapter()`
+        Purpose: Generates a chapter by the agent 
+        Pre-conditions: The agent must be generated, a prompt must be avalible to utilize. 
+        Post-conditions: Creates a chapter based on condtions give. 
+        Parameters: prompt, context 
+        Return value: string chapter
+
+    - `analyseAndVote()` 
+        Purpose: Agent will judge other chapters based on our critera and cast a vote based on judgement 
+        Pre-conditions: The agent must be generated, chapters from all agents must be generated 
+        Post-conditions: Choose Vote
+        Parameters: None
+        Return value: String AgentVotedFor 
+
+    - `sendVote()`
+        Purpose: Will send the vote to be tallied 
+        Pre-conditions: The agent has run analyzeAndVote() and returned a value 
+        Post-conditions: Cast a vote 
+        Parameters: String vote
+        Return value: Boolean 
+
+    - `setPersona()`
+        Purpose: Set persona
+        Pre-conditions: The agent is created the stpry creation has not started 
+        Parameters: String persona 
+        Return value: Boolean 
+
+        
+
+
 #### Database
 
 Firebase is used to store all of the necessary information generated and needed by the system to create the storyboard and drive user interaction. The database will contain information about chapters in the story, user data, and the generated critiques, goals, and votes.
