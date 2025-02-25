@@ -1,4 +1,5 @@
 ---
+title: System Overview
 sidebar_position: 1
 ---
 
@@ -12,10 +13,3 @@ Story Builder is a web application built using the React.js framework, along wit
 
 ## Background
 This application is designed to streamline the creative writing process by combining the content generation capabilities of AI with user-driven  refinement, creating a tool that enhances both efficiency and creativity. By allowing users to prompt and guide multiple AI-generated drafts and then vote on the best version, the app establishes a collaborative environment where human insight directly shapes the narrative. This approach not only reduces the time and cost associated with traditional writing methods but also serves as a resource for overcoming writer’s block and sparking new ideas. Additionally, by collecting detailed data on story elements—such as character mentions and narrative consistency—the platform offers actionable insights to further refine and enhance storytelling quality. Built on a modern technological stack with React.js and Node.js.
-
-
-
-
-
-
-
