@@ -29,7 +29,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY, // Ensure your API key is set in .env
 });
 
-async function runChatGPT() {
+async function runChatGPT(systemContent, userContent) {
     try {
         const completion = await openai.chat.completions.create({
             model: "gpt-4o-mini",
@@ -44,4 +44,5 @@ async function runChatGPT() {
         console.error("Error fetching completion:", error);
     }
 }
+
 
