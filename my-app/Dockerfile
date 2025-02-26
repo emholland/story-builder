@@ -1,25 +1,27 @@
 # Use a lightweight Node.js image for building the frontend
 FROM node:18-alpine AS build
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json from my-app directory
-COPY my-app/package.json ./
-COPY my-app/package-lock.json ./
+# Copy only package.json and package-lock.json to leverage Docker caching
+COPY my-app/package.json my-app/package-lock.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy the entire my-app directory (except what's ignored in .dockerignore)
-COPY my-app/ ./
+# Copy the entire my-app directory into the container
+COPY my-app ./my-app
+
+# Move into the app directory
+WORKDIR /app/my-app
 
 # Build the Vite app (this compiles the frontend for production)
 RUN npm run build
 
 # Use Nginx to serve the built frontend
 FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/my-app/dist /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
