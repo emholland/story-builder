@@ -5,25 +5,23 @@ FROM node:18-alpine AS build
 WORKDIR /app
 
 # Copy only package.json and package-lock.json to leverage Docker caching
-COPY package.json ./
-COPY package-lock.json ./
+COPY package.json package-lock.json ./
 
 # Install dependencies
 RUN npm install 
 RUN npm install axios
 
-# Copy the entire my-app directory into the container
+# Copy the entire app directory (excluding files in .dockerignore)
 COPY . ./
-
-# Move into the app directory
-WORKDIR /app/my-app
 
 # Build the Vite app (this compiles the frontend for production)
 RUN npm run build
 
 # Use Nginx to serve the built frontend
 FROM nginx:alpine
-COPY --from=build /my-app/dist /usr/share/nginx/html
+
+# Copy the built files from /app/dist (not /my-app/dist)
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
