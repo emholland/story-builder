@@ -47,8 +47,8 @@ app.post("/api/chat", async (req, res) => {
             {
                 headers: {
                     "Content-Type": "application/json",
-                    // greyed-out for now, until servers are back-up
-                    //"Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`, 
+               
+                    "Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`, 
                 },
             }
         ); 
@@ -69,4 +69,6 @@ app.post("/api/chat", async (req, res) => {
 // tells us what port the server is running on 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
+    console.log("Authorization Header:", `Bearer ${process.env.DEEPSEEK_API_KEY}`);
+
 });
