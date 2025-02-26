@@ -28,10 +28,10 @@ jobs:
         run: cd my-app && npm install
        
       - name: Run Linting (Fail on Errors)
-        run: npm run lint
+        run: cd my-app && npm run lint
 
       - name: Run Tests (Fail on Errors)
-        run: npm test
+        run: cd my-app && npm test
 
       - name: Build Project (Vite)
         run: cd my-app && npx vite build
