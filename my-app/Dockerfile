@@ -11,7 +11,7 @@ COPY my-app/package.json my-app/package-lock.json ./
 RUN npm install
 
 # Copy the entire my-app directory into the container
-COPY my-app ./my-app
+COPY . ./
 
 # Move into the app directory
 WORKDIR /app/my-app
