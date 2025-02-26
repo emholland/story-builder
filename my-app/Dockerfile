@@ -9,7 +9,8 @@ COPY package.json ./
 COPY package-lock.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install 
+RUN npm install axios
 
 # Copy the entire my-app directory into the container
 COPY . ./
