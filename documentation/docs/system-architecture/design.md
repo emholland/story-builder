@@ -157,8 +157,18 @@ classDiagram
         Parameters: Array - Agents
         Return Value: Array
 
-        
+# Login Class
+## Data Fields
+- 'String username' : Personalized name created by the user
+- 'String password' : Each account has a password which secures the account and is used to login
 
+## Methods 
+- `validate()`
+  Purpose: Validates user's account and ensures that user can login into their personal account
+  Pre-conditions: User has previously created an account and made a username and password
+  Parameters: String username and String password
+  Return Value: Boolean
+        
 
 #### Database
 
