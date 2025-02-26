@@ -4,15 +4,15 @@ FROM node:18-alpine AS build
 # Set the working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# Copy package.json and package-lock.json from my-app directory
 COPY my-app/package.json ./
+COPY my-app/package-lock.json ./
 
-
-
+# Install dependencies
 RUN npm install
 
-# Copy the entire project
-COPY . .
+# Copy the entire my-app directory (except what's ignored in .dockerignore)
+COPY my-app/ ./
 
 # Build the Vite app (this compiles the frontend for production)
 RUN npm run build
