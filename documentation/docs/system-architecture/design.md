@@ -103,6 +103,34 @@ classDiagram
 
 **Figure 1.1** blah blah blah description
 
+# Story Class 
+## Data Fields: 
+    - 'String guidelines' : Written guidelines for writing the story
+    - 'Array chapters' : Stores each chapter of the story
+    - 'Boolean isComplete' : Whether the story is complete or not
+    - 'int length' : length of the story in chapters
+
+## Methods: 
+    - `addChapter()`
+        Purpose: Add a chapter to the story
+        Pre-conditions: The story must be initialized
+        Post-conditions: A chapter is added to the story
+        Parameters: Chapter
+        Return value: Boolean
+
+    - `getStory()` 
+        Purpose: Get the text of the story
+        Pre-conditions: The story must be created with at least one chapter
+        Post-conditions: The story is unchanged
+        Parameters: Story
+        Return value: String
+
+    - `completeStory()`
+        Purpose: complete the story
+        Pre-conditions: The story is initialized
+        Post-conditions: The story is completed
+        Parameters: Story
+        Return value: Story
 
 # Agent Class 
 ## Data Fields: 
