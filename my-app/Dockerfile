@@ -5,7 +5,8 @@ FROM node:18-alpine AS build
 WORKDIR /app
 
 # Copy only package.json and package-lock.json to leverage Docker caching
-COPY my-app/package.json my-app/package-lock.json ./
+COPY package.json ./
+COPY package-lock.json ./
 
 # Install dependencies
 RUN npm install
