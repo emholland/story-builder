@@ -23,7 +23,7 @@ RUN npm run build
 
 # Use Nginx to serve the built frontend
 FROM nginx:alpine
-COPY --from=build /app/my-app/dist /usr/share/nginx/html
+COPY --from=build /my-app/dist /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
