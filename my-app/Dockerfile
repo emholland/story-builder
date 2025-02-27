@@ -1,20 +1,30 @@
-# Use an official Node.js image as a base
-FROM node:18-alpine
+# Use a lightweight Node.js image for building the frontend
+FROM node:18-alpine AS build
 
-# Set working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to leverage Docker caching
+# Copy only package.json and package-lock.json to leverage Docker caching
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install 
+RUN npm install axios
 
-# Copy the rest of the application files
-COPY . .
+# Copy the entire app directory (excluding files in .dockerignore)
+COPY . ./
 
-# Expose the port React runs on
-EXPOSE 5173
+# Build the Vite app (this compiles the frontend for production)
+RUN npm run build
 
-# Command to start the application (for Vite)
-CMD ["npm", "run", "dev", "--", "--host"]
+# Use Nginx to serve the built frontend
+FROM nginx:alpine
+
+# Copy the built files from /app/dist (not /my-app/dist)
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]

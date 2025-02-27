@@ -5,7 +5,6 @@ import App from './App.jsx'
 import AgentScreen from './assets/AgentScreen.jsx'
 import Home from './assets/Home.jsx'
 
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <AppScreen />
