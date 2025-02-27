@@ -2,17 +2,23 @@ class Session {
     // Constructor
     constructor(user, story, prompt) {
       this.user = user;
-      this.Story = story;
+      this.story = story;
       this.prompt;
       this.numberOfChapters; 
       this.currentChapters = [];
-      this.Agents = [];
+      this.agents = [];
       // ...
     }
   
-    //Elisa will do this Method
+    //Create Agent with API link
     createAgent() {
-      // Code for method1
+  
+      
+    }
+
+    //add agent to list of agents
+    addAgent(agent){
+      this.agents.push(agent);
     }
   
     method2(parameter) {
