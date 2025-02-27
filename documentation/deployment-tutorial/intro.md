@@ -120,10 +120,20 @@ sidebar_position: 1
 
     f. If you are satisfied with your changes, you can deploy them to the main page (the one we can all access through our GitHub repo):
 
-    ```jsx
-    [On Windows] $env:USE_SSH="true"; yarn deploy
+    ## MAKE SURE YOU ARE ON THE MAIN BRANCH WHEN YOU TRY TO DEPLOY
 
-    [On Mac] export USE_SSH=true && yarn deploy
+    ```jsx
+    [On Windows] $env:GIT_USER="tur97019"
+                 $env:ORGANIZATION_NAME="Capstone-Projects-2025-Spring"
+                 $env:PROJECT_NAME="project-003-story-builder-team-2"
+                 $env:USE_SSH="true"
+                 yarn deploy
+
+    [On Mac] export GIT_USER="tur97019"
+             export ORGANIZATION_NAME="Capstone-Projects-2025-Spring"
+             export PROJECT_NAME="project-003-story-builder-team-2"
+             export USE_SSH="true"
+             yarn deploy
     ```
 
 And then hopefully that works. We rate that 5 booms for sure.
