@@ -7,6 +7,6 @@ import Home from './assets/Home.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <AgentScreen />
   </StrictMode>,
 )

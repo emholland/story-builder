@@ -67,28 +67,42 @@ app.post("/api/chat", async (req, res) => {
 
 //ChatGPT Agent
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY, //API key is set in .env
-});
 
-async function runChatGPT() {
+app.post('/api/openai', async (req, res) => {
     try {
-        const completion = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [
-                { role: "system", content: "You are a helpful assistant." },
-                { role: "user", content: "Write a sentence about recursion in programming." },
-            ],
+        const { prompt } = req.body; // Accept user message from the request body
+
+        // Make the request to the OpenAI API
+        const response = await axios.post(
+            'https://api.openai.com/v1/chat/completions',
+            {
+                model: "gpt-4",  // Use the model you need
+                messages: [
+                    { role: "system", content: "You are a helpful assistant." },
+                    { role: "user", content: prompt || "Write a sentence about recursion in programming." },
+                ],
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+
+
+        // Send the response back to the client
+        res.json({
+            message: response.data.choices[0].message.content,
         });
 
-        console.log(completion.choices[0].message.content);
+
+
     } catch (error) {
         console.error("Error fetching completion:", error);
+        res.status(500).json({ error: 'Failed to fetch completion' });
     }
-}
-
-
-
+});
 
 // tells us what port the server is running on 
 app.listen(port, () => {
