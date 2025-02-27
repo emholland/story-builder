@@ -3,13 +3,10 @@
  CORS - allows our front-end to access by front-end applciations on different origins
  axios - similar to CORS allows react to access API requests
  dotenv - to use .env files for retrieving keys
- 
-
  */
 
 import express from "express";
 import cors from "cors";
-import axios from "axios";
 import dotenv from "dotenv";
 import OpenAI from "openai";
 
@@ -64,6 +61,32 @@ app.post("/api/chat", async (req, res) => {
         res.status(500).json({ error: error.response?.data || error.message });
     } 
 });
+
+
+//ChatGPT Agent
+
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY, //API key is set in .env
+});
+
+async function runChatGPT() {
+    try {
+        const completion = await openai.chat.completions.create({
+            model: "gpt-4o-mini",
+            messages: [
+                { role: "system", content: "You are a helpful assistant." },
+                { role: "user", content: "Write a sentence about recursion in programming." },
+            ],
+        });
+
+        console.log(completion.choices[0].message.content);
+    } catch (error) {
+        console.error("Error fetching completion:", error);
+    }
+}
+
+
+
 
 // tells us what port the server is running on 
 app.listen(port, () => {
