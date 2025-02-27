@@ -103,6 +103,34 @@ classDiagram
 
 **Figure 1.1** blah blah blah description
 
+# Story Class 
+## Data Fields: 
+    - 'String guidelines' : Written guidelines for writing the story
+    - 'Array chapters' : Stores each chapter of the story
+    - 'Boolean isComplete' : Whether the story is complete or not
+    - 'int length' : length of the story in chapters
+
+## Methods: 
+    - `addChapter()`
+        Purpose: Add a chapter to the story
+        Pre-conditions: The story must be initialized
+        Post-conditions: A chapter is added to the story
+        Parameters: Chapter
+        Return value: Boolean
+
+    - `getStory()` 
+        Purpose: Get the text of the story
+        Pre-conditions: The story must be created with at least one chapter
+        Post-conditions: The story is unchanged
+        Parameters: Story
+        Return value: String
+
+    - `completeStory()`
+        Purpose: complete the story
+        Pre-conditions: The story is initialized
+        Post-conditions: The story is completed
+        Parameters: Story
+        Return value: Story
 
 # Agent Class 
 ## Data Fields: 
@@ -137,9 +165,38 @@ classDiagram
         Pre-conditions: The agent is created the stpry creation has not started 
         Parameters: String persona 
         Return value: Boolean 
+# VotePhase Class
+## Data Fields
+    - 'Array Agents' : Stores each of the agents that we will be utilizing to vote on the current version of the story and each new geenration
+    - 'Array Chapters' : Each of the stories chapters that will be generated will be kept here. ex. Chapter 1, 2....
+    - 'Array Votes' : Each of the agents votes will be stored to evaluate the total votes casted onto the story
 
         
+## Methods
 
+    - `rest()`
+        Purpose: Stops the Agent generation of new material to allow for user reading/revision/etc
+        Pre-conditions: The agents have started generating material and are added to the story
+        Parameters: None
+        Return Value: String
+    - `countVotes()`
+        Purpose: Gathers the agent vote on what they believe to be the best generated material for the story
+        Pre-conditions: Material is present and generated for revision and agents are added onto the story
+        Parameters: Array - Agents
+        Return Value: Array
+
+# Login Class
+## Data Fields
+- 'String username' : Personalized name created by the user
+- 'String password' : Each account has a password which secures the account and is used to login
+
+## Methods 
+- `validate()`
+  Purpose: Validates user's account and ensures that user can login into their personal account
+  Pre-conditions: User has previously created an account and made a username and password
+  Parameters: String username and String password
+  Return Value: Boolean
+        
 
 #### Database
 
@@ -165,7 +222,7 @@ Use Case 1 Description
 
 **Figure 1.2 (shown below)**
 
-![image](https://github.com/user-attachments/assets/c206541e-89a9-4677-9078-6e35f7ac2ccd)
+![image](https://github.com/user-attachments/assets/0e0ee22d-46d5-491b-b5a1-e07a3b2272dd)
 
 **Use Case 2:** User adds Agents
 <details>
@@ -180,7 +237,7 @@ Use Case 2 Description
 
 **Figure 1.3 (shown below)**
 
-![image](https://github.com/user-attachments/assets/80036676-7917-4de5-8cf7-cfc37068f1a0)
+![image](https://github.com/user-attachments/assets/a16c31e9-2d0a-4790-998a-cc49510e6043)
 
 **Use Case 3:** Initial Story Creation
 <details>
@@ -195,7 +252,7 @@ Use Case 3 Description
 
 **Figure 1.4 (shown below)**
 
-![image](https://github.com/user-attachments/assets/e838f7d0-f528-42fb-863c-e9cd9323bfd0)
+![image](https://github.com/user-attachments/assets/4e99b642-0872-4b18-9832-e544fedf287e)
 
 **Use Case 4:** Vote and Approve 
 <details>
@@ -211,7 +268,7 @@ Use Case 4 Description
 
 **Figure 1.5 (shown below)**
 
-![image](https://github.com/user-attachments/assets/798665fc-c9c6-42fb-96de-73869a193e46)
+![image](https://github.com/user-attachments/assets/c28a1128-d5b6-47fe-a7e6-7f538126c7bc)
 
 **Use Case 5:** Veto 
 <details>
@@ -227,7 +284,7 @@ Use Case 5 Description
 
 **Figure 1.6 (shown below)**
 
-![image](https://github.com/user-attachments/assets/4397b5bc-f3e2-44dc-82b2-9588ec83cae8)
+![image](https://github.com/user-attachments/assets/fc58ec06-0f19-4be2-acb9-2a616d788101)
 
 **Use Case 6:** Critiques
 <details>
@@ -242,7 +299,8 @@ Use Case 6 Description
 
 **Figure 1.7 (shown below)**
 
-![Use Case 6](https://github.com/user-attachments/assets/8836c91e-f13f-48cd-9071-78b5c9f90424)
+![image](https://github.com/user-attachments/assets/097c12ee-7248-4b6e-8a38-310d24e0f5e3)
+
 
 **Use Case 7:** Draft Revision
 <details>
@@ -259,7 +317,8 @@ Use Case 7 Description
 
 **Figure 1.8 (shown below)**
 
-![Use Case 7](https://github.com/user-attachments/assets/a1557169-1b04-43be-9736-1e510f3d0b1f)
+![image](https://github.com/user-attachments/assets/0bf120ae-0ba6-4884-8e4c-0e3b900c6b16)
+
 
 **Use Case 8:** Story Mode 
 <details>
@@ -274,7 +333,8 @@ Use Case 8 Description
 
 **Figure 1.9 (shown below)**
 
-![Use Case 8](https://github.com/user-attachments/assets/4c93d63c-2306-4a6d-b17a-7d8f9f0fea41)
+![image](https://github.com/user-attachments/assets/a1b92737-ae17-4d01-bc9a-eca9ceeaed09)
+
 
 **Use Case 9:** Final Draft 
 <details>
@@ -289,7 +349,8 @@ Use Case 9 Description
 
 **Figure 1.10 (shown below)**
 
-![Use Case 9](https://github.com/user-attachments/assets/98c0b165-1bc6-4077-8571-1a0397d0bc0f)
+![image](https://github.com/user-attachments/assets/9722192e-adb3-438d-85cb-8d95c7e0440c)
+
 
 **Use Case 10:** Account History 
 <details>
@@ -304,7 +365,8 @@ Use Case 10 Description
 
 **Figure 1.11 (shown below)**
 
-![Use Case 10](https://github.com/user-attachments/assets/a04da8bc-ca30-4113-b3a6-0dab8f1a94b8)
+![image](https://github.com/user-attachments/assets/14a3f1be-eefe-4e24-8ee5-eafb7251fc9a)
+
 
 **Use Case 11:** Access Previous Drafts During Session 
 <details>
@@ -319,7 +381,8 @@ Use Case 11 Description
 
 **Figure 1.12 (shown below)**
 
-![Use Case 11](https://github.com/user-attachments/assets/9976e4cd-aeb7-4af7-94f7-15b6cc23b8b2)
+![image](https://github.com/user-attachments/assets/81b15225-5168-4f41-bbe6-876678810db4)
+
 
 ### State-Flow Diagram
 

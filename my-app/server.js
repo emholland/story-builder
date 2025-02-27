@@ -8,7 +8,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import OpenAI from "openai";
+//import OpenAI from "openai";
 
 dotenv.config(); // Load environment variables
 
@@ -44,7 +44,8 @@ app.post("/api/chat", async (req, res) => {
             {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`, //
+                    // greyed-out for now, until servers are back-up
+                    //"Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`, 
                 },
             }
         ); 
