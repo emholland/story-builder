@@ -9,7 +9,7 @@ import express from "express";
 import cors from "cors";
 import axios from "axios";
 import dotenv from "dotenv";
-import OpenAI from "openai";
+import { OpenAI } from "openai";
 
 dotenv.config(); // Load environment variables
 
@@ -100,6 +100,8 @@ app.post('/api/openai', async (req, res) => {
 
 
 // tells us what port the server is running on 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+export { app, server };

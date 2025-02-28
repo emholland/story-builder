@@ -1,9 +1,9 @@
-// /tests/openai.test.js
 import request from 'supertest';  // Supertest for making requests
-import {app} from './server.js';    // Import your Express app
+import { app, server } from './server.js';    // Import your Express app
+import { OpenAI } from 'openai';
 
 // Mock the OpenAI API client
-jest.mock('openai'); 
+jest.mock('openai');
 
 describe('POST /api/openai', () => {
   it('should return a successful response with a message', async () => {
@@ -12,8 +12,17 @@ describe('POST /api/openai', () => {
       choices: [{ message: { content: 'This is a mock response.' } }],
     };
 
-    // Mock the OpenAI API call to return the above mockResponse
-    OpenAI.prototype.chat.completions.create.mockResolvedValue(mockResponse);
+    // Create a mock instance of OpenAI that returns the mock response
+    const mockOpenAIInstance = {
+      chat: {
+        completions: {
+          create: jest.fn().mockResolvedValue(mockResponse),
+        },
+      },
+    };
+
+    // Mock OpenAI constructor to return mockOpenAIInstance
+    OpenAI.mockImplementation(() => mockOpenAIInstance);
 
     // Simulate a POST request to the endpoint
     const response = await request(app)
@@ -27,8 +36,17 @@ describe('POST /api/openai', () => {
   });
 
   it('should handle errors correctly', async () => {
-    // Mock the OpenAI API to throw an error
-    OpenAI.prototype.chat.completions.create.mockRejectedValue(new Error('API Error'));
+    // Create a mock instance of OpenAI for error case
+    const mockOpenAIInstance = {
+      chat: {
+        completions: {
+          create: jest.fn().mockRejectedValue(new Error('API Error')),
+        },
+      },
+    };
+
+    // Mock OpenAI constructor to return mockOpenAIInstance
+    OpenAI.mockImplementation(() => mockOpenAIInstance);
 
     const response = await request(app)
       .post('/api/openai')
@@ -39,4 +57,9 @@ describe('POST /api/openai', () => {
     // Assert that the response contains the expected error message
     expect(response.body.error).toBe('Failed to fetch completion');
   });
+});
+
+// Ensure the server is properly closed after tests
+afterAll(async () => {
+  await server.close(); // Close the server after the tests have completed
 });
