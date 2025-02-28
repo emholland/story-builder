@@ -1,5 +1,6 @@
 # Generated files
 .docusaurus
+coverage/
 
 # Misc
 .DS_Store
@@ -8,3 +9,4 @@
 .env.test.local
 .env.production.local
 .env
+

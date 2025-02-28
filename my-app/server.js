@@ -90,8 +90,6 @@ app.post('/api/openai', async (req, res) => {
             message: completion.choices[0].message.content,
         });
 
-
-
     } catch (error) {
         console.error("Error fetching completion:", error);
         res.status(500).json({ error: 'Failed to fetch completion' });
