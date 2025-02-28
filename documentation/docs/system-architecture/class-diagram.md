@@ -98,6 +98,25 @@ classDiagram
     }
 ```
 
+# App Class 
+## Data Fields: 
+    - 'User user' : Written guidelines for writing the story
+
+## Methods: 
+    - `displaySession()`
+        Purpose: display the the session to the user
+        Pre-conditions: There must be a user
+        Post-conditions: The session is displayed to the user
+        Parameters: Session
+        Return value: Boolean
+
+    - `setUser()` 
+        Purpose: Set the user
+        Pre-conditions: A user must be logged in
+        Post-conditions: The user is set
+        Parameters: User
+        Return value: Boolean
+
 #### Backend
 
 The backend is built using JavaScript, with Node.js and Express. It handles data sent from the other components and processes it. 
