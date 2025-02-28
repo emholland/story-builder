@@ -1,7 +1,6 @@
 // /tests/openai.test.js
-const request = require('supertest');
-const app = require('./server.js'); // Import your Express app
-const { OpenAI } = require('openai');
+import request from 'supertest';  // Supertest for making requests
+import {app} from './server.js';    // Import your Express app
 
 // Mock the OpenAI API client
 jest.mock('openai'); 
