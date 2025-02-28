@@ -1,6 +1,9 @@
 # Generated files
 .docusaurus
+
+# Ignore coverage reports
 coverage/
+
 
 # Misc
 .DS_Store
