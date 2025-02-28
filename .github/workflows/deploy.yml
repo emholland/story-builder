@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: cd my-app && npm install && npm install axios
        
-     # - name: Run Linting (Fail on Errors)
+     #jest - name: Run Linting (Fail on Errors)
       #  run: cd my-app && npm run lint
 
      # - name: Run Tests (Fail on Errors)
@@ -66,33 +66,33 @@ jobs:
     needs: docker
     runs-on: ubuntu-latest
 
-    steps:
-      - name: SSH into Server and Deploy
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            echo "Pulling latest Docker image..."
-            docker pull sbuilder06/storybuilder1:latest
+   # steps:
+    #  - name: SSH into Server and Deploy
+    #    uses: appleboy/ssh-action@v0.1.6
+    #    with:
+     #     host: ${{ secrets.SERVER_IP }}
+     #     username: ${{ secrets.SERVER_USER }}
+      #    key: ${{ secrets.SERVER_SSH_KEY }}
+      #    script: |
+      #      echo "Pulling latest Docker image..."
+      #      docker pull sbuilder06/storybuilder1:latest
 
-            echo "Checking if a container already exists..."
-            if [ "$(docker ps -a -q -f name=storybuildercontainer)" ]; then
-              echo "Stopping and removing existing container..."
-              docker stop storybuildercontainer || true
-              docker rm storybuildercontainer || true
-            fi
+      #      echo "Checking if a container already exists..."
+       #     if [ "$(docker ps -a -q -f name=storybuildercontainer)" ]; then
+       #       echo "Stopping and removing existing container..."
+      #        docker stop storybuildercontainer || true
+      #        docker rm storybuildercontainer || true
+      #      fi
 
-           echo "Starting new container..."
-            docker run -d --name storybuildercontainer -p 3000:80 --restart unless-stopped sbuilder06/storybuilder1
+      #     echo "Starting new container..."
+      #      docker run -d --name storybuildercontainer -p 3000:80 --restart unless-stopped sbuilder06/storybuilder1
 
-            echo "Verifying container is running..."
-            sleep 5
-            if ! docker ps -q -f name=storybuildercontainer; then
-              echo "Deployment failed! Rolling back to stable version..."
-              docker stop storybuildercontainer || true
-              docker rm storybuildercontainer || true
-              docker run -d --name storybuildercontainer -p 3000:80 --restart unless-stopped sbuilder06/storybuilder1:stable
+       #     echo "Verifying container is running..."
+       #     sleep 5
+       #     if ! docker ps -q -f name=storybuildercontainer; then
+       #       echo "Deployment failed! Rolling back to stable version..."
+        #      docker stop storybuildercontainer || true
+        #      docker rm storybuildercontainer || true
+         #     docker run -d --name storybuildercontainer -p 3000:80 --restart unless-stopped sbuilder06/storybuilder1:stable
             
 

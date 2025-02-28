@@ -41,8 +41,7 @@ app.post("/api/chat", async (req, res) => {
                 //specifications for the deepseek model - tokens, model, messages, etc
                 model: "deepseek-chat", 
                 messages: [{ role: "user", content: prompt }], 
-                max_tokens: 1500,
-                temperature: 1,
+                
             },
             {
                 headers: {
