@@ -184,6 +184,57 @@ classDiagram
 
 **Figure 1.1** blah blah blah description
 
+# Session Class 
+## Data Fields: 
+    - 'Array Agents' : Stores each of the agents that we will be utilizing to vote on the current version of the story and each new generation.
+    - 'User user' : Object representing a User.
+    - 'Story story' : Object representing a Story.
+    - 'Phase phase' : Object representing a Phase. 
+    - 'String guildlines' : Contains the outline for the entities within the system to follow the storybuilding process.
+
+## Methods: 
+    - `createStory()`
+        Purpose: To initialize a story for the session.
+        Pre-conditions: The session has begun and active.
+        Post-conditions: A story is added to the session.
+        Parameters: Story, User
+        Return value: Story
+
+    - `addAgentToArray()` 
+        Purpose: Take an agent object and add it to the Agent array.
+        Pre-conditions: The story must be initialized.
+        Post-conditions: The story is unchanged, but an Agent is added to the session.
+        Parameters: Agents
+        Return value: Array
+
+    - `removeAgentFromArray()` 
+        Purpose: Take an agent object and remove it from the Agent array.
+        Pre-conditions: The story must be initialized.
+        Post-conditions: The story is unchanged, but an Agent is removed from the session.
+        Parameters: Agents
+        Return value: Array
+
+    - `moveToNextPhase()` 
+        Purpose: Initiate the next phase for the storybuilding process (generation of a specific content).
+        Pre-conditions: The story must be initialized, with no current and incomplete generation process.
+        Post-conditions: The next phase of the process is now begun.
+        Parameters: Phase
+        Return value: Phase
+
+    - `reset()`
+        Purpose: To reset the session and its story and parameters.
+        Pre-conditions: The session has begun (User is logged in) and the story is initialized or in development.
+        Post-conditions: The entire session is reset.
+        Parameters: Story, User, Phase, Agents
+        Return value: Story, String
+
+    - `setGuidelines()`
+        Purpose: To outline the User's intended guidelines for their story.
+        Pre-conditions: The story is initialized, but a chapter has not been generated yet.
+        Post-conditions: A guideline for the story is completed.
+        Parameters: guidelines
+        Return value: String
+
 # Story Class 
 ## Data Fields: 
     - 'String guidelines' : Written guidelines for writing the story
