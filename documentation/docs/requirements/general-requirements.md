@@ -20,19 +20,19 @@ Story Builder will be supported on the following
 
 Story Builder will be tested and devloped using the following tools
 ### Front-End
-+ React.js
-+ Web Browser
++ React.js 19.0
++ Web Browser (See *Browsers* Section for versions)
 
 ### Back-End
 + Javascript
-+ Node.js
-+ Express.js
++ Node.js v22.14.0
++ Express.js v5 5.0.1
 + OpenAI API
     + Agents created by and create stories.
 
 ## Database
-+ Firebase
-+ Docker Desktop
++ Firebase v13.8.0
++ Docker Desktop 4.39.0
 
 
 ***- make the General Requirements more specific***
