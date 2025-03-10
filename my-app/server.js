@@ -44,7 +44,7 @@ app.post("/api/chat", async (req, res) => {
             {
                 headers: {
                     "Content-Type": "application/json",
-               
+
                     "Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`, 
                 },
             }
