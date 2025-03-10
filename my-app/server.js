@@ -39,13 +39,12 @@ app.post("/api/chat", async (req, res) => {
                 //specifications for the deepseek model - tokens, model, messages, etc
                 model: "deepseek-chat", 
                 messages: [{ role: "user", content: prompt }], 
-                max_tokens: 1500,
-                temperature: 1,
+                
             },
             {
                 headers: {
                     "Content-Type": "application/json",
-                    // greyed-out for now, until servers are back-up
+
                     "Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`, 
                 },
             }
@@ -100,6 +99,8 @@ app.post('/api/openai', async (req, res) => {
 // tells us what port the server is running on 
 const server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
+    console.log("Authorization Header:", `Bearer ${process.env.DEEPSEEK_API_KEY}`);
+
 });
 
 export { app, server };
