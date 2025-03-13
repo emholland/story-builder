@@ -20,6 +20,8 @@ class Agent {
               userPrompt: prompt,
               persona: this.persona, // Using the persona from the Agent instance
             });
+
+            this.chapter = response.data.message;
       
             // Return the completion response from OpenAI
             return response.data.message; // Assuming the backend sends 'message' in the response

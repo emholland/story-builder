@@ -125,8 +125,6 @@ app.post('/api/agents', (req, res) => {
         message: 'Agent created successfully',
         agent: newAgent,
     });
-
-    res.json(agents); // 'agents' is the in-memory array from your previous code
 });
 
 
