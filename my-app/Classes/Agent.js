@@ -1,4 +1,5 @@
 import axios from 'axios';
+import OpenAI from 'openai';
 
 class Agent {
     constructor(persona, aiInstance) {
@@ -14,23 +15,43 @@ class Agent {
      * @returns {Promise<string>} - The generated chapter.
      */
     async generateChapter(prompt) {
-        try {
-            // Send a POST request to the backend API
-            const response = await axios.post('http://localhost:5001/api/openai', {
-              userPrompt: prompt,
-              persona: this.persona, // Using the persona from the Agent instance
-            });
+        if(this.aiInstance == "openai"){
+            try {
+                // Send a POST request to the backend API
+                const response = await axios.post('http://localhost:5001/api/openai', {
+                    userPrompt: prompt,
+                    persona: this.persona, // Using the persona from the Agent instance
+                });
 
-            this.chapter = response.data.message;
-      
-            // Return the completion response from OpenAI
-            return response.data.message; // Assuming the backend sends 'message' in the response
-      
-          } catch (error) {
-            console.error('Error fetching completion:', error);
-            throw new Error('Failed to generate completion');
-          }
+                this.chapter = response.data.message;
+        
+                // Return the completion response from OpenAI
+                return response.data.message; // Assuming the backend sends 'message' in the response
+        
+            } catch (error) {
+                console.error('Error fetching completion:', error);
+                throw new Error('Failed to generate completion');
+            }
+        }else{
+            try {
+                    const res = await axios.post("http://localhost:5001/api/chat", {
+                        prompt: prompt,
+                        persona: this.persona, // Using the persona from the Agent instance
+                    });
+        
+                    this.chapter = res.data.message;
+
+                    return res.data.message; // Assuming the backend sends 'message' in the response
+                
+                
+        
+            } catch (error) {
+                console.error('Error fetching completion:', error);
+                throw new Error('Failed to generate completion');
+            }
+
         }
+    }
 
     /**
      * Analyzes generated chapters and votes for the best one.

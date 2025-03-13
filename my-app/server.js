@@ -34,6 +34,8 @@ app.get("/", (req, res) => {
 //  post used to send data to the server to retrieve from DeepSeek 
 app.post("/api/chat", async (req, res) => {
     const { prompt } = req.body;
+    const { persona } = req.body; 
+    const fullPrompt = "You are a helpful assitant that writes like " + persona + ". " + prompt;
 
     try {
          const response = await axios.post(
@@ -41,7 +43,7 @@ app.post("/api/chat", async (req, res) => {
             {
                 //specifications for the deepseek model - tokens, model, messages, etc
                 model: "deepseek-chat", 
-                messages: [{ role: "user", content: prompt }], 
+                messages: [{ role: "user", content: fullPrompt }], 
                 
             },
             {
@@ -54,9 +56,10 @@ app.post("/api/chat", async (req, res) => {
         ); 
 
      
-    
+        console.log("deepseek: ", response.data);
+        console.log("deepseek: ", response.data.choices);
         
-        res.json(response.data);
+        res.json({message: response.data.choices[0]?.message?.content});
 
     } 
     //error catching to throw an error in the console incase there's an issue for further debugging.
@@ -87,9 +90,9 @@ app.post('/api/openai', async (req, res) => {
             ],
         });
 
-        console.log(completion.choices[0].message.content);
+        console.log("openai: ",completion.choices[0].message.content);
 
-        // Send the response back to the client
+        // Send the response back to agent.js
         res.json({
             message: completion.choices[0].message.content,
         });

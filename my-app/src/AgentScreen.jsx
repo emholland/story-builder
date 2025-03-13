@@ -29,7 +29,7 @@ const handleNavigation = (event) => {
     const updateAgents = (newAgent) => {
         const nAgent = new Agent(newAgent.persona, newAgent.aiInstance);
         setAgents((prevAgents) => [...prevAgents, nAgent]);  // Add the new agent to the existing list
-        console.log(nAgent);
+        console.log("Front end recieved: ", nAgent);
     };
 
     // Toggle the popup visibility
@@ -40,11 +40,10 @@ const handleNavigation = (event) => {
     const fetchDeepSeekResponse = async () => {
         setDeepSeekLoading(true);
         try {
-            const res = await axios.post("http://localhost:5001/api/chat", {
-                prompt: "Write me a short poem, a few words",
-            });
-
-            setDeepSeekResponse(res.data.choices[0].text);
+            for (const agent of agents){
+                agent.generateChapter("Write a 6 word poem.");
+                console.log(agent);
+             }
         } catch (error) {
             console.error("Error:", error.response?.data || error.message);
             setDeepSeekResponse("An error occurred while fetching the response.");
