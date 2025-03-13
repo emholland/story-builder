@@ -27,7 +27,7 @@ const handleNavigation = (event) => {
 
     // Function to update the list of agents after adding a new agent
     const updateAgents = (newAgent) => {
-        const nAgent = new Agent(newAgent.persona);
+        const nAgent = new Agent(newAgent.persona, newAgent.aiInstance);
         setAgents((prevAgents) => [...prevAgents, nAgent]);  // Add the new agent to the existing list
         console.log(nAgent);
     };
@@ -70,13 +70,6 @@ const handleNavigation = (event) => {
 
     return (
         <div>
-            <select onChange={handleNavigation}>
-                <option value=""> Select Agent</option>
-                <option value={"deepseek"}> DeepSeek</option>
-                <option>OpenAI</option>
-                
-
-            </select>
             <h2>DeepSeek AI Chat</h2>
             <button onClick={fetchDeepSeekResponse} disabled={deepSeekLoading}>
                 {deepSeekLoading ? "Generating..." : "Generate Response"}
@@ -97,12 +90,13 @@ const handleNavigation = (event) => {
             </AddAgent>
             <br></br>
             <div>
-                <h3>Open AI Agents List</h3>
+                <h3>AI Agents List</h3>
                 <ul>
                     {agents.length > 0 ? (
                         agents.map((agent, index) => (
                             <li key={index}>
-                                <strong>Persona:</strong> {agent.persona}... 
+                                <strong>AI:</strong> {agent.aiInstance}
+                                <strong> &nbsp; Persona:</strong> {agent.persona}... 
                                 <br></br>{agent.chapter}
                             </li>
 

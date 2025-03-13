@@ -7,6 +7,7 @@ import axios from "axios";
 const AddAgent = ({ children, updateAgents }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+  const [selectedAI, setSelectedAI] = useState("");
 
   const togglePopup = () => {
     setIsOpen(!isOpen);
@@ -35,11 +36,12 @@ const AddAgent = ({ children, updateAgents }) => {
 
   const addAgent = () => {
     console.log("Adding agent:", selectedOption); // Log to see what was selected
-    const agentData = { persona: selectedOption };
+    const agentData = { persona: selectedOption, aiInstance: selectedAI };
 
     handleSubmit(agentData);
 
     setSelectedOption("");
+    setSelectedAI("");
     setIsOpen(false); // Close the popup after adding
 
   }
@@ -55,6 +57,10 @@ const AddAgent = ({ children, updateAgents }) => {
     setSelectedOption(e.target.value);
   };
 
+  const handleAIChange = (e) => {
+    setSelectedAI(e.target.value);
+  }
+
   return (
     <div className="popup-container">
       <button className="popup-button" onClick={togglePopup}>
@@ -68,22 +74,37 @@ const AddAgent = ({ children, updateAgents }) => {
             </button>
 
             <div className="agent-settings">
-              <h2>Add an Agent</h2>
-              <div className="dropdown-container">
-                <label className="dropdown-label">Persona:</label>
-                <select
-                  value={selectedOption}
-                  onChange={handleSelectChange}
-                  className="dropdown-select"
-                >
-                  <option value="" disabled>Select a Persona</option>
-                  {options.map((option, index) => (
-                    <option key={index} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                <h2>Add an Agent</h2>
+                <div className="dropdown-container">
+                    <label className="dropdown-label">Persona:</label>
+                    <select
+                    value={selectedOption}
+                    onChange={handleSelectChange}
+                    className="dropdown-select"
+                    >
+                    <option value="" disabled>Select a Persona</option>
+                    {options.map((option, index) => (
+                        <option key={index} value={option.value}>
+                        {option.label}
+                        </option>
+                    ))}
+                    </select>
+                </div>
+            
+                <div className="dropdown-container">
+                    <label className="dropdown-label">AI:</label>
+                    <select
+                    value={selectedAI}
+                    onChange={handleAIChange}
+                    className="dropdown-select"
+                    >
+                    <option value=""> Select an AI</option>
+                    <option value={"deepseek"}> DeepSeek</option>
+                    <option value={"openai"}>OpenAI</option>
+                    
+
+                    </select>
+                </div>
             </div>
 
             <button className="add-agent-button" onClick={addAgent}>

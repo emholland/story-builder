@@ -109,13 +109,14 @@ let agents = [];
 // POST route for creating an agent
 app.post('/api/agents', (req, res) => {
     const { persona } = req.body;
+    const { aiInstance } = req.body;
 
     if (!persona) {
         return res.status(400).json({ message: 'Persona is required' });
     }
 
     // Create a new agent object
-    const newAgent = new Agent(persona);
+    const newAgent = new Agent(persona, aiInstance);
 
     // Save the agent to the in-memory storage (you could use a database here)
     agents.push(newAgent);
@@ -128,7 +129,7 @@ app.post('/api/agents', (req, res) => {
 });
 
 
-// tells us what port the server is running on 
+// tells us what port the server is running on  
 const server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

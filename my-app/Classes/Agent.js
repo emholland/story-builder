@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 class Agent {
-    constructor(persona) {
+    constructor(persona, aiInstance) {
         this.persona = persona; 
         this.chapter = "";
-        this.aiInstance; 
+        this.aiInstance = aiInstance; 
     }
 
     /**
