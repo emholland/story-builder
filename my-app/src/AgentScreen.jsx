@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./AgentScreen.css"
 import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
 import AddAgent from './Components/AddAgent.jsx'
 import Agent from '../Classes/Agent.js'
 
@@ -10,6 +11,17 @@ const AgentScreen = () => {
     const [openAIResponse, setOpenAIResponse] = useState("");
     const [deepSeekLoading, setDeepSeekLoading] = useState(false); // loading state for DeepSeek
     const [openAILoading, setOpenAILoading] = useState(false); // loading state for OpenAI
+    
+    const navigate = useNavigate();
+
+const handleNavigation = (event) => {
+    const selectedValue = event.target.value;
+    if (selectedValue === "deepseek") {
+        navigate("/write"); 
+    } else if (selectedValue === "openai") {
+        navigate("/"); 
+    }
+};
     const [isPopupOpen, setIsPopupOpen] = useState(false);  // State to control popup visibility
 
 
@@ -58,7 +70,13 @@ const AgentScreen = () => {
 
     return (
         <div>
-            <p></p>
+            <select onChange={handleNavigation}>
+                <option value=""> Select Agent</option>
+                <option value={"deepseek"}> DeepSeek</option>
+                <option>OpenAI</option>
+                
+
+            </select>
             <h2>DeepSeek AI Chat</h2>
             <button onClick={fetchDeepSeekResponse} disabled={deepSeekLoading}>
                 {deepSeekLoading ? "Generating..." : "Generate Response"}
