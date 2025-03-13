@@ -1,8 +1,8 @@
 class Agent {
-    constructor(persona, aiInstance) {
+    constructor(persona) {
         this.persona = persona; 
         this.chapter = "";
-        this.aiInstance = aiInstance; 
+        this.aiInstance; 
     }
 
     /**

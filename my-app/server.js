@@ -10,6 +10,7 @@ import cors from "cors";
 import axios from "axios";
 import dotenv from "dotenv";
 import { OpenAI } from "openai";
+import Agent from "./Classes/Agent.js"
 
 dotenv.config(); // Load environment variables
 
@@ -17,9 +18,11 @@ dotenv.config(); // Load environment variables
 const app = express();
 const port = 5001;
 
+
 //enables cors to be used for API calls. .use is for middleware
 app.use(cors());
 app.use(express.json());
+
 
 
 
@@ -93,6 +96,33 @@ app.post('/api/openai', async (req, res) => {
         console.error("Error fetching completion:", error);
         res.status(500).json({ error: 'Failed to fetch completion' });
     }
+});
+
+
+
+//agent stuff 
+// Dummy in-memory storage for agents
+let agents = [];
+
+// POST route for creating an agent
+app.post('/api/agents', (req, res) => {
+  const { persona } = req.body;
+
+  if (!persona) {
+    return res.status(400).json({ message: 'Persona is required' });
+  }
+
+  // Create a new agent object
+  const newAgent = new Agent(persona);
+
+  // Save the agent to the in-memory storage (you could use a database here)
+  agents.push(newAgent);
+
+  // Send a success response back to the frontend
+  res.status(201).json({
+    message: 'Agent created successfully',
+    agent: newAgent,
+  });
 });
 
 
