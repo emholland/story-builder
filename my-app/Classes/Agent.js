@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 class Agent {
     constructor(persona) {
         this.persona = persona; 
@@ -11,18 +13,22 @@ class Agent {
      * @param {string} context - Additional context for continuity.
      * @returns {Promise<string>} - The generated chapter.
      */
-    async generateChapter(prompt, context) {
+    async generateChapter(prompt) {
         try {
-            const response = await this.aiInstance.generateText({
-                
+            // Send a POST request to the backend API
+            const response = await axios.post('http://localhost:5001/api/openai', {
+              userPrompt: prompt,
+              persona: this.persona, // Using the persona from the Agent instance
             });
-            this.chapter = response.text;
-            return this.chapter;
-        } catch (error) {
-            console.error("Error generating chapter:", error);
-            return "";
+      
+            // Return the completion response from OpenAI
+            return response.data.message; // Assuming the backend sends 'message' in the response
+      
+          } catch (error) {
+            console.error('Error fetching completion:', error);
+            throw new Error('Failed to generate completion');
+          }
         }
-    }
 
     /**
      * Analyzes generated chapters and votes for the best one.

@@ -74,14 +74,16 @@ const openai = new OpenAI({
 
 app.post('/api/openai', async (req, res) => {
     try {
-        const { prompt } = req.body; // Accept user message from the request body
+        const { userPrompt } = req.body; // Accept user message from the request body
+        const { persona } = req.body; 
+        const systemPrompt = "You are a helpful assitant that writes like " + persona;
 
         // Make the request to the OpenAI API
         const completion = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [
-                { role: "system", content: "You are a helpful assistant." },
-                { role: "user", content: prompt || "Write a sentence about not having a prompt to follow." },
+                { role: "system", content: systemPrompt },
+                { role: "user", content: userPrompt},
             ],
         });
 
@@ -106,31 +108,31 @@ let agents = [];
 
 // POST route for creating an agent
 app.post('/api/agents', (req, res) => {
-  const { persona } = req.body;
+    const { persona } = req.body;
 
-  if (!persona) {
-    return res.status(400).json({ message: 'Persona is required' });
-  }
+    if (!persona) {
+        return res.status(400).json({ message: 'Persona is required' });
+    }
 
-  // Create a new agent object
-  const newAgent = new Agent(persona);
+    // Create a new agent object
+    const newAgent = new Agent(persona);
 
-  // Save the agent to the in-memory storage (you could use a database here)
-  agents.push(newAgent);
+    // Save the agent to the in-memory storage (you could use a database here)
+    agents.push(newAgent);
 
-  // Send a success response back to the frontend
-  res.status(201).json({
-    message: 'Agent created successfully',
-    agent: newAgent,
-  });
+    // Send a success response back to the frontend
+    res.status(201).json({
+        message: 'Agent created successfully',
+        agent: newAgent,
+    });
+
+    res.json(agents); // 'agents' is the in-memory array from your previous code
 });
 
 
 // tells us what port the server is running on 
 const server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    console.log("Authorization Header:", `Bearer ${process.env.DEEPSEEK_API_KEY}`);
-
 });
 
 export { app, server };

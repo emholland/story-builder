@@ -4,7 +4,7 @@ import './AddAgent.css';
 import axios from "axios";
 
 
-const AddAgent = ({ children }) => {
+const AddAgent = ({ children, updateAgents }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
 
@@ -13,6 +13,11 @@ const AddAgent = ({ children }) => {
   };
 
   const handleSubmit = async (agentData) => {
+    if (!selectedOption) {
+        alert("Please select a persona.");
+        return;
+      }
+      
     try {
       // Send the agent data to the backend
       const response = await axios.post('http://localhost:5001/api/agents', agentData, {
@@ -21,6 +26,8 @@ const AddAgent = ({ children }) => {
         },
       });
       console.log('Agent added successfully:', response.data);
+      const newAgent = response.data.agent; // Assuming the backend returns the new agent in response
+      updateAgents(newAgent); // Update the list of agents in the parent component
     } catch (error) {
       console.error('Error adding agent:', error);
     }
