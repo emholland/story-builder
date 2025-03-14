@@ -1,3 +1,6 @@
+import axios from 'axios';
+import OpenAI from 'openai';
+
 class Agent {
     constructor(persona, aiInstance) {
         this.persona = persona; 
@@ -11,16 +14,42 @@ class Agent {
      * @param {string} context - Additional context for continuity.
      * @returns {Promise<string>} - The generated chapter.
      */
-    async generateChapter(prompt, context) {
-        try {
-            const response = await this.aiInstance.generateText({
+    async generateChapter(prompt) {
+        if(this.aiInstance == "openai"){
+            try {
+                // Send a POST request to the backend API
+                const response = await axios.post('http://localhost:5001/api/openai', {
+                    userPrompt: prompt,
+                    persona: this.persona, // Using the persona from the Agent instance
+                });
+
+                this.chapter = response.data.message;
+        
+                // Return the completion response from OpenAI
+                return response.data.message; // Assuming the backend sends 'message' in the response
+        
+            } catch (error) {
+                console.error('Error fetching completion:', error);
+                throw new Error('Failed to generate completion');
+            }
+        }else{
+            try {
+                    const res = await axios.post("http://localhost:5001/api/chat", {
+                        prompt: prompt,
+                        persona: this.persona, // Using the persona from the Agent instance
+                    });
+        
+                    this.chapter = res.data.message;
+
+                    return res.data.message; // Assuming the backend sends 'message' in the response
                 
-            });
-            this.chapter = response.text;
-            return this.chapter;
-        } catch (error) {
-            console.error("Error generating chapter:", error);
-            return "";
+                
+        
+            } catch (error) {
+                console.error('Error fetching completion:', error);
+                throw new Error('Failed to generate completion');
+            }
+
         }
     }
 
