@@ -2,8 +2,27 @@
 sidebar_position: 1
 ---
 # Unit tests
-For each method, one or more test cases.
+```javascript
+test("fetches and displays response", async () => {
+    axios.post.mockResolvedValue({
+        data: { choices: [{ text: "This is a test response." }] },
+    });
 
-A test case consists of input parameter values and expected results.
+    render(<AgentScreen />);
 
-All external classes should be stubbed using mock objects.
+    const button = screen.getByText("Generate Response");
+    fireEvent.click(button);
+
+    // Check button text manually (Vitest does not support `toHaveTextContent` natively)
+    expect(button.textContent).toBe("Generating...");
+
+    await waitFor(() => {
+        // Instead of `toBeInTheDocument`, check if the element exists
+        expect(screen.getByText(/Response:/)).not.toBeNull();
+        expect(screen.getByText("This is a test response.")).not.toBeNull();
+    });
+
+    expect(button.textContent).toBe("Generate Response");
+});
+
+```

@@ -10,6 +10,7 @@ import cors from "cors";
 import axios from "axios";
 import dotenv from "dotenv";
 import { OpenAI } from "openai";
+import Agent from "./Classes/Agent.js"
 
 dotenv.config(); // Load environment variables
 
@@ -17,9 +18,11 @@ dotenv.config(); // Load environment variables
 const app = express();
 const port = 5001;
 
+
 //enables cors to be used for API calls. .use is for middleware
 app.use(cors());
 app.use(express.json());
+
 
 
 
@@ -31,6 +34,8 @@ app.get("/", (req, res) => {
 //  post used to send data to the server to retrieve from DeepSeek 
 app.post("/api/chat", async (req, res) => {
     const { prompt } = req.body;
+    const { persona } = req.body; 
+    const fullPrompt = "You are a helpful assitant that writes like " + persona + ". " + prompt;
 
     try {
          const response = await axios.post(
@@ -38,7 +43,7 @@ app.post("/api/chat", async (req, res) => {
             {
                 //specifications for the deepseek model - tokens, model, messages, etc
                 model: "deepseek-chat", 
-                messages: [{ role: "user", content: prompt }], 
+                messages: [{ role: "user", content: fullPrompt }], 
                 
             },
             {
@@ -51,9 +56,10 @@ app.post("/api/chat", async (req, res) => {
         ); 
 
      
-    
+        console.log("deepseek: ", response.data);
+        console.log("deepseek: ", response.data.choices);
         
-        res.json(response.data);
+        res.json({message: response.data.choices[0]?.message?.content});
 
     } 
     //error catching to throw an error in the console incase there's an issue for further debugging.
@@ -71,20 +77,22 @@ const openai = new OpenAI({
 
 app.post('/api/openai', async (req, res) => {
     try {
-        const { prompt } = req.body; // Accept user message from the request body
+        const { userPrompt } = req.body; // Accept user message from the request body
+        const { persona } = req.body; 
+        const systemPrompt = "You are a helpful assitant that writes like " + persona;
 
         // Make the request to the OpenAI API
         const completion = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [
-                { role: "system", content: "You are a helpful assistant." },
-                { role: "user", content: prompt || "Write a sentence about not having a prompt to follow." },
+                { role: "system", content: systemPrompt },
+                { role: "user", content: userPrompt},
             ],
         });
 
-        console.log(completion.choices[0].message.content);
+        console.log("openai: ",completion.choices[0].message.content);
 
-        // Send the response back to the client
+        // Send the response back to agent.js
         res.json({
             message: completion.choices[0].message.content,
         });
@@ -96,11 +104,37 @@ app.post('/api/openai', async (req, res) => {
 });
 
 
-// tells us what port the server is running on 
+
+//agent stuff 
+// Dummy in-memory storage for agents
+let agents = [];
+
+// POST route for creating an agent
+app.post('/api/agents', (req, res) => {
+    const { persona } = req.body;
+    const { aiInstance } = req.body;
+
+    if (!persona) {
+        return res.status(400).json({ message: 'Persona is required' });
+    }
+
+    // Create a new agent object
+    const newAgent = new Agent(persona, aiInstance);
+
+    // Save the agent to the in-memory storage (you could use a database here)
+    agents.push(newAgent);
+
+    // Send a success response back to the frontend
+    res.status(201).json({
+        message: 'Agent created successfully',
+        agent: newAgent,
+    });
+});
+
+
+// tells us what port the server is running on  
 const server = app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    console.log("Authorization Header:", `Bearer ${process.env.DEEPSEEK_API_KEY}`);
-
 });
 
 export { app, server };

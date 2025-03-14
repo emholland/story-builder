@@ -47,7 +47,7 @@ classDiagram
       + Array AgentDisplay[] 
       + String Prompt
 
-      + setPrompt
+      + setPrompt()
       + startSession() 
 
       
@@ -97,6 +97,52 @@ classDiagram
         +displayStory()
     }
 ```
+
+# App Class 
+## Data Fields: 
+    - 'User user' : Written guidelines for writing the story
+
+## Methods: 
+    - `displaySession()`
+        Purpose: display the the session to the user
+        Pre-conditions: There must be a user
+        Post-conditions: The session is displayed to the user
+        Parameters: Session
+        Return value: Boolean
+
+    - `setUser()` 
+        Purpose: Set the user
+        Pre-conditions: A user must be logged in
+        Post-conditions: The user is set
+        Parameters: User User
+        Return value: Boolean
+
+# LoginPageDisplay Class 
+## Data Fields: 
+    - 'String username' : Username field displayed to user
+    - 'String password' : Password field displayed to user
+
+## Methods: 
+    - `validate()`
+        Purpose: Validate the username and passowrd
+        Pre-conditions: None
+        Post-conditions: The username and password are found to be either valid or invalid
+        Parameters: String Username, String Password
+        Return value: Boolean
+
+# SessionPageDisplay Class 
+## Data Fields: 
+    - 'String Story' : Username field displayed to user
+    - 'Array AgentDisplay[]' : Password field displayed to user
+    - 'String Prompt' : Username field displayed to user
+
+## Methods: 
+    - `setPrompt()`
+        Purpose: Set the prompt
+        Pre-conditions: A prompt was provided by the user
+        Post-conditions: The prompt was set
+        Parameters: String prompt
+        Return value: Boolean
 
 #### Backend
 
