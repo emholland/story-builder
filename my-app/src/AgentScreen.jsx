@@ -62,11 +62,7 @@ const handleNavigation = (event) => {
                 
 
             </select>
-            <h2>DeepSeek AI Chat</h2>
-            <button onClick={fetchDeepSeekResponse} disabled={deepSeekLoading}>
-                {deepSeekLoading ? "Generating..." : "Generate Response"}
-            </button>
-            {deepSeekResponse && <p><strong>Response:</strong> {deepSeekResponse}</p>}
+            
      
             <br></br>
  
