@@ -20,9 +20,9 @@ classDiagram
     App --> LoginPageDisplay
     App --> SessionPageDisplay
     SessionPageDisplay --> AgentDisplay
-    SessionPageDisplay --> AgentCreationDisplay
+    SessionPageDisplay --> AgentSelectionDisplay
     SessionPageDisplay --> PromptInputDisplay
-    AgentDisplay --> AgentCreationDisplay
+    AgentDisplay --> AgentSelectionDisplay
     SessionPageDisplay --> ChapterDisplay
     SessionPageDisplay --> StoryDisplay
     ChapterDisplay --> VotingDisplay
@@ -64,7 +64,7 @@ classDiagram
         + String persona
     }
 
-    class AgentCreationDisplay{
+    class AgentSelectionDisplay{
         + String agentname 
         + String persona
 
@@ -142,6 +142,93 @@ classDiagram
         Pre-conditions: A prompt was provided by the user
         Post-conditions: The prompt was set
         Parameters: String prompt
+        Return value: Boolean
+
+# PromptInputDisplay Class 
+## Data Fields: 
+    - 'String Prompt' : Prompt provided by the user
+
+## Methods: 
+    - `setPrompt()`
+        Purpose: Set the prompt
+        Pre-conditions: A prompt was provided by the user
+        Post-conditions: The prompt was set
+        Parameters: String prompt
+        Return value: Boolean
+
+# AgentDisplay Class 
+## Data Fields: 
+    - 'String Agentname' : Name of the agent
+    - 'String Prompt' : Prompt provided by the user
+    
+## Methods: 
+
+# StoryDisplay Class 
+## Data Fields: 
+    - 'String Story' : Prompt provided by the user
+
+## Methods: 
+    - `displayStory()`
+        Purpose: Display the story to the user
+        Pre-conditions: The user is on the story page
+        Post-conditions: The story was shown to the user
+        Parameters: String Story
+        Return value: Boolean
+
+# ChapterDisplay Class 
+## Data Fields: 
+    - 'String Agent' : An AI agent used to write the story
+    - 'String Chapter' : A chapter of the story written by the agents
+
+## Methods: 
+    - `displayChapter()`
+        Purpose: Display a chapter of the story to the user
+        Pre-conditions: A story is being displayed to the user
+        Post-conditions: The chapter was shown to the user
+        Parameters: String Chapter
+        Return value: Boolean
+
+# AgentSelectionDisplay Class 
+## Data Fields: 
+    - 'String Agentname' : Name of an agent
+    - 'String Persona' : Persona of an agent
+
+## Methods: 
+    - `selectAgent()`
+        Purpose: Select an agent from the list of agents
+        Pre-conditions: At least one agent exists
+        Post-conditions: An agent was selected for writing
+        Parameters: String Agentname
+        Return value: Boolean
+    - `createAgentDisplay()`
+        Purpose: Display the agent creation page
+        Pre-conditions: The user is navigating to the agent creation page
+        Post-conditions: The agent creation page is shownn to the user
+        Parameters: None
+        Return value: Boolean
+
+# VotingDisplay Class 
+## Data Fields: 
+    - 'int Votes' : Number of votes
+
+## Methods: 
+
+# ChapterEditingView Class 
+## Data Fields: 
+    - 'String Chapter' : A chapter of a story
+
+## Methods: 
+    - `editChapter()`
+        Purpose: Allow the user to edit a chapter
+        Pre-conditions: At least one chapter exists
+        Post-conditions: The user is able to edit a chapter
+        Parameters: String Chapter
+        Return value: Boolean
+    - `vetoChapter()`
+        Purpose: Allow the user to veto a chapter
+        Pre-conditions: At least one chapter exists
+        Post-conditions: A chapter was vetoed
+        Parameters: String Chapter
         Return value: Boolean
 
 #### Backend
