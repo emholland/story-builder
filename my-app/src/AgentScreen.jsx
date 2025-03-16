@@ -41,7 +41,7 @@ const handleNavigation = (event) => {
         setDeepSeekLoading(true);
         try {
             for (const agent of agents){
-                agent.generateChapter("Write a 6 word poem.");
+                agent.generateChapter("Write a story about aliens.");
                 console.log(agent);
              }
         } catch (error) {

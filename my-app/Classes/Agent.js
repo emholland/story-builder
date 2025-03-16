@@ -5,7 +5,8 @@ class Agent {
     constructor(persona, aiInstance) {
         this.persona = persona; 
         this.chapter = "";
-        this.aiInstance = aiInstance; 
+        this.aiInstance = aiInstance;
+        this.summary = "";
     }
 
     /**
@@ -18,15 +19,23 @@ class Agent {
         if(this.aiInstance == "openai"){
             try {
                 // Send a POST request to the backend API
-                const response = await axios.post('http://localhost:5001/api/openai', {
-                    userPrompt: prompt,
+                const chapter = await axios.post('http://localhost:5001/api/openai', {
+                    userPrompt: "Write a 50 word chapter of a story. The prompt is: " + prompt + "\nA summary of the story so far is: " + this.summary,
                     persona: this.persona, // Using the persona from the Agent instance
                 });
 
-                this.chapter = response.data.message;
+                this.chapter = chapter.data.message;
+
+                // Get a summary of the chapter
+                const chapterSummary = await axios.post('http://localhost:5001/api/openai', {
+                    userPrompt: "Give a one sentence summary of the following: " + this.chapter,
+                });
+
+                this.summary += chapterSummary.data.message;
+                //console.log(this.summary);
         
                 // Return the completion response from OpenAI
-                return response.data.message; // Assuming the backend sends 'message' in the response
+                return this.chapter; // Assuming the backend sends 'message' in the response
         
             } catch (error) {
                 console.error('Error fetching completion:', error);
