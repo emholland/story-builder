@@ -67,6 +67,15 @@ const handleNavigation = (event) => {
         }
     };
 
+    const checkAccuracy = async (agent) => {
+        try{
+            const accuracyResponse = await agent.testAccuracy();
+            console.log("AI Accuracy Evaluation: ", accuracyResponse);
+        }catch (error){
+            console.error("Error checking accuracy:", error);
+        }
+    };
+
     return (
         <div>
             <h2>DeepSeek AI Chat</h2>
@@ -82,7 +91,7 @@ const handleNavigation = (event) => {
                 {openAILoading ? "Generating..." : "Generate Response"}
             </button>
             {openAIResponse && <p><strong>Response:</strong> {openAIResponse}</p>}
-
+   
             {/* The Popup component */}
             <AddAgent isOpen={isPopupOpen} onClose={togglePopup} updateAgents={updateAgents}>
                 <h2>Add Agent</h2>
@@ -97,6 +106,8 @@ const handleNavigation = (event) => {
                                 <strong>AI:</strong> {agent.aiInstance}
                                 <strong> &nbsp; Persona:</strong> {agent.persona}... 
                                 <br></br>{agent.chapter}
+                                <br />
+                                <button onClick={() => checkAccuracy(agent)}>Check Accuracy</button>
                             </li>
 
                         ))
