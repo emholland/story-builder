@@ -49,8 +49,21 @@ import "./StoryCreationPage.css";
 
 
      */}
-function StoryCreation () {
+const StoryCreation = () => {
     return (
+        <div className="story-creation-page">
+            <div className="black-board">
+                <div className="phase-box">Phase 1</div>
+
+                <div className="agent-text-box">
+                    <textarea defaultValue="Provide agents with key details required for the story. You can be as desrictpive as you want" />
+                </div>
+
+                <div className="user-box"> User Info</div>
+
+                <div className="add-agents"><button> Add Agents </button></div>
+           </div>
+        </div>
         );
-    }
+    };
 export default StoryCreation;
