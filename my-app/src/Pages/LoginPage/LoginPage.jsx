@@ -1,45 +1,71 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getDoc, doc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { db } from "./firebaseConfig"; // Ensure correct Firebase import
 import Username from "./Username";
 import Password from "./Password";
-import { useNavigate } from "react-router-dom";
+import CreateAccountButton from "./CreateAccountButton";
 import "./LoginPage.css";
 
-const LoginPage = () => {
-    const navigate = useNavigate();
+const fetchImages = async () => {
+  try {
+    const docRef = doc(db, "FrontendImages", "LoginScreenImage");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data().imageUrl;
+    } else {
+      console.error("No such document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching image:", error);
+    return null;
+  }
+};
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Placeholder logic: Simulates successful login
-        navigate("/dashboard"); // Change "/dashboard" to actual route later
-      };
-    
-    return (
-        <div className="login-page">
-        <div className="login-page-image-container">
-        <img
-          src="" // Placeholder, replace with Firebase Storage fetch logic
-          alt="Login Illustration"
-          className="login-image"
-        />
+const LoginPage = () => {
+  const [imageUrl, setImageUrl] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loadImage = async () => {
+      const url = await fetchImages();
+      setImageUrl(url);
+    };
+    loadImage();
+  }, []);
+  const handleLogin = () => {
+    handleAuthentication(email, password, "", "login");
+  };
+
+  return (
+    <div className="login-page">
+      {/* Left side: Image container */}
+      <div className="login-page-image-container">
+        {imageUrl && <img src={imageUrl} alt="Login Illustration" className="login-image" />}
       </div>
 
+      
       <div className="login-separator"></div>
 
+      {/* Right side: Login form */}
       <div className="login-form-container">
         <h1 className="login-page-hero-text">Create an account</h1>
         <p className="login-page-subtext">
-        Already have an account? <button className="login-text-button" onClick={() => navigate("/login")}>Log in</button>
+          Already have an account? <button className="login-text-button" onClick={handleLogin} disabled={!email || !password}>Log in</button>
+           
         </p>
 
         <form className="login-form">
-          <Username />
-          <Password />
-          <CreateAcountButton/>
+          <Username value={email} onChange={(e) => setEmail(e.target.value)}  />
+          <Password value={password} onChange={(e) => setPassword(e.target.value)}/>
+          <CreateAccountButton email={email} password={password} />
         </form>
       </div>
     </div>
-
-    );
+  );
 };
-export default LoginPage;
 
+export default LoginPage;

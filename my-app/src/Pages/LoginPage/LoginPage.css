@@ -33,7 +33,7 @@ border-radius: 5px;
     width: 100%;
     height: auto;
     border-radius: 5px;
-    object-fit: cover;
+    object-fit: fill;
 }
 .login-page-hero-text{
     font-size: 3.65rem; 

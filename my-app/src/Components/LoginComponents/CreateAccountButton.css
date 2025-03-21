@@ -1,0 +1,21 @@
+.create-account-button {
+    width: 90%; 
+    max-width: 662px; 
+    height: 72px; 
+    background-color: rgba(255, 255, 255, 0.5); 
+    border: none;
+    border-radius: 12px;
+    font-size: 1.58rem; 
+    font-weight: 400; 
+    font-family: 'Inter', sans-serif;
+    color: black; 
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.create-account-button:hover {
+    opacity: 0.8;
+}
