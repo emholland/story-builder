@@ -432,6 +432,16 @@ classDiagram
         Pre-conditions: The agent is created the stpry creation has not started 
         Parameters: String persona 
         Return value: Boolean 
+     - `fetchDeepseekResponse()`
+        Purpose: Call Deepseek API, taking in global prompts and personas to write and generate chapter
+        Pre-conditions: The agent is created, the persona is selected, and an input is put in .
+        Parameters: String Input, String Agent, String Persona 
+        Return value: String
+    - `setDeepseekResponse()`
+        Purpose: set Deepseek API response, allowing it to be displayed on the screen as a String
+        Pre-conditions: fetchDeepseekResponse is called to ingest it's output.
+        Parameters: fetchDeepseekResponse() 
+        Return value: String
 # VotePhase Class
 ## Data Fields
     - 'Array Agents' : Stores each of the agents that we will be utilizing to vote on the current version of the story and each new geenration
