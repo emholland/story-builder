@@ -98,6 +98,8 @@ classDiagram
     }
 ```
 
+**Figure 1.1** The above diagram depicts the Frontend class diagram for the project. Each class contains attributes and methods. The main class is the App class. All other class relate to the App class. 
+
 # App Class 
 ## Data Fields: 
     - 'User user' : Written guidelines for writing the story
@@ -315,7 +317,7 @@ classDiagram
     }
 ```
 
-**Figure 1.1** blah blah blah description
+**Figure 1.2** The above diagram depicts the Backend class diagram for the project. Each class contains attributes and methods. The main class is the User class. All other class relate to the User class. 
 
 # Session Class 
 ## Data Fields: 
