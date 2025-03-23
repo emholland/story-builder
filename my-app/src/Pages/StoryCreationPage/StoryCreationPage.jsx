@@ -113,7 +113,7 @@ const StoryCreation = () => {
                                     </ul> 
                                 </div>
             </div>
-            <button class="test-percent top-right" onClick={() => checkAccuracy(agent)}>Check Accuracy</button>
+            <button class="test-percent top-right" onClick={() => checkAccuracy(agent)}>Check Agent Accuracy</button>
         </div>
     );
 };

@@ -80,7 +80,7 @@ textarea {
 
 /* Generate Chapter Button */
 .generate-chapter {
-    background-color: #222222;
+    background-color: #1e1d1d;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -120,7 +120,7 @@ textarea {
     position: absolute;
     top: 5vh;
     right: 4vw;
-    background-color: #222222;
+    background-color: #1e1d1d;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -167,7 +167,7 @@ textarea {
 .add-agents button {
     width: 100%;
     height: 100%;
-    background-color: #222222;
+    background-color: #1e1d1d;
     color: white;
     border: none;
     padding: 12px;
