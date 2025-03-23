@@ -1,10 +1,10 @@
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { db } from "./firebaseConfig"; // Ensure Firestore is imported
+import { db } from "../../../firebase.js"; // Ensure Firestore is imported
 
 const auth = getAuth();
-const navigate = useNavigate();
+//const navigate = useNavigate();
 
 const handleAuthentication = async (email, password, username, action) => {
   try {

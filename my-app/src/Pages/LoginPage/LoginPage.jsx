@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { getDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { db } from "./firebaseConfig"; // Ensure correct Firebase import
-import Username from "./Username";
-import Password from "./Password";
-import CreateAccountButton from "./CreateAccountButton";
+import { db } from "../../../firebase.js"; // Ensure correct Firebase import
+import Username from "../../Components/LoginComponents/Username.jsx";
+import Password from "../../Components/LoginComponents/Password.jsx";
+import CreateAccountButton from "../../Components/LoginComponents/CreateAccountButton.jsx";
 import "./LoginPage.css";
 
 const fetchImages = async () => {

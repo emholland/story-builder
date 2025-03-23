@@ -1,6 +1,6 @@
 import React from "react";
-import { handleAuthentication } from "./authentication";
-import "./CreateAccount.css";
+import { handleAuthentication } from "./Authenication.jsx";
+import "./CreateAccountButton.css";
 
 const CreateAccountButton = ({ email, password }) => {
   const handleCreateAccount = () => {
