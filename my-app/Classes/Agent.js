@@ -40,15 +40,20 @@ class Agent {
                 throw new Error('Failed to generate completion');
             }
         }else{
+            // Create outline if not already created
+            if (this.chapterCount == 0) {
+                await this.createOutline(prompt);
+            }
+            this.chapterCount++;
             try {
-                    const res = await axios.post("http://localhost:5001/api/chat", {
-                        prompt: prompt,
-                        persona: this.persona, // Using the persona from the Agent instance
-                    });
-        
-                    this.chapter = res.data.message;
-
-                    return res.data.message; // Assuming the backend sends 'message' in the response
+                    // Write a chapter using API
+                console.log("Write chapter number " + this.chapterCount + " of a story based on the following story outline: " + JSON.stringify(this.outline));
+                const res = await axios.post("http://localhost:5001/api/chat", {
+                    prompt: "Write chapter number" + this.chapterCount + "of a story based on the following story outline: " + this.outline,
+                    persona: this.persona, // Using the persona from the Agent instance
+                });
+                this.chapter = res.data.choices[0].message.content;
+                return this.chapter // Assuming the backend sends 'message' in the response
                 
                 
         
@@ -75,7 +80,7 @@ class Agent {
                 return response.data.message;
 
             } catch (error) {
-                console.error('Error fetching accuracy:', error);
+                console.log('Error fetching accuracy:', error);
                 throw new Error('Failed to generate accuracy');
             }
         }else{
@@ -88,7 +93,7 @@ class Agent {
             return res.data.message;
 
         } catch (error) {
-            console.error('Error checking accuracy:', error);
+            console.log('Error checking accuracy:', error);
             throw new Error('Failed to check accuracy');
         }
     }
