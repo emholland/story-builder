@@ -53,9 +53,7 @@ class Agent {
                     persona: this.persona, // Using the persona from the Agent instance
                 });
                 this.chapter = res.data.choices[0].message.content;
-        
-                // Return the completion response from OpenAI
-                return this.chapter; // Assuming the backend sends 'message' in the response
+                return this.chapter // Assuming the backend sends 'message' in the response
                 
                 
         
@@ -82,7 +80,7 @@ class Agent {
                 return response.data.message;
 
             } catch (error) {
-                console.error('Error fetching accuracy:', error);
+                console.log('Error fetching accuracy:', error);
                 throw new Error('Failed to generate accuracy');
             }
         }else{
@@ -95,7 +93,7 @@ class Agent {
             return res.data.message;
 
         } catch (error) {
-            console.error('Error checking accuracy:', error);
+            console.log('Error checking accuracy:', error);
             throw new Error('Failed to check accuracy');
         }
     }
