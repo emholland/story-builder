@@ -41,7 +41,7 @@ const StoryCreation = () => {
     
       // Function to handle "Next" button click
       const goNextChapter = () => {
-        if (chapterIndex < agents.chapterHistory.length - 1) {
+        if (chapterIndex < agents[0].chapterHistory.length - 1) {
           setChapterIndex(currentIndex + 1);
         }
       };
