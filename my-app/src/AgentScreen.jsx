@@ -56,7 +56,7 @@ const handleNavigation = (event) => {
         setOpenAILoading(true);
         try {
              for (const agent of agents){
-                await agent.generateChapter("Write a 6 word poem.");
+                await agent.generateChapter("Write a story about a computer science student who learns they have superpowers.");
                 console.log(agent);
              }
         } catch (error) {
