@@ -56,7 +56,7 @@ const handleNavigation = (event) => {
         setOpenAILoading(true);
         try {
              for (const agent of agents){
-                await agent.generateChapter("Write a 6 word poem.");
+                await agent.generateChapter("Write a story about a computer science student who learns they have superpowers.");
                 console.log(agent);
              }
         } catch (error) {
@@ -70,7 +70,8 @@ const handleNavigation = (event) => {
     const checkAccuracy = async (agent) => {
         try{
             const accuracyResponse = await agent.testAccuracy();
-            console.log("AI Accuracy Evaluation: ", accuracyResponse);
+            console.log("Accuracy Evaluation for", agent.persona, ":", accuracyResponse);
+        alert(`Accuracy for ${agent.persona}: ${accuracyResponse}`);
         }catch (error){
             console.error("Error checking accuracy:", error);
         }
