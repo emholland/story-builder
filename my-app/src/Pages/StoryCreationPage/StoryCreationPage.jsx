@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Agent from '../Classes/Agent.js'
+import Agent from "../../../Classes/Agent"
 import "./StoryCreationPage.css";
 
 
 const StoryCreation = () => {
-    const [userInput, setUserInput] = useState("");
+    /*const [userInput, setUserInput] = useState("");
     const [generatedChapter, setGeneratedChapter] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -23,7 +23,7 @@ const StoryCreation = () => {
         } catch (error) {
           alert("Failed to generate chapter. Please try again.");
         }
-    };
+    };*/
 
 
     return (
@@ -47,7 +47,7 @@ const StoryCreation = () => {
                     <button>Add Agents</button>
                 </div>
             </div>
-            <button class="test-percent top-right">Test %</button>
+            <button class="test-percent top-right" onClick={() => checkAccuracy(agent)}>Check Accuracy</button>
         </div>
     );
 };
