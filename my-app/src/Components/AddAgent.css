@@ -29,12 +29,14 @@
   
   /* Close button inside the popup */
   .close-button {
+    max-width: 10%;
+    max-height: 10%;
     position: absolute;
     top: 5px;
     right: 5px;
-    background: transparent;
+    background: none;
     border: none;
-    font-size: 20px;
+    font-size: 5px;
     cursor: pointer;
     color: #333;
   }
