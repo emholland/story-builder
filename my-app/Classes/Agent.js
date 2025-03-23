@@ -4,6 +4,7 @@ import OpenAI from 'openai';
 class Agent {
     constructor(persona, aiInstance) {
         this.persona = persona; 
+        this.chapterHistory = [];
         this.chapter = "";
         this.aiInstance = aiInstance;
         this.outline = "";
@@ -31,6 +32,7 @@ class Agent {
                     persona: this.persona, // Using the persona from the Agent instance
                 });
                 this.chapter = response.data.message;
+                this.chapterHistory.push(response.data.message);
         
                 // Return the completion response from OpenAI
                 return this.chapter; // Assuming the backend sends 'message' in the response
@@ -53,6 +55,7 @@ class Agent {
                     persona: this.persona, // Using the persona from the Agent instance
                 });
                 this.chapter = res.data.choices[0].message.content;
+                this.chapterHistory.push(res.data.choices[0].message.content);
                 return this.chapter // Assuming the backend sends 'message' in the response
                 
                 
@@ -64,6 +67,12 @@ class Agent {
 
         }
     }
+
+        // Get the current item
+    getChapterAtIndex(index) {
+        return this.chapterHistroy[index];
+    }
+
 
     async testAccuracy() {
         if (!this.chapter) {
