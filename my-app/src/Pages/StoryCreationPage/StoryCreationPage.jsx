@@ -78,7 +78,7 @@ const StoryCreation = () => {
                     <textarea placeholder="Provide agents with key details required for the story. You can be as descriptive as you want"></textarea>
                     <div className="controls">
                         <button className="generate-chapter" onClick={generateAIResponse} disabled={aiLoading}>
-                            {aiLoading ? "Generating..." : "Generate Response"}
+                            {aiLoading ? "Generating..." : "Generate Chapter"}
                         </button>
             
                         <div className="arrows">
