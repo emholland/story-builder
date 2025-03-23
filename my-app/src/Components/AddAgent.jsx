@@ -128,6 +128,7 @@ const AddAgent = ({ children, updateAgents }) => {
 
                     </select>
                 </div>
+                {/*
                 <div>
                 <input className='textBar'
                 type="text"
@@ -137,19 +138,19 @@ const AddAgent = ({ children, updateAgents }) => {
                 placeholder="Type a message..."
             />
                 </div>
+                */}
             </div>
-
-            <button className="add-agent-button" onClick={() => { addAgent(); fetchDeepSeekResponse(); }} disabled={deepSeekLoading}>
-            {deepSeekLoading ? "Loading..." : "Add"}
-              
-            </button>
+                  
+             
+               <button className="add-agent-button" onClick={() => { addAgent()}} disabled={deepSeekLoading}>
+                {deepSeekLoading ? "Loading..." : "Add"}
+              </button>
+            
 
           </div>
           
         </div>
       )}
-      <h3>Output:</h3>
-      <p>{deepSeekResponse}</p>
     </div>
   );
 };
