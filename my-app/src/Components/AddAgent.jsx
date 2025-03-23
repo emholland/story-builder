@@ -151,8 +151,6 @@ const AddAgent = ({ children, updateAgents }) => {
           
         </div>
       )}
-      <h3>Output:</h3>
-      <p>{deepSeekResponse}</p>
     </div>
   );
 };
