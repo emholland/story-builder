@@ -48,7 +48,7 @@ class Agent {
         
                     this.chapter = res.data.message;
 
-                    return res.data.message; // Assuming the backend sends 'message' in the response
+                    return this.chapter // Assuming the backend sends 'message' in the response
                 
                 
         
@@ -75,7 +75,7 @@ class Agent {
                 return response.data.message;
 
             } catch (error) {
-                console.error('Error fetching accuracy:', error);
+                console.log('Error fetching accuracy:', error);
                 throw new Error('Failed to generate accuracy');
             }
         }else{
@@ -88,7 +88,7 @@ class Agent {
             return res.data.message;
 
         } catch (error) {
-            console.error('Error checking accuracy:', error);
+            console.log('Error checking accuracy:', error);
             throw new Error('Failed to check accuracy');
         }
     }
