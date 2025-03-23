@@ -115,6 +115,14 @@ textarea {
     background-color: #444444;
 }
 
+.test-button{ 
+    width: 20vw;
+    height: 5vh;
+    font-size: small;
+    margin-left:20px;
+    margin-right: 20px;
+}
+
 /* Test Percentage button */
 .test-percent {
     position: absolute;

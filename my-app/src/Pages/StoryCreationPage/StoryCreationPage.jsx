@@ -101,6 +101,7 @@ const StoryCreation = () => {
                                         {agents.length > 0 ? (
                                             agents.map((agent, index) => (
                                                 <li key={index}>
+                                                    <button className="test-button" onClick={() => checkAccuracy(agent)}>Check Agent Accuracy</button>
                                                     <strong>AI:</strong> {agent.aiInstance}
                                                     <strong> &nbsp; Persona:</strong> {agent.persona}... 
                                                     <br></br>{agent.chapter}
@@ -113,7 +114,7 @@ const StoryCreation = () => {
                                     </ul> 
                                 </div>
             </div>
-            <button class="test-percent top-right" onClick={() => checkAccuracy(agent)}>Check Agent Accuracy</button>
+        
         </div>
     );
 };
