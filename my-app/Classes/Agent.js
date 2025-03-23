@@ -83,7 +83,7 @@ class Agent {
             try {
                 // Send a POST request to the backend API
                 const response = await axios.post('http://localhost:5001/api/openai', {
-                    userPrompt: `Analyze the following text and determine if the writing style is accurate to the selected persona:\n\n"${this.chapter}"\n\nProvide a percentage score and a brief explanation.`
+                    userPrompt: `Analyze the following text and determine if the writing style is accurate to the selected persona:\n\n"${this.chapter}"\n\nProvide a percentage score and a brief explanation in uder 50 words.`
                 });
                 console.log("Accuracy Check Response: ", response.data.message);
                 return response.data.message;
@@ -95,7 +95,7 @@ class Agent {
         }else{
             try {
                     const res = await axios.post("http://localhost:5001/api/chat", {
-                        prompt: `Analyze the following text and determine if the writing style is accurate to the selected persona:\n\n"${this.chapter}"\n\nProvide a percentage score and a brief explanation.`
+                        prompt: `Analyze the following text and determine if the writing style is accurate to the selected persona:\n\n"${this.chapter}"\n\nProvide a percentage score and a brief explanation in under 50 words.`
             });
 
             console.log("Accuracy Check Response:", res.data.message);
