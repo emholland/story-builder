@@ -4,8 +4,8 @@ html, body {
     margin: 0;
 }
 
-/* Container for the whole page */
-.story_create_page {
+/* General Page Styling */
+.story-create-page {
     background-color: black;
     color: white;
     display: flex;
@@ -13,10 +13,10 @@ html, body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    overflow: hidden; /* Prevents scrolling */
+    overflow: hidden; /* Prevent scrolling */
 }
 
-/* The blackboard */
+/* Blackboard Styling */
 .black-board {
     width: 96.5vw;
     height: 94vh;
@@ -30,17 +30,13 @@ html, body {
     align-items: center;
     padding: 20px;
     box-sizing: border-box;
-    max-width: 100%;
-    max-height: 100%;
 }
 
-/* Phase box inside the blackboard */
+/* Phase Box Styling */
 .phase-box {
     width: 40vw;
     height: 8vh;
-    position: absolute;
-    top: 7vh;
-    left: 36vw;
+    margin-bottom: 20px;
     border-radius: 12px;
     background-color: #ffffff0d;
     display: flex;
@@ -49,7 +45,95 @@ html, body {
     color: white;
 }
 
-/* User Info Box */
+/* Text Area Container and Controls */
+.agent-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60vw;
+    margin-top: 40px;
+}
+
+textarea {
+    width: 60vw;
+    height: 30vh;
+    border-radius: 11px;
+    border: 1px solid white;
+    background-color: #ffffff0d;
+    color: white;
+    padding: 12px;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    margin-bottom: 20px;
+    margin-left: 9vw;
+}
+
+/*General Rules for Generate Chapter & Arrows Button*/
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+}
+
+/* Generate Chapter Button */
+.generate-chapter {
+    background-color: #222222;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 2vw;
+}
+
+.generate-chapter:hover {
+    background-color: #444444;
+}
+
+/* Arrow Button Styling */
+.arrows {
+    display: flex;
+    gap: 10px;
+}
+
+.arrows button {
+    background-color: #222222;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+
+}
+
+.arrows button:hover {
+    background-color: #444444;
+}
+
+/* Test Percentage button */
+.test-percent {
+    position: absolute;
+    top: 5vh;
+    right: 4vw;
+    background-color: #222222;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.test-percent:hover {
+    background-color: #444444;
+}
+
+/*User Info Box */
 .user-box {
     width: 15vw;
     height: 5vh;
@@ -58,14 +142,13 @@ html, body {
     left: 2vw;
     border-radius: 8px;
     padding: 12px;
-    gap: 12px;
     background-color: #444444;
     display: flex;
     align-items: center;
     color: white;
 }
 
-/* Add Agents button box */
+/* Add Agents Button Styling */
 .add-agents {
     width: 15vw;
     height: 8vh;
@@ -74,15 +157,13 @@ html, body {
     left: 2vw;
     border-radius: 8px;
     padding: 12px;
-    gap: 6px;
-    background-color: #222222;
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
 }
 
-/* Button inside Add Agents */
 .add-agents button {
     width: 100%;
     height: 100%;
@@ -97,21 +178,4 @@ html, body {
 
 .add-agents button:hover {
     background-color: #444444;
-}
-
-/* Style for the textarea inside Agent Textbox */
-textarea {
-    width: 60vw;
-    height: 30vh;
-    position: absolute;
-    top: 22vh;
-    left: 25vw;
-    border-radius: 11.28px;
-    border: 1px solid white;
-    background-color: #ffffff0d;
-    color: white;
-    padding: 12px;
-    font-size: 14px;
-    resize: none;
-    outline: none;
 }
