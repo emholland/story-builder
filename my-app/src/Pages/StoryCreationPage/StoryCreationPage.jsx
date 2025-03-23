@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Agent from '../../../Classes/Agent.js'
+import Agent from "../../../Classes/Agent"
 import "./StoryCreationPage.css";
 import AddAgent from "../../Components/AddAgent.jsx"
 

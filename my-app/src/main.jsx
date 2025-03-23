@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Import routing components
 import "./index.css";
 import App from "./App.jsx";
+import LoginPage from "./Pages/LoginPage/LoginPage.jsx";
+import StoryCreationPage from "./Pages/StoryCreationPage/StoryCreationPage.jsx";
 import AgentScreen from "./AgentScreen.jsx";
 import NewHome from "./NewHome.jsx";
 import AgentGeneration from "./AgentGeneration.jsx";

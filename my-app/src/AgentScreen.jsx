@@ -11,19 +11,18 @@ const AgentScreen = () => {
     const [openAIResponse, setOpenAIResponse] = useState("");
     const [deepSeekLoading, setDeepSeekLoading] = useState(false); // loading state for DeepSeek
     const [openAILoading, setOpenAILoading] = useState(false); // loading state for OpenAI
-    
-    const navigate = useNavigate();
-
-const handleNavigation = (event) => {
-    const selectedValue = event.target.value;
-    if (selectedValue === "deepseek") {
-        navigate("/write"); 
-    } else if (selectedValue === "openai") {
-        navigate("/"); 
-    }
-};
     const [isPopupOpen, setIsPopupOpen] = useState(false);  // State to control popup visibility
 
+    //const navigate = useNavigate();
+
+    /*const handleNavigation = (event) => {
+        const selectedValue = event.target.value;
+        if (selectedValue === "deepseek") {
+            navigate("/write"); 
+        } else if (selectedValue === "openai") {
+            navigate("/"); 
+        }
+    };*/
 
     // Function to update the list of agents after adding a new agent
     const updateAgents = (newAgent) => {
@@ -37,7 +36,7 @@ const handleNavigation = (event) => {
         setIsPopupOpen(!isPopupOpen);
     };
 
-    const fetchDeepSeekResponse = async () => {
+    /*const fetchDeepSeekResponse = async () => {
         setDeepSeekLoading(true);
         try {
             for (const agent of agents){
@@ -50,9 +49,9 @@ const handleNavigation = (event) => {
         } finally {
             setDeepSeekLoading(false);
         }
-    };
+    };*/
 
-    const generateOpenAIResponse = async () => {
+    /*const generateOpenAIResponse = async () => {
         setOpenAILoading(true);
         try {
              for (const agent of agents){
@@ -65,7 +64,7 @@ const handleNavigation = (event) => {
         } finally {
             setOpenAILoading(false);
         }
-    };
+    };*/
 
     const checkAccuracy = async (agent) => {
         try{

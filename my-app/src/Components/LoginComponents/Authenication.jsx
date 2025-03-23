@@ -1,10 +1,10 @@
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { db } from "./firebaseConfig"; // Ensure Firestore is imported
+import { db } from "../../../firebase.js"; // Ensure Firestore is imported
 
 const auth = getAuth();
-const navigate = useNavigate();
+//const navigate = useNavigate();
 
 const handleAuthentication = async (email, password, username, action) => {
   try {
@@ -12,13 +12,13 @@ const handleAuthentication = async (email, password, username, action) => {
       // Attempt to log in
       await signInWithEmailAndPassword(auth, email, password);
       console.log("User logged in successfully!");
-      navigate("/dashboard");
+      navigate("/StoryCreationPage"); 
     } else if (action === "create") {
       try {
         // Try signing in first (auto-login returning users)
         await signInWithEmailAndPassword(auth, email, password);
         console.log("User already exists, logging in...");
-        navigate("/dashboard");
+        navigate("/StoryCreationPage"); //palce holder page
       } catch (signInError) {
         // If user does not exist, create a new account
         if (signInError.code === "auth/user-not-found") {
@@ -34,7 +34,7 @@ const handleAuthentication = async (email, password, username, action) => {
             });
             
             console.log("User data saved to Firestore");
-            navigate("/dashboard");
+            navigate("/StoryCreationPage"); //change placeholder page 
           } catch (createError) {
             console.error("Error creating account:", createError);
           }
