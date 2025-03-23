@@ -1,0 +1,181 @@
+/* Ensure the html and body take up the full viewport */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* General Page Styling */
+.story-create-page {
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+/* Blackboard Styling */
+.black-board {
+    width: 96.5vw;
+    height: 94vh;
+    position: absolute;
+    top: 3vh;
+    left: 2vw;
+    border-radius: 25px;
+    background-color: #222222;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Phase Box Styling */
+.phase-box {
+    width: 40vw;
+    height: 8vh;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    background-color: #ffffff0d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+/* Text Area Container and Controls */
+.agent-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60vw;
+    margin-top: 40px;
+}
+
+textarea {
+    width: 60vw;
+    height: 30vh;
+    border-radius: 11px;
+    border: 1px solid white;
+    background-color: #ffffff0d;
+    color: white;
+    padding: 12px;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    margin-bottom: 20px;
+    margin-left: 9vw;
+}
+
+/*General Rules for Generate Chapter & Arrows Button*/
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+}
+
+/* Generate Chapter Button */
+.generate-chapter {
+    background-color: #222222;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 2vw;
+}
+
+.generate-chapter:hover {
+    background-color: #444444;
+}
+
+/* Arrow Button Styling */
+.arrows {
+    display: flex;
+    gap: 10px;
+}
+
+.arrows button {
+    background-color: #222222;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+
+}
+
+.arrows button:hover {
+    background-color: #444444;
+}
+
+/* Test Percentage button */
+.test-percent {
+    position: absolute;
+    top: 5vh;
+    right: 4vw;
+    background-color: #222222;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.test-percent:hover {
+    background-color: #444444;
+}
+
+/*User Info Box */
+.user-box {
+    width: 15vw;
+    height: 5vh;
+    position: absolute;
+    top: 5vh;
+    left: 2vw;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: #444444;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+/* Add Agents Button Styling */
+.add-agents {
+    width: 15vw;
+    height: 8vh;
+    position: absolute;
+    top: 17vh;
+    left: 2vw;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.add-agents button {
+    width: 100%;
+    height: 100%;
+    background-color: #222222;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.add-agents button:hover {
+    background-color: #444444;
+}
