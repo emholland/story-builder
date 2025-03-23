@@ -26,9 +26,9 @@ class Agent {
             this.chapterCount++;
             try {
                 // Write a chapter using API
-                console.log("Write chapter number " + this.chapterCount + " of a story based on the following story outline: " + JSON.stringify(this.outline));
+                console.log("Write chapter number " + this.chapterCount + " ,no longer than 50 words, of a story based on the following story outline: " + JSON.stringify(this.outline));
                 const response = await axios.post('http://localhost:5001/api/openai', {
-                    userPrompt: "Write chapter number" + this.chapterCount + "of a story based on the following story outline: " + this.outline,
+                    userPrompt: "Write chapter number" + this.chapterCount + " ,no longer than 50 words, of a story based on the following story outline: " + this.outline,
                     persona: this.persona, // Using the persona from the Agent instance
                 });
                 this.chapter = response.data.message;
@@ -49,9 +49,9 @@ class Agent {
             this.chapterCount++;
             try {
                     // Write a chapter using API
-                console.log("Write chapter number " + this.chapterCount + " of a story based on the following story outline: " + JSON.stringify(this.outline));
+                console.log("Write chapter number " + this.chapterCount + " ,no longer than 50 words, of a story based on the following story outline: " + JSON.stringify(this.outline));
                 const res = await axios.post("http://localhost:5001/api/chat", {
-                    prompt: "Write chapter number" + this.chapterCount + "of a story based on the following story outline: " + this.outline,
+                    prompt: "Write chapter number" + this.chapterCount + " ,no longer than 50 words, of a story based on the following story outline: " + this.outline,
                     persona: this.persona, // Using the persona from the Agent instance
                 });
                 this.chapter = res.data.choices[0].message.content;
@@ -161,7 +161,7 @@ class Agent {
         try {
             // Create outline
             const response = await axios.post('http://localhost:5001/api/openai', {
-                userPrompt: "Create an outline for a story about " + prompt + " The story will be 10 chapters in total and each chapter will be 100 words. Make sure to include what happens in each chapter and what characters appear.",
+                userPrompt: "Create an outline, no loner than, 100 words, for a story about " + prompt + " The story will be 4 chapters in total and each chapter will be 50 words. Make sure to include what happens in each chapter and what characters appear.",
             });
             this.outline = response.data.message;
             console.log(this.outline);

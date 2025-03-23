@@ -19,7 +19,7 @@ const StoryCreation = () => {
 
     const generateAIResponse = async () => {
         setAILoading(true);
-        setchapterIndex(agents[0].chapterCount);
+        setChapterIndex(agents[0].chapterCount);
         try {
              for (const agent of agents){
                 await agent.generateChapter("Write a story about a computer science student who learns they have superpowers.");
@@ -35,14 +35,14 @@ const StoryCreation = () => {
 
     const goPreviousChapter = () => {
         if (chapterIndex > 0) {
-          setChapterIndex(currentIndex - 1);
+          setChapterIndex(chapterIndex - 1);
         }
       };
     
       // Function to handle "Next" button click
       const goNextChapter = () => {
         if (chapterIndex < agents[0].chapterHistory.length - 1) {
-          setChapterIndex(currentIndex + 1);
+          setChapterIndex(chapterIndex + 1);
         }
       };
 
