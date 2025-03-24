@@ -26,9 +26,9 @@ class Agent {
             this.chapterCount++;
             try {
                 // Write a chapter using API
-                console.log("Write chapter number " + this.chapterCount + " ,no longer than 150 words, of a story based on the following story outline: " + JSON.stringify(this.outline));
+                console.log("Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline));
                 const response = await axios.post('http://localhost:5001/api/openai', {
-                    userPrompt: "Write chapter number" + this.chapterCount + " ,no longer than 150 words, of a story based on the following story outline: " + this.outline,
+                    userPrompt: "Write chapter number" + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + this.outline,
                     persona: this.persona, // Using the persona from the Agent instance
                 });
                 this.chapter = response.data.message;
@@ -49,9 +49,9 @@ class Agent {
             this.chapterCount++;
             try {
                     // Write a chapter using API
-                console.log("Write chapter number " + this.chapterCount + " ,no longer than 150 words, of a story based on the following story outline: " + JSON.stringify(this.outline));
+                console.log("Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline));
                 const res = await axios.post("http://localhost:5001/api/chat", {
-                    prompt: "Write chapter number" + this.chapterCount + " ,no longer than 150 words, of a story based on the following story outline: " + this.outline,
+                    prompt: "Write chapter number" + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + this.outline,
                     persona: this.persona, // Using the persona from the Agent instance
                 });
                 this.chapter = res.data.choices[0].message.content;
@@ -70,7 +70,7 @@ class Agent {
 
         // Get the current item
     getChapterAtIndex(index) {
-        return this.chapterHistroy[index];
+        return this.chapterHistory[index];
     }
 
 

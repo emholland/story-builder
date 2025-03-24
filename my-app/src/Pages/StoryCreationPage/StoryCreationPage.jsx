@@ -7,22 +7,31 @@ import AddAgent from "../../Components/AddAgent.jsx"
 
 
 const StoryCreation = () => {
-    /*const [userInput, setUserInput] = useState("");
+    const [userInput, setUserInput] = useState("");
+    const [prompt, setPrompt] = useState("Write a story about a computer science student who learns they have superpowers.");
     const [generatedChapter, setGeneratedChapter] = useState("");
-    const [loading, setLoading] = useState(false);*/
-
+    //const [loading, setLoading] = useState(false);
+    //const [isChapterGenerated, setIsChapterGenerated] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);  // State to control popup visibility
     const [agents, setAgents] = useState([]);
     const [aiResponse, setAIResponse] = useState("");
     const [aiLoading, setAILoading] = useState(false); // loading state for DeepSeek
     const [chapterIndex, setChapterIndex] = useState(0);
 
+    useEffect(() => {
+        //if (!isChapterGenerated)
+        setPrompt(userInput.trim() ? userInput : "Write a story about a computer science student who learns they have superpowers.");
+    }, [userInput]); //[userInput, isChapterGenerated]);
+
     const generateAIResponse = async () => {
         setAILoading(true);
+        console.log("User Input:", userInput);
+        console.log("Prompt Used:", prompt);
+
         setChapterIndex(agents[0].chapterCount);
         try {
              for (const agent of agents){
-                await agent.generateChapter("Write a story about a computer science student who learns they have superpowers.");
+                await agent.generateChapter(prompt);
                 console.log(agent);
              }
         } catch (error) {
@@ -30,6 +39,7 @@ const StoryCreation = () => {
             setAIResponse("An error occurred while fetching the response.");
         } finally {
             setAILoading(false);
+            //setIsChapterGenerated(true);
         }
     };
 
@@ -92,7 +102,7 @@ const StoryCreation = () => {
                 <div className="phase-box">Chapter {chapterIndex+1}</div>
 
                 <div className="agent-text-container">
-                    <textarea placeholder="Provide agents with key details required for the story. You can be as descriptive as you want"></textarea>
+                <textarea value={userInput} onChange={(e) => setUserInput(e.target.value)} placeholder="Provide agents with key details required for the story. You can be as descriptive as you want" /*disabled={isChapterGenerated}*/></textarea>
                     <div className="controls">
                         <button className="generate-chapter" onClick={generateAIResponse} disabled={aiLoading}>
                             {aiLoading ? "Generating..." : "Generate Chapter"}
@@ -100,7 +110,7 @@ const StoryCreation = () => {
             
                         <div className="arrows">
                             <button className="move-backward" onClick={() => goPreviousChapter()}>⬅</button>
-                            <button className="move-forward"onClick={() => goNextChapter()}>➡</button>
+                            <button className="move-forward" onClick={() => goNextChapter()}>➡</button>
                         </div>
                     </div>
                 </div>
