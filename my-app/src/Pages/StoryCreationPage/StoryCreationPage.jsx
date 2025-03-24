@@ -15,9 +15,11 @@ const StoryCreation = () => {
     const [agents, setAgents] = useState([]);
     const [aiResponse, setAIResponse] = useState("");
     const [aiLoading, setAILoading] = useState(false); // loading state for DeepSeek
+    const [chapterIndex, setChapterIndex] = useState(0);
 
     const generateAIResponse = async () => {
         setAILoading(true);
+        setChapterIndex(agents[0].chapterCount);
         try {
              for (const agent of agents){
                 await agent.generateChapter("Write a story about a computer science student who learns they have superpowers.");
@@ -30,6 +32,19 @@ const StoryCreation = () => {
             setAILoading(false);
         }
     };
+
+    const goPreviousChapter = () => {
+        if (chapterIndex > 0) {
+          setChapterIndex(chapterIndex - 1);
+        }
+      };
+    
+      // Function to handle "Next" button click
+      const goNextChapter = () => {
+        if (chapterIndex < agents[0].chapterHistory.length - 1) {
+          setChapterIndex(chapterIndex + 1);
+        }
+      };
 
     // Function to update the list of agents after adding a new agent
     const updateAgents = (newAgent) => {
@@ -53,6 +68,8 @@ const StoryCreation = () => {
         }
     };
 
+
+
     //Function to generate chapter
     const handleGenerateChapter = async () => {
         if (!prompt.trim()) {
@@ -72,7 +89,7 @@ const StoryCreation = () => {
     return (
         <div className="story-create-page">
             <div className="black-board">
-                <div className="phase-box">Phase 1</div>
+                <div className="phase-box">Chapter {chapterIndex+1}</div>
 
                 <div className="agent-text-container">
                     <textarea placeholder="Provide agents with key details required for the story. You can be as descriptive as you want"></textarea>
@@ -82,8 +99,8 @@ const StoryCreation = () => {
                         </button>
             
                         <div className="arrows">
-                            <button className="move-backward">⬅</button>
-                            <button className="move-forward">➡</button>
+                            <button className="move-backward" onClick={() => goPreviousChapter()}>⬅</button>
+                            <button className="move-forward"onClick={() => goNextChapter()}>➡</button>
                         </div>
                     </div>
                 </div>
@@ -104,7 +121,7 @@ const StoryCreation = () => {
                                                     <button className="test-button" onClick={() => checkAccuracy(agent)}>Check Agent Accuracy</button>
                                                     <strong>AI:</strong> {agent.aiInstance}
                                                     <strong> &nbsp; Persona:</strong> {agent.persona}... 
-                                                    <br></br>{agent.chapter}
+                                                    <br></br>{agent.chapterHistory[chapterIndex]}
                                                 </li>
                     
                                             ))
