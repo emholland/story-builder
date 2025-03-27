@@ -36,6 +36,7 @@ const LoginPage = () => {
     };
     loadImage();
   }, []);
+
   const handleLogin = () => {
     handleAuthentication(email, password, "", "login");
   };

@@ -12,13 +12,13 @@ const handleAuthentication = async (email, password, username, action) => {
       // Attempt to log in
       await signInWithEmailAndPassword(auth, email, password);
       console.log("User logged in successfully!");
-      navigate("/StoryCreationPage"); 
+      navigate("/dashboard"); 
     } else if (action === "create") {
       try {
         // Try signing in first (auto-login returning users)
         await signInWithEmailAndPassword(auth, email, password);
         console.log("User already exists, logging in...");
-        navigate("/StoryCreationPage"); //palce holder page
+        navigate("/dashboard"); //palce holder page
       } catch (signInError) {
         // If user does not exist, create a new account
         if (signInError.code === "auth/user-not-found") {
@@ -28,13 +28,13 @@ const handleAuthentication = async (email, password, username, action) => {
             console.log("Account created successfully!");
 
             // Store user details in Firestore
-            await setDoc(doc(db, "Users", user.uid), {
+            await setDoc(doc(db, "/Users", user.uid), {
               user_id: user.uid,
               username: username, // Placeholder, replace with actual user input
             });
             
             console.log("User data saved to Firestore");
-            navigate("/StoryCreationPage"); //change placeholder page 
+            navigate("/dashboard"); //change placeholder page 
           } catch (createError) {
             console.error("Error creating account:", createError);
           }
