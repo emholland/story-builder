@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { getDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../../firebase.js"; // Ensure correct Firebase import
-import Username from "../../Components/LoginComponents/Username.jsx";
+import Email from "../../Components/LoginComponents/Email.jsx";
 import Password from "../../Components/LoginComponents/Password.jsx";
 import CreateAccountButton from "../../Components/LoginComponents/CreateAccountButton.jsx";
+import { handleAuthentication } from "../../Components/LoginComponents/Authenication.jsx";
 import "./LoginPage.css";
 
 const fetchImages = async () => {
@@ -38,7 +39,7 @@ const LoginPage = () => {
   }, []);
 
   const handleLogin = () => {
-    handleAuthentication(email, password, "", "login");
+    handleAuthentication(email, password, "login", navigate);
   };
 
   return (
@@ -60,7 +61,7 @@ const LoginPage = () => {
         </p>
 
         <form className="login-form">
-          <Username value={email} onChange={(e) => setEmail(e.target.value)}  />
+          <Email value={email} onChange={(e) => setEmail(e.target.value)}  />
           <Password value={password} onChange={(e) => setPassword(e.target.value)}/>
           <CreateAccountButton email={email} password={password} />
         </form>

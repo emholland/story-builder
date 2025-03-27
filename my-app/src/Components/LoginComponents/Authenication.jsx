@@ -1,45 +1,38 @@
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../../firebase.js"; // Ensure Firestore is imported
 
 const auth = getAuth();
-//const navigate = useNavigate();
 
-const handleAuthentication = async (email, password, username, action) => {
+const handleAuthentication = async (email, password, action, navigate) => {
   try {
     if (action === "login") {
       // Attempt to log in
       await signInWithEmailAndPassword(auth, email, password);
       console.log("User logged in successfully!");
-      navigate("/dashboard"); 
+      navigate("/dashboard");
     } else if (action === "create") {
       try {
-        // Try signing in first (auto-login returning users)
-        await signInWithEmailAndPassword(auth, email, password);
-        console.log("User already exists, logging in...");
-        navigate("/dashboard"); //palce holder page
-      } catch (signInError) {
-        // If user does not exist, create a new account
-        if (signInError.code === "auth/user-not-found") {
-          try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            console.log("Account created successfully!");
+        // Create a new user
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        console.log("Account created successfully!");
 
-            // Store user details in Firestore
-            await setDoc(doc(db, "/Users", user.uid), {
-              user_id: user.uid,
-              username: username, // Placeholder, replace with actual user input
-            });
-            
-            console.log("User data saved to Firestore");
-            navigate("/dashboard"); //change placeholder page 
-          } catch (createError) {
-            console.error("Error creating account:", createError);
-          }
+        // Store user details in Firestore
+        const userDocRef = doc(db, "Users", user.uid);
+        const userData = {
+          user_id: user.uid,
+          email: user.email,
+        };
+        
+        console.log("Saving user data to Firestore:", userData);
+        await setDoc(userDocRef, userData);                       // stores in in firebase
+        console.log("User data saved to Firestore");
+      } catch (createError) {
+        if (createError.code === "auth/email-already-in-use") {
+          console.error("This email is already registered. Please log in instead!");
         } else {
-          console.error("Sign-in error:", signInError);
+          console.error("Error creating account:", createError);
         }
       }
     }

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Im
 import "./index.css";
 import "./App.css";
 import LoginPage from "./Pages/LoginPage/LoginPage.jsx";
-import NewHome from "./Pages/HomePage/NewHome.jsx";
+import HomePage from "./Pages/HomePage/HomePage.jsx";
 import AgentScreen from "./Pages/StoryCreationPage/AgentScreen.jsx";
 import StoryCreation from "./Pages/StoryCreationPage/StoryCreationPage.jsx";
 
@@ -13,7 +13,7 @@ createRoot(document.getElementById("root")).render(
     <Router> {/* Wrap your app with BrowserRouter */}
       <Routes>
         {/* Define your routes here */}
-        <Route path="/" element={<NewHome/>} /> {/* Home page */}
+        <Route path="/" element={<HomePage/>} /> {/* Home page */}
         <Route path="/login" element={<LoginPage/>} /> {/* Login page */}
         <Route path="/dashboard" element={<StoryCreation/>} /> {/* Dashboard page */}
         <Route path="/agent" element={<AgentScreen/>} /> {/* AgentScreen page */}
