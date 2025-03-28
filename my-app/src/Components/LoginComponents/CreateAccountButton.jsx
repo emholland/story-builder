@@ -4,7 +4,7 @@ import "./CreateAccountButton.css";
 
 const CreateAccountButton = ({ email, password }) => {
   const handleCreateAccount = () => {
-    handleAuthentication(email, password, "", "create");
+    handleAuthentication(email, password, "create");
   };
 
   return (

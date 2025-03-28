@@ -1,0 +1,23 @@
+.email-field{
+    width: 90%; 
+    max-width: 662px;
+    height: 76px; 
+    background-color: rgba(255, 255, 255, 0.25); 
+    border: none;
+    border-radius: 12px;
+    padding: 0 1rem;
+    font-size: 1.58rem; 
+    font-weight: 400; 
+    font-family: 'Inter', sans-serif;
+    color: rgba(255, 255, 255, 0.5); 
+    outline: none;
+}
+.email-field-text{
+    color: rgba(255, 255, 255, 0.5); 
+    font-size: 1.58rem;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+}
+.email-field:hover{ /*stroke of the field will turn blue when hovered over*/
+    border: 2px solid blue;   
+}

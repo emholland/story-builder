@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Agent from "../../../Classes/Agent"
 import "./StoryCreationPage.css";
-import AddAgent from "../../Components/AddAgent.jsx"
+import AddAgent from "../AgentPopup/AddAgent.jsx"
 
 
 const StoryCreation = () => {
@@ -77,24 +77,6 @@ const StoryCreation = () => {
             console.error("Error checking accuracy:", error);
         }
     };
-
-
-
-    //Function to generate chapter
-    const handleGenerateChapter = async () => {
-        if (!prompt.trim()) {
-          alert("Please enter a prompt before generating a chapter.");
-          return;
-        }
-
-        try {
-          const chapter = await generateChapter(prompt); // Call the function passed as a prop
-          setGeneratedChapter(chapter);
-        } catch (error) {
-          alert("Failed to generate chapter. Please try again.");
-        }
-    };
-
 
     return (
         <div className="story-create-page">
