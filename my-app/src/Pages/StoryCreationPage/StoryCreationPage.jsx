@@ -19,7 +19,7 @@ const StoryCreation = () => {
     const [chapterIndex, setChapterIndex] = useState(0);
     const [showModal, setShowModal] = useState(false);
 
-    const [chapterCount, setChapterCount] = useState(1);  // Number input
+    const [chapterCount, setChapterCount] = useState(0);  // Number input
     const [chapterButtons, setChapterButtons] = useState([]); // List of buttons
 
 
@@ -99,6 +99,12 @@ const StoryCreation = () => {
         }
     };
 
+    const handleChapterClick = () => {
+        console.log(`Clicked Chapter ${chapterIndex + 1}`);
+        // Open modal with info on chapter
+      };
+      
+
     return (
         <div className="story-create-page">
 
@@ -165,7 +171,10 @@ const StoryCreation = () => {
                 </div>
             )}
 
-                <div className="phase-box">Chapter {chapterIndex+1}</div>
+                <button className="phase-box chapter-heading-button" onClick={handleChapterClick}>
+                Chapter {chapterIndex + 1}
+                </button>
+
 
                 <div className="arrows">
                             <button className="move-backward" onClick={() => goPreviousChapter()}>⬅</button>
@@ -174,9 +183,8 @@ const StoryCreation = () => {
                                     <button
                                     key={num}
                                     className="chapter-button"
-                                    onClick={() => console.log(`Chapter ${num} clicked`)}
+                                    onClick={goToChapter}
                                     >
-                                     {num}
                                     </button>
                                 ))}
                             </div>
