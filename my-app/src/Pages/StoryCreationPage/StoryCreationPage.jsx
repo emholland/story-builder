@@ -71,6 +71,12 @@ const StoryCreation = () => {
         }
       };
 
+      const goToChapter = (chapter) => {
+        if (chapter <= agents[0].chapterHistory.length - 1 ) {
+          setChapterIndex(chapter);
+        }
+      };
+
     // Function to update the list of agents after adding a new agent
     const updateAgents = (newAgent) => {
         const nAgent = new Agent(newAgent.persona, newAgent.aiInstance);
