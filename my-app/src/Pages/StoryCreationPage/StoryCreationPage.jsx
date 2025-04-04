@@ -17,6 +17,21 @@ const StoryCreation = () => {
     const [aiResponse, setAIResponse] = useState("");
     const [aiLoading, setAILoading] = useState(false); // loading state for DeepSeek
     const [chapterIndex, setChapterIndex] = useState(0);
+    const [showModal, setShowModal] = useState(false);
+
+    const [chapterCount, setChapterCount] = useState(1);  // Number input
+    const [chapterButtons, setChapterButtons] = useState([]); // List of buttons
+
+
+
+    useEffect(() => {
+      // Show the modal right after the page loads
+      setShowModal(true);
+    }, []);
+  
+    const closeModal = () => {
+      setShowModal(false);
+    };
 
     useEffect(() => {
         //if (!isChapterGenerated)
@@ -80,48 +95,121 @@ const StoryCreation = () => {
 
     return (
         <div className="story-create-page">
+
             <div className="black-board">
+
+            {showModal && (
+                <div className="modal-overlay">
+                <div className="modal-box">
+                    <h2>Welcome to Story Builder!</h2>
+                    <p>Let’s get started on your new story.</p>
+                    <div className="agent-settings">
+                        <div className="add-agents">
+                            <AddAgent isOpen={isPopupOpen} onClose={togglePopup} updateAgents={updateAgents}>
+                                            <h2>Add Agent</h2>
+                            </AddAgent>
+                                
+                        </div>
+
+                        <div className="agent-display">
+                            <h3>AI Agents List</h3>
+                                <ul>
+                                {agents.length > 0 ? (
+                                    agents.map((agent, index) => (
+                                        <li key={index}>
+                                            <strong>AI:</strong> {agent.aiInstance}
+                                            <strong> &nbsp; Persona:</strong> {agent.persona}... 
+                                            <br></br>{agent.chapterHistory[chapterIndex]}
+                                        </li>
+                        
+                                    ))
+                                ) : (
+                                    <p>No agents have been added yet</p>
+                                )}
+                                </ul> 
+                        </div>
+                    </div>
+
+                    <label for="quantity" class="chapter-number-label">Number of Chapters:</label>
+                    <input
+                        className="chapter-number-input"
+                        type="number"
+                        id="quantity"
+                        name="quantity"
+                        min="1"
+                        max="15"
+                        value={chapterCount}
+                        onChange={(e) => {
+                            const value = parseInt(e.target.value) || 1;
+                            setChapterCount(value);
+                        
+                            // Generate an array of numbers [1, 2, ..., value]
+                            const buttons = Array.from({ length: value }, (_, i) => i + 1);
+                            setChapterButtons(buttons);
+                          }}
+                    />
+
+
+                    <textarea value={userInput} onChange={(e) => setUserInput(e.target.value)} placeholder="Provide agents with key details required for the story. You can be as descriptive as you want" /*disabled={isChapterGenerated}*/></textarea>
+                    <br></br>
+
+                    
+                    <button onClick={closeModal}>Start</button>
+                </div>
+                </div>
+            )}
+
                 <div className="phase-box">Chapter {chapterIndex+1}</div>
 
+                <div className="arrows">
+                            <button className="move-backward" onClick={() => goPreviousChapter()}>⬅</button>
+                            <div className="chapter-button-list">
+                                {chapterButtons.map((num) => (
+                                    <button
+                                    key={num}
+                                    className="chapter-button"
+                                    onClick={() => console.log(`Chapter ${num} clicked`)}
+                                    >
+                                     {num}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <button className="move-forward" onClick={() => goNextChapter()}>➡</button>
+                        </div>
+
+
+
+                <h3>AI Agents Chat</h3>
+
+                <div className="agent-display-output">
+                                <ul>
+                                {agents.length > 0 ? (
+                                    agents.map((agent, index) => (
+                                        <li key={index}>
+                                            <button className="test-button" onClick={() => checkAccuracy(agent)}>Check Agent Accuracy</button>
+                                            <strong>AI:</strong> {agent.aiInstance}
+                                            <strong> &nbsp; Persona:</strong> {agent.persona}... 
+                                            <br></br>{agent.chapterHistory[chapterIndex]}
+                                        </li>
+                        
+                                    ))
+                                ) : (
+                                    <p>No agents have been added yet</p>
+                                )}
+                                </ul> 
+                        </div>
+
+                <div className="user-box">User Info</div>
+
                 <div className="agent-text-container">
-                <textarea value={userInput} onChange={(e) => setUserInput(e.target.value)} placeholder="Provide agents with key details required for the story. You can be as descriptive as you want" /*disabled={isChapterGenerated}*/></textarea>
                     <div className="controls">
                         <button className="generate-chapter" onClick={generateAIResponse} disabled={aiLoading}>
                             {aiLoading ? "Generating..." : "Generate Chapter"}
                         </button>
-            
-                        <div className="arrows">
-                            <button className="move-backward" onClick={() => goPreviousChapter()}>⬅</button>
-                            <button className="move-forward" onClick={() => goNextChapter()}>➡</button>
-                        </div>
                     </div>
                 </div>
-
-                <div className="user-box">User Info</div>
-                <div className="add-agents">
-                    <AddAgent isOpen={isPopupOpen} onClose={togglePopup} updateAgents={updateAgents}>
-                                    <h2>Add Agent</h2>
-                    </AddAgent>
-                            
-                </div>
-                <div className="agent-display">
-                                    <h3>AI Agents List</h3>
-                                    <ul>
-                                        {agents.length > 0 ? (
-                                            agents.map((agent, index) => (
-                                                <li key={index}>
-                                                    <button className="test-button" onClick={() => checkAccuracy(agent)}>Check Agent Accuracy</button>
-                                                    <strong>AI:</strong> {agent.aiInstance}
-                                                    <strong> &nbsp; Persona:</strong> {agent.persona}... 
-                                                    <br></br>{agent.chapterHistory[chapterIndex]}
-                                                </li>
-                    
-                                            ))
-                                        ) : (
-                                            <p>No agents available</p>
-                                        )}
-                                    </ul> 
-                                </div>
+                
             </div>
         
         </div>
