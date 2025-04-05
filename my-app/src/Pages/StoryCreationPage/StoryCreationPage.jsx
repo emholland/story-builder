@@ -21,6 +21,7 @@ const StoryCreation = () => {
 
     const [chapterCount, setChapterCount] = useState(0);  // Number input
     const [chapterButtons, setChapterButtons] = useState([]); // List of buttons
+    const [evaluation, setEvaluation] = useState("");
 
 
 
@@ -103,6 +104,26 @@ const StoryCreation = () => {
         console.log(`Clicked Chapter ${chapterIndex + 1}`);
         // Open modal with info on chapter
       };
+
+     const chapterEvaluation = async () => {
+
+        try {
+            const res = await axios.post("http://localhost:5001/api/chat", {
+                prompt: "evaluate the previous chapter and give it a rating in quality and accuracy from 1-5 \n \n" + aiLoading, // Append user input to the global prompt
+            }); 
+            // Optional: do something with res, like console.log(res.data)
+            const message = res.data.choices[0].message.content;
+           console.log(setEvaluation(message));
+           setEvaluation(message);
+            
+        } catch (error) {
+            console.error(error); // Make sure to log the actual error
+            console.log("An error occurred while fetching the response.");
+        }
+        
+
+    };
+
       
 
     return (
@@ -222,6 +243,17 @@ const StoryCreation = () => {
                             {aiLoading ? "Generating..." : "Generate Chapter"}
                         </button>
                     </div>
+                </div>
+                <div className="evaluation-box">
+                    <button className="evaluation-button" onClick={chapterEvaluation}>
+                        Evaluate
+                        
+                    </button>
+
+            
+                </div>
+                <div className="evaluation-output">
+                {evaluation ? <p>{evaluation}</p> : <p>No evaluation yet.</p>}
                 </div>
                 
             </div>
