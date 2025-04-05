@@ -4,7 +4,7 @@ import axios from "axios";
 import Agent from "../../../Classes/Agent"
 import "./StoryCreationPage.css";
 import AddAgent from "../AgentPopup/AddAgent.jsx"
-
+import Evaluation from "../../Components/Evaluation/Evaluate.jsx"
 
 const StoryCreation = () => {
     const [userInput, setUserInput] = useState("");
@@ -105,24 +105,7 @@ const StoryCreation = () => {
         // Open modal with info on chapter
       };
 
-     const chapterEvaluation = async () => {
-
-        try {
-            const res = await axios.post("http://localhost:5001/api/chat", {
-                prompt: "evaluate the previous chapter and give it a rating in quality and accuracy from 1-5 \n \n" + aiLoading, // Append user input to the global prompt
-            }); 
-            // Optional: do something with res, like console.log(res.data)
-            const message = res.data.choices[0].message.content;
-           console.log(setEvaluation(message));
-           setEvaluation(message);
-            
-        } catch (error) {
-            console.error(error); // Make sure to log the actual error
-            console.log("An error occurred while fetching the response.");
-        }
-        
-
-    };
+     
 
       
 
@@ -245,16 +228,13 @@ const StoryCreation = () => {
                     </div>
                 </div>
                 <div className="evaluation-box">
-                    <button className="evaluation-button" onClick={chapterEvaluation}>
-                        Evaluate
-                        
-                    </button>
-
-            
+                    {agents.length > 0 && (
+                    <Evaluation
+                            aiLoading={agents[0].chapterHistory[chapterIndex]} // or pass the selected agent
+                                 />
+                                        )}
                 </div>
-                <div className="evaluation-output">
-                {evaluation ? <p>{evaluation}</p> : <p>No evaluation yet.</p>}
-                </div>
+                
                 
             </div>
         
