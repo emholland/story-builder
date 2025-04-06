@@ -137,59 +137,88 @@
  
      const userPrompt =
          type === "evaluate"
-             ? `Evaluate this chapter and return only a markdown-formatted evaluation with a rating from 1-5, exlcude any excess messages and only include the evaluation:\n\n${prompt}`
+             ? `Evaluate this chapter and return only a markdown-formatted evaluation with a critical evaluation, point out things that can be imporved and inconsistencies, exlcude any excess messages and only include the evaluation:\n\n${prompt}`
              : prompt;
+    const numberPrompt = 
+        type === "numberEval"
+        ? `Evaluate this chapter and return only a markdown-formatted evaluation with a rating from, evaluate it critically, don't be biased and only score from 80-100 use all ranges and be consistent, use numbers 1-100, exlcude any excess messages and only include the number:\n\n${prompt}`
+        : null;
+    const actualPrompt = type === "numberEval" ? numberPrompt : userPrompt;
  
      const completion = await openai.chat.completions.create({
          model: "gpt-4o-mini",
          messages: [
-             { role: "system", content: systemPrompt },
-             { role: "user", content: userPrompt },
+            { role: "system", content: systemPrompt },
+            { role: "user", content: actualPrompt },
          ],
          stream: true,
      });
  
      for await (const chunk of completion) {
-         const content = chunk.choices?.[0]?.delta?.content;
-         if (content) {
-             ws.send(JSON.stringify({ type: "chunk", content }));
-         }
-     }
+        const content = chunk.choices?.[0]?.delta?.content;
+        if (content) {
+          ws.send(JSON.stringify({
+            type: type === "numberEval" ? "numberEval" : "chunk",
+            content,
+          }));
+        }
+      }
  
      ws.send(JSON.stringify({ type: "done" }));
  }
  
  async function handleDeepSeekFakeStream(ws, prompt, persona, type) {
-     const fullPrompt = `You are a helpful assistant that writes like ${persona}. ${prompt}`;
- 
-     try {
-         const response = await axios.post(
-             "https://api.deepseek.com/v1/chat/completions",
-             {
-                 model: "deepseek-chat",
-                 messages: [{ role: "user", content: fullPrompt }],
-             },
-             {
-                 headers: {
-                     "Content-Type": "application/json",
-                     "Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`,
-                 },
-             }
-         );
- 
-         const fullText = response.data.choices?.[0]?.message?.content || "No response";
- 
-         for (let i = 0; i < fullText.length; i++) {
-             ws.send(JSON.stringify({ type: "chunk", content: fullText[i] }));
-             await new Promise((res) => setTimeout(res, 10));
-         }
- 
-         ws.send(JSON.stringify({ type: "done" }));
-     } catch (error) {
-         console.error("DeepSeek streaming error:", error);
-         ws.send(JSON.stringify({ type: "error", message: error.message }));
-     }
- }
+    const systemPrompt = `You are a helpful assistant that writes like ${persona}.`;
+  
+    const userPrompt =
+      type === "evaluate"
+        ? `Evaluate this chapter and return only a markdown-formatted evaluation. Be critical — point out inconsistencies and areas for improvement. Do not include any excess messages:\n\n${prompt}`
+        : prompt;
+  
+    const numberPrompt =
+      type === "numberEval"
+        ? `Evaluate this chapter critically and return ONLY a number between 1 and 100 that reflects its quality. Do not be biased. Use the full range from 80–100, and do not include any explanations or formatting. Only return a number:\n\n${prompt}`
+        : null;
+  
+    const actualPrompt = type === "numberEval" ? numberPrompt : userPrompt;
+  
+    try {
+      const response = await axios.post(
+        "https://api.deepseek.com/v1/chat/completions",
+        {
+          model: "deepseek-chat",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: actualPrompt },
+          ],
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}`,
+          },
+        }
+      );
+  
+      const fullText = response.data.choices?.[0]?.message?.content || "No response";
+  
+      for (let i = 0; i < fullText.length; i++) {
+        ws.send(
+          JSON.stringify({
+            type: type === "numberEval" ? "numberEval" : "chunk",
+            content: fullText[i],
+          })
+        );
+        await new Promise((res) => setTimeout(res, 10));
+      }
+  
+      ws.send(JSON.stringify({ type: "done" }));
+    } catch (error) {
+      console.error("DeepSeek streaming error:", error);
+      ws.send(JSON.stringify({ type: "error", message: error.message }));
+    }
+  }
+  
  
  export { app, server };
  

@@ -1,59 +1,95 @@
 import React, { useState, useRef } from "react";
 import ReactMarkdown from "react-markdown";
+import Evalbar from "../Evaluation/EvaluationBar.jsx";
 
 export default function EvaluationComponent({ aiLoading }) {
   const [evaluation, setEvaluation] = useState("");
+  const [numberEval, setNumberEval] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
-  const socketRef = useRef(null);
+
+  const textSocketRef = useRef(null);
+  const numberSocketRef = useRef(null);
 
   const chapterEvaluation = () => {
-    const socket = new WebSocket("ws://localhost:5001");
-    socketRef.current = socket;
+    // 1. Set up UI state
+    setEvaluation("");
+    setNumberEval(0);
+    setIsStreaming(true);
+    setShowModal(true);
 
-    setEvaluation("");         // Clear previous result
-    setIsStreaming(true);      // Start loading
-    setShowModal(true);        // Open modal
+    // 2. TEXT WebSocket (for markdown explanation)
+    const textSocket = new WebSocket("ws://localhost:5001");
+    textSocketRef.current = textSocket;
 
-    socket.onopen = () => {
-      socket.send(
+    textSocket.onopen = () => {
+      textSocket.send(
         JSON.stringify({
-          provider: "openai", // or "deepseek"
+          provider: "openai",
           prompt: aiLoading,
           type: "evaluate",
         })
       );
     };
 
-    socket.onmessage = (event) => {
+    textSocket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       if (data.type === "chunk") {
         setEvaluation((prev) => prev + data.content);
       } else if (data.type === "done") {
         setIsStreaming(false);
-      } else if (data.type === "error") {
-        console.error("WebSocket error:", data.message);
-        setIsStreaming(false);
       }
     };
 
-    socket.onerror = (error) => {
-      console.error("WebSocket connection error:", error);
+    textSocket.onerror = (error) => {
+      console.error("Text WebSocket error:", error);
       setIsStreaming(false);
     };
 
-    socket.onclose = () => {
-      console.log("WebSocket closed");
+    textSocket.onclose = () => {
+      console.log("Text WebSocket closed");
+    };
+
+    // 3. NUMBER WebSocket (for Evalbar score)
+    const numberSocket = new WebSocket("ws://localhost:5001");
+    numberSocketRef.current = numberSocket;
+
+    numberSocket.onopen = () => {
+      numberSocket.send(
+        JSON.stringify({
+          provider: "openai",
+          prompt: "Give a number between 0 and 100 that reflects the quality of this chapter.",
+          type: "numberEval",
+        })
+      );
+    };
+
+    numberSocket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("Raw numberEval data:", data); 
+      if (data.type === "numberEval") {
+        const numericValue = parseInt(data.content.match(/\d+/)?.[0]) || 0;
+        setNumberEval(numericValue);
+      }
+    };
+
+    numberSocket.onerror = (error) => {
+      console.error("Number WebSocket error:", error);
+    };
+
+    numberSocket.onclose = () => {
+      console.log("Number WebSocket closed");
     };
   };
 
   const closeModal = () => {
     setShowModal(false);
-    if (socketRef.current) {
-      socketRef.current.close();
-    }
-    setEvaluation("");
     setIsStreaming(false);
+    setEvaluation("");
+    setNumberEval(0);
+
+    if (textSocketRef.current) textSocketRef.current.close();
+    if (numberSocketRef.current) numberSocketRef.current.close();
   };
 
   return (
@@ -68,9 +104,19 @@ export default function EvaluationComponent({ aiLoading }) {
             <button className="close-button" onClick={closeModal}>
               &times;
             </button>
+
             <h2>Evaluation Result</h2>
             {isStreaming && <p><em>Evaluating...</em></p>}
-            <ReactMarkdown>{evaluation}</ReactMarkdown>
+
+            <div className="markdown-output">
+              <ReactMarkdown>{evaluation}</ReactMarkdown>
+            </div>
+
+            <div className="evaluation-percent">
+              <h3></h3>
+              <Evalbar number={numberEval} />
+
+            </div>
           </div>
         </div>
       )}
@@ -85,7 +131,18 @@ export default function EvaluationComponent({ aiLoading }) {
           border-radius: 8px;
           cursor: pointer;
         }
-        
+
+        .evaluation-percent {
+          color: black;
+          margin-top: 20px;
+        }
+
+        .markdown-output {
+          margin-top: 10px;
+          color: black;
+          font-size: 14px;
+          line-height: 1.6;
+        }
 
         .modal-overlay {
           position: fixed;
@@ -123,7 +180,7 @@ export default function EvaluationComponent({ aiLoading }) {
           color: black;
         }
 
-        h2 {
+        h2, h3 {
           margin-top: 0;
         }
       `}</style>
