@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Agent from "../../../Classes/Agent"
 import "./StoryCreationPage.css";
+import "../AgentPopup/TestAgentPopup.css";
 import AddAgent from "../AgentPopup/AddAgent.jsx"
 
 
@@ -13,6 +14,8 @@ const StoryCreation = () => {
     //const [loading, setLoading] = useState(false);
     //const [isChapterGenerated, setIsChapterGenerated] = useState(false);
     const [isPopupOpen, setIsPopupOpen] = useState(false);  // State to control popup visibility
+    const [isAccuracyPopupVisible, setIsAccuracyPopupVisible] = useState(false); // State to control accuracy popup visibility
+    const [accuracyResult, setAccuracyResult] = useState('');
     const [agents, setAgents] = useState([]);
     const [aiResponse, setAIResponse] = useState("");
     const [aiLoading, setAILoading] = useState(false); // loading state for DeepSeek
@@ -72,7 +75,8 @@ const StoryCreation = () => {
         try{
             const accuracyResponse = await agent.testAccuracy();
             console.log("Accuracy Evaluation for", agent.persona, ":", accuracyResponse);
-        alert(`Accuracy for ${agent.persona}: ${accuracyResponse}`);
+            setAccuracyResult(`Accuracy for ${agent.persona}: ${accuracyResponse}`);
+            setIsAccuracyPopupVisible(true); // Show the accuracy popup
         }catch (error){
             console.error("Error checking accuracy:", error);
         }
@@ -111,6 +115,15 @@ const StoryCreation = () => {
                                             agents.map((agent, index) => (
                                                 <li key={index}>
                                                     <button className="test-button" onClick={() => checkAccuracy(agent)}>Check Agent Accuracy</button>
+                                                    {isAccuracyPopupVisible && (
+                                                        <div className="popup-overlay" onClick={() => setIsAccuracyPopupVisible(false)}>
+                                                            <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+                                                                 <button className="close-button" onClick={() => setIsAccuracyPopupVisible(false)}>✕</button>
+                                                                 <h2>Agent Accuracy</h2>
+                                                                 <p className="accuracy-response">{accuracyResult}</p>
+                                                                </div>
+                                                             </div>
+                                                          )}
                                                     <strong>AI:</strong> {agent.aiInstance}
                                                     <strong> &nbsp; Persona:</strong> {agent.persona}... 
                                                     <br></br>{agent.chapterHistory[chapterIndex]}

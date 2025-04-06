@@ -116,11 +116,12 @@ textarea {
 }
 
 .test-button{ 
-    width: 20vw;
+    width: 25vw;
     height: 5vh;
     font-size: small;
     margin-left:20px;
     margin-right: 20px;
+    background-color: #1e1d1d;
 }
 
 /* Test Percentage button */
@@ -191,3 +192,5 @@ textarea {
 .agent-display p{
     color:white;
 }
+
+
