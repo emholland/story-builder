@@ -105,7 +105,7 @@ export default function EvaluationComponent({ aiLoading }) {
               &times;
             </button>
 
-            <h2>Evaluation Result</h2>
+            <h2></h2>
             {isStreaming && <p><em>Evaluating...</em></p>}
 
             <div className="markdown-output">
@@ -125,7 +125,7 @@ export default function EvaluationComponent({ aiLoading }) {
         .evaluation-button {
           padding: 10px 20px;
           font-size: 16px;
-          background: #007bff;
+          background: #eef485;
           color: black;
           border: none;
           border-radius: 8px;
@@ -158,7 +158,7 @@ export default function EvaluationComponent({ aiLoading }) {
         }
 
         .modal-content {
-          background: white;
+          background: #424035;
           padding: 20px;
           border-radius: 10px;
           max-width: 600px;

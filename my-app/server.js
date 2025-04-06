@@ -131,9 +131,12 @@
  });
  
  async function handleOpenAIStream(ws, prompt, persona, type) {
-     const systemPrompt = persona
-         ? `You are a helpful assistant that writes like ${persona}.`
-         : "You are a helpful assistant.";
+     const systemPrompt =
+     type === "writer"
+     ? `You are a helpful assistant that writes like ${persona}. Write a story based on the prompt below in that author's writing style in about 100 words. Only return the story:\n\n`
+     : persona
+     ? `You are a helpful assistant that writes like ${persona}.`
+     : "You are a helpful assistant.";
  
      const userPrompt =
          type === "evaluate"
@@ -143,7 +146,12 @@
         type === "numberEval"
         ? `Evaluate this chapter and return only a markdown-formatted evaluation with a rating from, evaluate it critically, don't be biased and only score from 80-100 use all ranges and be consistent, use numbers 1-100, exlcude any excess messages and only include the number:\n\n${prompt}`
         : null;
-    const actualPrompt = type === "numberEval" ? numberPrompt : userPrompt;
+        const actualPrompt =
+        type === "writer"
+          ? prompt // Use raw story idea
+          : type === "numberEval"
+          ? numberPrompt
+          : userPrompt;
  
      const completion = await openai.chat.completions.create({
          model: "gpt-4o-mini",
@@ -168,11 +176,16 @@
  }
  
  async function handleDeepSeekFakeStream(ws, prompt, persona, type) {
-    const systemPrompt = `You are a helpful assistant that writes like ${persona}.`;
+    const systemPrompt =
+     type === "writer"
+     ? `You are a helpful assistant that writes like ${persona}. Write a story based on the prompt below in that author's writing style in about 100 words. Only return the story:\n\n`
+     : persona
+     ? `You are a helpful assistant that writes like ${persona}.`
+     : "You are a helpful assistant.";
   
     const userPrompt =
       type === "evaluate"
-        ? `Evaluate this chapter and return only a markdown-formatted evaluation. Be critical — point out inconsistencies and areas for improvement. Do not include any excess messages:\n\n${prompt}`
+        ? `Evaluate this chapter and return only a markdown-formatted evaluation. Be critical — point out inconsistencies and areas for improvement. Do not include any excess messages, keep each section to a sentence or two:\n\n${prompt}`
         : prompt;
   
     const numberPrompt =
@@ -180,7 +193,12 @@
         ? `Evaluate this chapter critically and return ONLY a number between 1 and 100 that reflects its quality. Do not be biased. Use the full range from 80–100, and do not include any explanations or formatting. Only return a number:\n\n${prompt}`
         : null;
   
-    const actualPrompt = type === "numberEval" ? numberPrompt : userPrompt;
+        const actualPrompt =
+        type === "writer"
+          ? prompt // Use raw story idea
+          : type === "numberEval"
+          ? numberPrompt
+          : userPrompt;
   
     try {
       const response = await axios.post(
