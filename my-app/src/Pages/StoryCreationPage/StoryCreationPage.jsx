@@ -147,11 +147,17 @@ const StoryCreation = () => {
     }
   };
 
-  const goToChapter = (chapter) => {
-    if (chapter <= agents[0].chapterHistory.length - 1 ) {
-      setChapterIndex(chapter);
-    }
-  };
+      const goToChapter = (num) => {
+        const maxIndex = agents[0]?.chapterHistory?.length;
+
+        if (num > 0 && num <= maxIndex) {
+          console.log(`Switching to chapter ${num}`);
+          setChapterIndex(num-1);
+        } else {
+          console.warn(`Chapter ${num} is out of bounds (max: ${num})`);
+        }
+        
+      };
 
   const updateAgents = (newAgent) => {
     const nAgent = new Agent(newAgent.persona, newAgent.aiInstance);
@@ -255,19 +261,22 @@ const StoryCreation = () => {
           Chapter {chapterIndex + 1}
         </button>
 
-        <div className="arrows">
-          <button className="move-backward" onClick={goPreviousChapter}>⬅</button>
-          <div className="chapter-button-list">
-            {chapterButtons.map((num) => (
-              <button
-                key={num}
-                className="chapter-button"
-                onClick={() => goToChapter(num - 1)}
-              />
-            ))}
-          </div>
-          <button className="move-forward" onClick={goNextChapter}>➡</button>
-        </div>
+                <div className="arrows">
+                            <button className="move-backward" onClick={() => goPreviousChapter()}>⬅</button>
+                            <div className="chapter-button-list">
+                                {chapterButtons.map((num) => (
+                                    <button
+                                    key={num}
+                                    className="chapter-button"
+                                    onClick={ () => goToChapter(num)}
+                                    >
+                                        {num}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <button className="move-forward" onClick={() => goNextChapter()}>➡</button>
+                        </div>
 
         <h3>AI Agents Chat</h3>
         <ul className="agent-display-output">
