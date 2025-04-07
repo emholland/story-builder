@@ -4,19 +4,23 @@ import { db } from "../../../firebase.js"; // Ensure Firestore is imported
 
 const auth = getAuth();
 
-const handleAuthentication = async (email, password, action, navigate) => {
+const handleAuthentication = async (email, password, action, navigate, setMessages) => {
   try {
     if (action === "login") {
       // Attempt to log in
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("User logged in successfully!");
+      const successMessage = "User logged in successfully!";
+      console.log(successMessage);
+      setMessages((prevMessages) => [prevMessages, { type: "success", message: successMessage }]);
       navigate("/dashboard");
     } else if (action === "create") {
       try {
         // Create a new user
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        console.log("Account created successfully!");
+        const successMessage = "Account created successfully! Now, Log in!";
+        console.log(successMessage);
+        setMessages((prevMessages) => [prevMessages, { type: "success", message: successMessage }]);
 
         // Store user details in Firestore
         const userDocRef = doc(db, "Users", user.uid);
@@ -24,20 +28,26 @@ const handleAuthentication = async (email, password, action, navigate) => {
           user_id: user.uid,
           email: user.email,
         };
-        
+
         console.log("Saving user data to Firestore:", userData);
-        await setDoc(userDocRef, userData);                       // stores in in firebase
+        await setDoc(userDocRef, userData); // stores in Firebase
         console.log("User data saved to Firestore");
       } catch (createError) {
         if (createError.code === "auth/email-already-in-use") {
-          console.error("This email is already registered. Please log in instead!");
+          const errorMessage = "This email is already registered. Please log in instead!";
+          console.error(errorMessage);
+          setMessages((prevMessages) => [prevMessages, { type: "error", message: errorMessage }]);
         } else {
-          console.error("Error creating account:", createError);
+          const errorMessage = "Error creating account: " + createError.message;
+          console.error(errorMessage);
+          setMessages((prevMessages) => [prevMessages, { type: "error", message: errorMessage }]);
         }
       }
     }
   } catch (error) {
-    console.error("Authentication error:", error);
+    const errorMessage = "Authentication error: " + error.message;
+    console.error(errorMessage);
+    setMessages((prevMessages) => [prevMessages, { type: "error", message: errorMessage }]);
   }
 };
 

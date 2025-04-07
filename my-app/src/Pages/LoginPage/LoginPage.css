@@ -15,60 +15,38 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 3rem; /* Adjust the padding to move elements */
+    padding-top: 2rem; /* You can control the top padding to move the heading */
     border-radius: 8px;
 }
 .login-form{
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 100%;
     gap: 1.5rem; 
 }
-.login-page-image-container{
-width: 778.41rem;
-height: 1025.33rem;
-border-radius: 5px;
-}
-.login-image{
-    width: 100%;
+.login-page-image-container {
+    width: 50%; /* or a max width like 400px */
+    max-width: 400px;
     height: auto;
     border-radius: 5px;
+  }
+.login-image{
+    width: 90%;
+    height: auto;
+    border-radius: 20px;
     object-fit: fill;
 }
 .login-page-hero-text{
     font-size: 3.65rem; 
     font-weight: 400; 
     font-family: 'Inter', sans-serif;
-    text-align: center;
-    line-height: normal; 
-    margin-bottom: 0.5rem;
+    margin-top: 20px; /* Adjust this value as needed */
+    margin-bottom: 20px; /* Adjust this value as needed */
+}
 
-}
-.login-page-subtext{
-    font-size: 1.58rem; 
-    font-weight: 400; 
-    font-family: 'Inter', sans-serif;
-    text-align: center;
-    opacity: 0.5; 
-    margin-bottom: 1.5rem;
-    
-}
-.login-text-button{
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.58rem; 
-    font-weight: 400; 
-    font-family: 'Inter', sans-serif;
-    text-decoration: underline;
-    text-underline-offset: 25%; 
-    text-decoration-thickness: 3.5%; 
-    cursor: pointer;
-}
-ogin-text-button:hover{
-    opacity: 1;
-}
-.login-seperator{
+.login-separator{
     width: 0.05rem; 
     height: 80vh; 
     min-height: 500px; 
@@ -76,3 +54,70 @@ ogin-text-button:hover{
     background-color: rgba(255, 255, 255, 0.5); 
     border-radius: 50%; 
 }
+
+.create-account-button {
+    width: 50%; 
+    max-width: 200px; 
+    height: 50px; 
+    background-color: #eef485; 
+    border: none;
+    border-radius: 12px;
+    font-size: 1.25rem; 
+    font-weight: 00; 
+    font-family: 'Inter', sans-serif;
+    color: black; 
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.create-account-button:hover {
+    background-color: #e1df63;
+}
+
+.login-button {
+    width: 90%; 
+    max-width: 662px; 
+    height: 72px; 
+    background-color: #eef485; 
+    border: none;
+    border-radius: 12px;
+    font-size: 1.58rem; 
+    font-weight: 400; 
+    font-family: 'Inter', sans-serif;
+    color: black; 
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-button:hover {
+    background-color: #e1df63;
+}
+
+.messages {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .message {
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+  }
+  
+  .message.success {
+    background-color: green;
+  }
+  
+  .message.error {
+    background-color: red;
+  }
