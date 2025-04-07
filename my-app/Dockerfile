@@ -1,30 +1,33 @@
-# Use a lightweight Node.js image for building the frontend
-FROM node:18-alpine AS build
+# ---- Step 1: Build Frontend with Vite ----
+    FROM node:18-alpine AS frontend
 
-# Set the working directory inside the container
-WORKDIR /app
-
-# Copy only package.json and package-lock.json to leverage Docker caching
-COPY package.json package-lock.json ./
-
-# Install dependencies
-RUN npm install 
-RUN npm install axios
-
-# Copy the entire app directory (excluding files in .dockerignore)
-COPY . ./
-
-# Build the Vite app (this compiles the frontend for production)
-RUN npm run build
-
-# Use Nginx to serve the built frontend
-FROM nginx:alpine
-
-# Copy the built files from /app/dist (not /my-app/dist)
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port 80
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+    WORKDIR /app
+    
+    COPY package*.json ./
+    RUN npm install
+    
+    COPY . .
+    RUN npm run build
+    
+    
+    # ---- Step 2: Set up Backend and Serve App ----
+    FROM node:18-alpine
+    
+    WORKDIR /app
+    
+    # Copy backend-related files (and we'll use full copy here for simplicity)
+    COPY . .
+    
+    # ✅ Copy the .env file explicitly
+    COPY .env .env
+    
+    # Copy built frontend from previous stage into Express public dir
+    COPY --from=frontend /app/dist ./dist
+    
+    # Install backend dependencies
+    RUN npm install
+    
+    EXPOSE 80
+    
+    CMD ["node", "server.js"]
+    
