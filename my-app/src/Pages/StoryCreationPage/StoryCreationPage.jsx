@@ -47,6 +47,7 @@ const StoryCreation = () => {
 
     try {
       for (const agent of agents) {
+        agent.setChapterCount(chapterCount);
         await agent.generateChapter(prompt);
         const newChapter = agent.chapterHistory[agent.chapterHistory.length - 1];
         setAIResponse(newChapter);
