@@ -18,8 +18,13 @@
  import { OpenAI } from "openai";
  import Agent from "./Classes/Agent.js";
  import { WebSocketServer } from 'ws';
- 
+ import path from "path";
+ import { fileURLToPath } from "url";
+
  dotenv.config(); // Load environment variables
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
  
  const app = express();
  const port = 5001;
@@ -27,10 +32,7 @@
  app.use(cors());
  app.use(express.json());
  
- app.get("/", (req, res) => {
-     res.send("testing!");
- });
- 
+
  app.post("/api/chat", async (req, res) => {
      const { prompt, persona } = req.body;
      const fullPrompt = "You are a helpful assitant that writes like " + persona + ". " + prompt;
@@ -241,15 +243,13 @@
       console.error("DeepSeek streaming error:", error);
       ws.send(JSON.stringify({ type: "error", message: error.message }));
     }
-    app.use(express.static(path.join(__dirname, 'dist')));
-
-// Fallback route to index.html (for client-side routing)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
   }
   
+  // ✅ Serve the built frontend (after all API and WebSocket setup)
+app.use(express.static(path.join(__dirname, "dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
  
  export { app, server };
  
