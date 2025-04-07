@@ -27,7 +27,7 @@
     # Install backend dependencies
     RUN npm install
     
-    EXPOSE 80
+    EXPOSE 5001
     
     CMD ["node", "server.js"]
     

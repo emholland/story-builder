@@ -5,6 +5,12 @@
  dotenv - to use .env files for retrieving keys
  */
 
+/* Imports:
+ -Node/express - Our backend functions to be able to make API calls and other necessary backend tools
+ CORS - allows our front-end to access by front-end applciations on different origins
+ axios - similar to CORS allows react to access API requests
+ dotenv - to use .env files for retrieving keys
+ */
  import express from "express";
  import cors from "cors";
  import axios from "axios";
