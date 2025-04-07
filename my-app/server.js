@@ -11,12 +11,17 @@ import axios from "axios";
 import dotenv from "dotenv";
 import { OpenAI } from "openai";
 import Agent from "./Classes/Agent.js"
+import path from "path";
+import { fileURLToPath } from 'url';
 
 dotenv.config(); // Load environment variables
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 //ports, express() to initialize our backend for calls to be made. port to launch our backend and keep it up
 const app = express();
-const port = 5001;
+const port = 80;
 
 
 //enables cors to be used for API calls. .use is for middleware
@@ -131,6 +136,13 @@ app.post('/api/agents', (req, res) => {
     });
 });
 
+// Serve static files from the frontend build
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// Fallback route to index.html (for client-side routing)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 // tells us what port the server is running on  
 const server = app.listen(port, () => {
