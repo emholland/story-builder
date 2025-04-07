@@ -71,10 +71,16 @@ const StoryCreation = () => {
         }
       };
 
-      const goToChapter = (chapter) => {
-        if (chapter <= agents[0].chapterHistory.length - 1 ) {
-          setChapterIndex(chapter);
+      const goToChapter = (num) => {
+        const maxIndex = agents[0]?.chapterHistory?.length;
+
+        if (num > 0 && num <= maxIndex) {
+          console.log(`Switching to chapter ${num}`);
+          setChapterIndex(num-1);
+        } else {
+          console.warn(`Chapter ${num} is out of bounds (max: ${num})`);
         }
+        
       };
 
     // Function to update the list of agents after adding a new agent
@@ -183,8 +189,9 @@ const StoryCreation = () => {
                                     <button
                                     key={num}
                                     className="chapter-button"
-                                    onClick={goToChapter}
+                                    onClick={ () => goToChapter(num)}
                                     >
+                                        {num}
                                     </button>
                                 ))}
                             </div>
