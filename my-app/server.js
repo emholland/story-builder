@@ -5,44 +5,38 @@
  dotenv - to use .env files for retrieving keys
  */
 
-import express from "express";
-import cors from "cors";
-import axios from "axios";
-import dotenv from "dotenv";
-import { OpenAI } from "openai";
-import Agent from "./Classes/Agent.js"
-import path from "path";
-import { fileURLToPath } from 'url';
+/* Imports:
+ -Node/express - Our backend functions to be able to make API calls and other necessary backend tools
+ CORS - allows our front-end to access by front-end applciations on different origins
+ axios - similar to CORS allows react to access API requests
+ dotenv - to use .env files for retrieving keys
+ */
 
-dotenv.config(); // Load environment variables
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-//ports, express() to initialize our backend for calls to be made. port to launch our backend and keep it up
-const app = express();
-const port = 80;
-
-
-//enables cors to be used for API calls. .use is for middleware
-app.use(cors());
-app.use(express.json());
-
-
-
-
-//test used to retrieve data from the server
-app.get("/", (req, res) => {
-    res.send("testing!");
-});
-
-//  post used to send data to the server to retrieve from DeepSeek 
-app.post("/api/chat", async (req, res) => {
-    const { prompt } = req.body;
-    const { persona } = req.body; 
-    const fullPrompt = "You are a helpful assitant that writes like " + persona + ". " + prompt;
-
-    try {
+ import express from "express";
+ import cors from "cors";
+ import axios from "axios";
+ import dotenv from "dotenv";
+ import { OpenAI } from "openai";
+ import Agent from "./Classes/Agent.js";
+ import { WebSocketServer } from 'ws';
+ 
+ dotenv.config(); // Load environment variables
+ 
+ const app = express();
+ const port = 5001;
+ 
+ app.use(cors());
+ app.use(express.json());
+ 
+ app.get("/", (req, res) => {
+     res.send("testing!");
+ });
+ 
+ app.post("/api/chat", async (req, res) => {
+     const { prompt, persona } = req.body;
+     const fullPrompt = "You are a helpful assitant that writes like " + persona + ". " + prompt;
+ 
+     try {
          const response = await axios.post(
              "https://api.deepseek.com/v1/chat/completions",
              {
@@ -248,32 +242,15 @@ app.post("/api/chat", async (req, res) => {
       console.error("DeepSeek streaming error:", error);
       ws.send(JSON.stringify({ type: "error", message: error.message }));
     }
-
-    // Create a new agent object
-    const newAgent = new Agent(persona, aiInstance);
-
-    // Save the agent to the in-memory storage (you could use a database here)
-    agents.push(newAgent);
-
-    // Send a success response back to the frontend
-    res.status(201).json({
-        message: 'Agent created successfully',
-        agent: newAgent,
-    });
-});
-
-// Serve static files from the frontend build
-app.use(express.static(path.join(__dirname, 'dist')));
+    app.use(express.static(path.join(__dirname, 'dist')));
 
 // Fallback route to index.html (for client-side routing)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-// tells us what port the server is running on  
-const server = app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
-
-export { app, server };
-
+  }
+  
+ 
+ export { app, server };
+ 
