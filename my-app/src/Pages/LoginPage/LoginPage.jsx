@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../../../firebase.js"; // Ensure correct Firebase import
 import Email from "../../Components/LoginComponents/Email.jsx";
 import Password from "../../Components/LoginComponents/Password.jsx";
-import CreateAccountButton from "../../Components/LoginComponents/CreateAccountButton.jsx";
+//import CreateAccountButton from "../../Components/LoginComponents/CreateAccountButton.jsx";
 import { handleAuthentication } from "../../Components/LoginComponents/Authenication.jsx";
 import "./LoginPage.css";
 
@@ -29,6 +29,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     const loadImage = async () => {
@@ -39,7 +40,11 @@ const LoginPage = () => {
   }, []);
 
   const handleLogin = () => {
-    handleAuthentication(email, password, "login", navigate);
+    handleAuthentication(email, password, "login", navigate, setMessages);
+  };
+
+  const handleCreateAccount = () => {
+    handleAuthentication(email, password, "create", null, setMessages);
   };
 
   return (
@@ -54,17 +59,20 @@ const LoginPage = () => {
 
       {/* Right side: Login form */}
       <div className="login-form-container">
-        <h1 className="login-page-hero-text">Create an account</h1>
-        <p className="login-page-subtext">
-          Already have an account? <button className="login-text-button" onClick={handleLogin} disabled={!email || !password}>Log in</button>
-           
-        </p>
-
+        <h1 className="login-page-hero-text">Sign In</h1>
+        
         <form className="login-form" onSubmit={(e) => e.preventDefault()}>
           <Email value={email} onChange={(e) => setEmail(e.target.value)}  />
           <Password value={password} onChange={(e) => setPassword(e.target.value)}/>
-          <CreateAccountButton email={email} password={password} />
+          <button className="login-button" onClick={handleLogin} disabled={!email || !password}>Log in</button>
+          <button className="create-account-button" onClick={handleCreateAccount} disabled={!email || !password}>Create Account</button>
         </form>
+
+        <div className="messages">
+          {messages.map((msg, index) => (
+            <p key={index} className={`message ${msg.type}`}>{msg.message}</p>
+          ))}
+        </div>
       </div>
     </div>
   );
