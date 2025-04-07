@@ -3,14 +3,17 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Agent from "../../../Classes/Agent";
 import "./StoryCreationPage.css";
+import "../AgentPopup/TestAgentPopup.css";
 import AddAgent from "../AgentPopup/AddAgent.jsx";
 import Evaluation from "../../Components/Evaluation/Evaluate.jsx";
 import ReactMarkdown from "react-markdown";
-
+//eval
 const StoryCreation = () => {
   const [userInput, setUserInput] = useState("");
   const [prompt, setPrompt] = useState("Write a story about a computer science student who learns they have superpowers.");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isAccuracyPopupVisible, setIsAccuracyPopupVisible] = useState(false); // State to control accuracy popup visibility
+  const [accuracyResult, setAccuracyResult] = useState('');
   const [agents, setAgents] = useState([]);
   const [aiResponse, setAIResponse] = useState("");
   const [aiLoading, setAILoading] = useState(false);
@@ -163,7 +166,8 @@ const StoryCreation = () => {
     try {
       const accuracyResponse = await agent.testAccuracy();
       console.log("Accuracy Evaluation for", agent.persona, ":", accuracyResponse);
-      alert(`Accuracy for ${agent.persona}: ${accuracyResponse}`);
+      setAccuracyResult(`Accuracy for ${agent.persona}: ${accuracyResponse}`);
+      setIsAccuracyPopupVisible(true); // Show the accuracy popup
     } catch (error) {
       console.error("Error checking accuracy:", error);
     }
@@ -270,6 +274,15 @@ const StoryCreation = () => {
           {agents.map((agent, index) => (
             <li key={index}>
               <button className="test-button" onClick={() => checkAccuracy(agent)}>Check Agent Accuracy</button>
+              {isAccuracyPopupVisible && (
+                  <div className="popup-overlay" onClick={() => setIsAccuracyPopupVisible(false)}>
+                  <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+                      <button className="close-button" onClick={() => setIsAccuracyPopupVisible(false)}>✕</button>
+                      <h2>Agent Accuracy</h2>
+                      <p className="accuracy-response">{accuracyResult}</p>
+                  </div>
+                   </div>
+                                                          )}
               <strong>AI:</strong> {agent.aiInstance}
               <strong> &nbsp; Persona:</strong> {agent.persona}...
               <div className="markdown-output">
