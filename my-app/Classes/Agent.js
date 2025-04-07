@@ -9,6 +9,7 @@ class Agent {
         this.aiInstance = aiInstance;
         this.outline = "";
         this.chapterCount = 0;
+        this.totalChapters = 0;
     }
 
     /**
@@ -27,7 +28,7 @@ class Agent {
             try {
                 // Write a chapter using API
                 console.log("Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline));
-                const response = await axios.post('/api/openai', {
+                const response = await axios.post('http://localhost:5001/api/openai', {
                     userPrompt: "Write chapter number" + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + this.outline,
                     persona: this.persona, // Using the persona from the Agent instance
                 });
@@ -50,7 +51,7 @@ class Agent {
             try {
                     // Write a chapter using API
                 console.log("Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline));
-                const res = await axios.post('/api/chat', {
+                const res = await axios.post("http://localhost:5001/api/chat", {
                     prompt: "Write chapter number" + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + this.outline,
                     persona: this.persona, // Using the persona from the Agent instance
                 });
@@ -82,7 +83,7 @@ class Agent {
         if(this.aiInstance == "openai"){
             try {
                 // Send a POST request to the backend API
-                const response = await axios.post('/api/openai', {
+                const response = await axios.post('http://localhost:5001/api/openai', {
                     userPrompt: `Analyze the following text and determine if the writing style is accurate to the selected persona:\n\n"${this.chapter}"\n\nProvide a percentage score and a brief explanation in uder 50 words.`
                 });
                 console.log("Accuracy Check Response: ", response.data.message);
@@ -94,12 +95,12 @@ class Agent {
             }
         }else{
             try {
-                    const res = await axios.post('/api/chat', {
+                    const res = await axios.post("http://localhost:5001/api/chat", {
                         prompt: `Analyze the following text and determine if the writing style is accurate to the selected persona:\n\n"${this.chapter}"\n\nProvide a percentage score and a brief explanation in under 50 words.`
             });
 
-            console.log("Accuracy Check Response:", res.data.message);
-            return res.data.message;
+            console.log("Accuracy Check Response:", res.data.choices[0].message.content);
+            return res.data.choices[0].message.content;
 
         } catch (error) {
             console.log('Error checking accuracy:', error);
@@ -107,7 +108,30 @@ class Agent {
         }
     }
 }
+    async promptAgentToVote() {
+        if (!this.chapterHistory.length) {
+            console.warn(`Agent ${this.persona} has no chapters to vote on.`);
+            return {};
+        }
     
+        const votedChapter = this.analyseAndVote(this.chapterHistory);
+    
+        const votedIndex = this.chapterHistory.findIndex(ch => ch === votedChapter);
+        if (votedIndex === -1) {
+            console.warn(`Agent ${this.persona} could not match voted chapter.`);
+            return {};
+        }
+    
+        this.sendVote(votedChapter);
+    
+        return {
+            votedIndex,
+            voteValue: 1
+        };
+    }
+    
+
+
 
     /**
      * Analyzes generated chapters and votes for the best one.
@@ -155,13 +179,21 @@ class Agent {
 
     /**
      * 
+     * @param {int} chapterTotal 
+     */
+    setChapterCount(chapterTotal) {
+        this.totalChapters = chapterTotal;
+    }
+
+    /**
+     * 
      * @param {string} prompt 
      */
     async createOutline(prompt) {
         try {
             // Create outline
-            const response = await axios.post('/api/openai', {
-                userPrompt: "Create an outline, no loner than, 100 words, for a story about " + prompt + " The story will be 4 chapters in total and each chapter will be 50 words. Make sure to include what happens in each chapter and what characters appear.",
+            const response = await axios.post('http://localhost:5001/api/openai', {
+                userPrompt: "Create an outline, no loner than, 100 words, for a story about " + prompt + " The story will be " + this.totalChapters + " chapters in total and each chapter will be 50 words. Make sure to include what happens in each chapter and what characters appear.",
             });
             this.outline = response.data.message;
             console.log(this.outline);

@@ -3,14 +3,17 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Agent from "../../../Classes/Agent";
 import "./StoryCreationPage.css";
+import "../AgentPopup/TestAgentPopup.css";
 import AddAgent from "../AgentPopup/AddAgent.jsx";
 import Evaluation from "../../Components/Evaluation/Evaluate.jsx";
 import ReactMarkdown from "react-markdown";
-
+//eval
 const StoryCreation = () => {
   const [userInput, setUserInput] = useState("");
   const [prompt, setPrompt] = useState("Write a story about a computer science student who learns they have superpowers.");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isAccuracyPopupVisible, setIsAccuracyPopupVisible] = useState(false); // State to control accuracy popup visibility
+  const [accuracyResult, setAccuracyResult] = useState('');
   const [agents, setAgents] = useState([]);
   const [aiResponse, setAIResponse] = useState("");
   const [aiLoading, setAILoading] = useState(false);
@@ -44,6 +47,7 @@ const StoryCreation = () => {
 
     try {
       for (const agent of agents) {
+        agent.setChapterCount(chapterCount);
         await agent.generateChapter(prompt);
         const newChapter = agent.chapterHistory[agent.chapterHistory.length - 1];
         setAIResponse(newChapter);
@@ -144,11 +148,17 @@ const StoryCreation = () => {
     }
   };
 
-  const goToChapter = (chapter) => {
-    if (chapter <= agents[0].chapterHistory.length - 1 ) {
-      setChapterIndex(chapter);
-    }
-  };
+      const goToChapter = (num) => {
+        const maxIndex = agents[0]?.chapterHistory?.length;
+
+        if (num > 0 && num <= maxIndex) {
+          console.log(`Switching to chapter ${num}`);
+          setChapterIndex(num-1);
+        } else {
+          console.warn(`Chapter ${num} is out of bounds (max: ${num})`);
+        }
+        
+      };
 
   const updateAgents = (newAgent) => {
     const nAgent = new Agent(newAgent.persona, newAgent.aiInstance);
@@ -163,7 +173,8 @@ const StoryCreation = () => {
     try {
       const accuracyResponse = await agent.testAccuracy();
       console.log("Accuracy Evaluation for", agent.persona, ":", accuracyResponse);
-      alert(`Accuracy for ${agent.persona}: ${accuracyResponse}`);
+      setAccuracyResult(`Accuracy for ${agent.persona}: ${accuracyResponse}`);
+      setIsAccuracyPopupVisible(true); // Show the accuracy popup
     } catch (error) {
       console.error("Error checking accuracy:", error);
     }
@@ -251,25 +262,37 @@ const StoryCreation = () => {
           Chapter {chapterIndex + 1}
         </button>
 
-        <div className="arrows">
-          <button className="move-backward" onClick={goPreviousChapter}>⬅</button>
-          <div className="chapter-button-list">
-            {chapterButtons.map((num) => (
-              <button
-                key={num}
-                className="chapter-button"
-                onClick={() => goToChapter(num - 1)}
-              />
-            ))}
-          </div>
-          <button className="move-forward" onClick={goNextChapter}>➡</button>
-        </div>
+                <div className="arrows">
+                            <button className="move-backward" onClick={() => goPreviousChapter()}>⬅</button>
+                            <div className="chapter-button-list">
+                                {chapterButtons.map((num) => (
+                                    <button
+                                    key={num}
+                                    className="chapter-button"
+                                    onClick={ () => goToChapter(num)}
+                                    >
+                                        {num}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <button className="move-forward" onClick={() => goNextChapter()}>➡</button>
+                        </div>
 
         <h3>AI Agents Chat</h3>
         <ul className="agent-display-output">
           {agents.map((agent, index) => (
             <li key={index}>
               <button className="test-button" onClick={() => checkAccuracy(agent)}>Check Agent Accuracy</button>
+              {isAccuracyPopupVisible && (
+                  <div className="popup-overlay" onClick={() => setIsAccuracyPopupVisible(false)}>
+                  <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+                      <button className="close-button" onClick={() => setIsAccuracyPopupVisible(false)}>✕</button>
+                      <h2>Agent Accuracy</h2>
+                      <p className="accuracy-response">{accuracyResult}</p>
+                  </div>
+                   </div>
+                                                          )}
               <strong>AI:</strong> {agent.aiInstance}
               <strong> &nbsp; Persona:</strong> {agent.persona}...
               <div className="markdown-output">

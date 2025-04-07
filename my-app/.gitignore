@@ -27,3 +27,5 @@ dist-ssr
 
 # Ignore coverage reports
 coverage/
+dataconnect/
+dataconnect-generated/
