@@ -108,7 +108,30 @@ class Agent {
         }
     }
 }
+    async promptAgentToVote() {
+        if (!this.chapterHistory.length) {
+            console.warn(`Agent ${this.persona} has no chapters to vote on.`);
+            return {};
+        }
     
+        const votedChapter = this.analyseAndVote(this.chapterHistory);
+    
+        const votedIndex = this.chapterHistory.findIndex(ch => ch === votedChapter);
+        if (votedIndex === -1) {
+            console.warn(`Agent ${this.persona} could not match voted chapter.`);
+            return {};
+        }
+    
+        this.sendVote(votedChapter);
+    
+        return {
+            votedIndex,
+            voteValue: 1
+        };
+    }
+    
+
+
 
     /**
      * Analyzes generated chapters and votes for the best one.
