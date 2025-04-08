@@ -62,14 +62,8 @@ const StoryCreation = () => {
   };
 
   const sendWriterPrompt = (storyIdea) => {
+    const previousChapter = agents[0]?.chapterHistory.slice(-1)[0] || "";
     const basePrompt = storyIdea?.trim() || userInput || prompt;
-    agents.forEach(async (agent) => {
-      const previousChapter = agent.chapterHistory.slice(-1)[0] || "";
-      const writerPrompt = `${basePrompt}\n\nPrevious Chapter:\n${previousChapter}`;
-  
-      const newChapter = await agent.generateChapter(writerPrompt);
-      agent.chapterHistory.push(newChapter);
-    });
   
     // For chapters after the first, use the last chapter as context
     const isContinuation = agents[0]?.chapterHistory.length > 0;
