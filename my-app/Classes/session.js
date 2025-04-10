@@ -40,8 +40,7 @@ class Session {
         this.story.addChapter(winningChapter)
       }
       this.currentChapter++;
-    
-      console.log("Fake vote selected:", winningChapter);
+
       return winningChapter;
   };
 

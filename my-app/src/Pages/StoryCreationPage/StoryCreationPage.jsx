@@ -47,13 +47,21 @@ const StoryCreation = () => {
     setShowModal(false);
   };
 
+  const cloneAgent = (originalAgent) => {
+    const cloned = Object.create(Object.getPrototypeOf(originalAgent));
+    return Object.assign(cloned, originalAgent);
+  };
+  
+
   const handleGenerateChapters = () => {
     setAILoading(true);
   
     generateChaptersForAgentsInParallel((agent, chapter) => {
+      const updatedAgent = cloneAgent(agent); // 🔁 clone it
+
       setAgents((prevAgents) =>
         prevAgents.map((a) =>
-          a.persona === agent.persona ? agent : a
+          a.persona === updatedAgent.persona ? updatedAgent : a
         )
       );
     });
@@ -72,6 +80,7 @@ const StoryCreation = () => {
       console.log('No agents available to vote.');
     }
     setPhase("generate");
+    setChapterIndex(chapterIndex+1);
 
   };
   

@@ -29,7 +29,6 @@ class Agent {
         if(this.aiInstance == "openai"){
             try {
                 // Write a chapter using API
-                console.log("Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(outline) + ". With the context of this last chapter: " + chapter);
                 const response = await axios.post('http://localhost:5001/api/openai', {
                     userPrompt: "Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + outline + ". With the context of this last chapter: " + chapter,
                     persona: this.persona, // Using the persona from the Agent instance
@@ -47,7 +46,7 @@ class Agent {
         }else{
             try {
                     // Write a chapter using API
-                console.log("Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline));
+                    
                 const res = await axios.post("http://localhost:5001/api/chat", {
                     prompt: "Write chapter number" + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + this.outline,
                     persona: this.persona, // Using the persona from the Agent instance
