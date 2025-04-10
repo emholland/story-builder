@@ -4,11 +4,10 @@ import "./ChapterInfoPopup.css"; // create styling separately
 import {getPhase} from "../../Controllers/sessionController"
 
 const ChapterInfoPopup = ({ isOpen, onClose, index}) => {
-  const phase = getPhase(index);
-
-  if (!phase || !isOpen) return null;
-
   if (!isOpen) return null;
+
+  const phase = getPhase(index);
+  if (!phase) return null;
 
   return (
     <div className="chapter-popup-overlay">

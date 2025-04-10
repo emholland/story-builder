@@ -160,7 +160,7 @@ const StoryCreation = () => {
   };*/
 
   const goPreviousChapter = () => {
-    if (chapterIndex >= 0) {
+    if (chapterIndex > 0) {
       setChapterIndex(chapterIndex - 1);
     }
   };
