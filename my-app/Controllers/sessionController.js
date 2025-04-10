@@ -2,6 +2,9 @@
 
 import Session from "../Classes/Session";
 import Agent from "../Classes/Agent";
+import { db } from "../firebase"; // adjust path if needed
+import { collection, addDoc, setDoc, doc, Timestamp } from "firebase/firestore";
+
 
 let currentSession = null;
 
@@ -92,3 +95,25 @@ export const generateChaptersForAgentsInParallel = async (onProgress) => {
 export const callFakeVote = () => {
     return(currentSession.fakeVote());
 };
+
+
+//firebase stuff 
+
+export const saveSessionToFirebase = async () => {
+    if (!currentSession) return;
+  
+    const sessionData = currentSession.toJSON();
+  
+    try {
+      const docRef = await addDoc(collection(db, "sessions"), {
+        ...sessionData,
+        createdAt: Timestamp.now(),
+      });
+  
+      console.log("Session saved to Firebase with ID:", docRef.id);
+      return docRef.id;
+    } catch (e) {
+      console.error("Error saving session to Firebase:", e);
+    }
+  };
+  
