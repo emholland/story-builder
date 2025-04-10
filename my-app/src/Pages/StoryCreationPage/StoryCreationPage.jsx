@@ -5,7 +5,6 @@ import Agent from "../../../Classes/Agent";
 import {
   createNewSession,
   loadSessionFromLocalStorage,
-  getCurrentSession,
   generateChaptersForAgentsInParallel,
   callFakeVote,
 } from "../../../Controllers/sessionController.js";
@@ -14,6 +13,8 @@ import "../AgentPopup/TestAgentPopup.css";
 import AddAgent from "../AgentPopup/AddAgent.jsx";
 import Evaluation from "../../Components/Evaluation/Evaluate.jsx";
 import ReactMarkdown from "react-markdown";
+import ChapterInfoPopup from "../../Components/ChapterInfoPopup.jsx";
+
 //eval
 const StoryCreation = () => {
   const [userInput, setUserInput] = useState("");
@@ -32,6 +33,7 @@ const StoryCreation = () => {
   const [lastUsedPrompt, setLastUsedPrompt] = useState("");
   const [phase, setPhase] = useState("generate");
 
+  const [isChpPopupOpen, setIsChpPopupOpen] = useState(false);
 
   const textSocketRef = useRef(null);
 
@@ -53,23 +55,21 @@ const StoryCreation = () => {
   };
   
 
-  const handleGenerateChapters = () => {
-    setAILoading(true);
+  const handleGenerateChapters = async () => {
+    setPhase("loading");
   
-    generateChaptersForAgentsInParallel((agent, chapter) => {
-      const updatedAgent = cloneAgent(agent); // 🔁 clone it
-
+    await generateChaptersForAgentsInParallel((agent, chapter) => {
+      const updatedAgent = cloneAgent(agent);
       setAgents((prevAgents) =>
         prevAgents.map((a) =>
           a.persona === updatedAgent.persona ? updatedAgent : a
         )
       );
     });
-  
-    setAILoading(false); // You can keep a loading spinner per agent if needed
-    setPhase("vote");
 
+    setPhase("vote");
   };
+  
 
   const handleVoting = () => {
     const winningChapter = callFakeVote();
@@ -160,7 +160,7 @@ const StoryCreation = () => {
   };*/
 
   const goPreviousChapter = () => {
-    if (chapterIndex > 0) {
+    if (chapterIndex >= 0) {
       setChapterIndex(chapterIndex - 1);
     }
   };
@@ -175,9 +175,9 @@ const StoryCreation = () => {
       const goToChapter = (num) => {
         const maxIndex = agents[0]?.chapterHistory?.length;
 
-        if (num > 0 && num <= maxIndex) {
+        if (num >= 0 && num <= maxIndex) {
           console.log(`Switching to chapter ${num}`);
-          setChapterIndex(num-1);
+          setChapterIndex(num);
         } else {
           console.warn(`Chapter ${num} is out of bounds (max: ${num})`);
         }
@@ -204,9 +204,15 @@ const StoryCreation = () => {
     }
   };
 
-  const handleChapterClick = () => {
-    console.log(`Clicked Chapter ${chapterIndex + 1}`);
+  const openChpPopup = () => {
+    console.log("open phase info for: " + chapterIndex);
+    setIsChpPopupOpen(true);
   };
+
+  const closeChpPopup = () => {
+    setIsChpPopupOpen(false);
+  };
+
 
   return (
     <div className="story-create-page">
@@ -255,7 +261,7 @@ const StoryCreation = () => {
                 onChange={(e) => {
                   const value = parseInt(e.target.value) || 1;
                   setChapterCount(value);
-                  const buttons = Array.from({ length: value }, (_, i) => i + 1);
+                  const buttons = Array.from({ length: value+1 }, (_, i) => i );
                   setChapterButtons(buttons);
                 }}
               />
@@ -272,9 +278,18 @@ const StoryCreation = () => {
           </div>
         )}
 
-        <button className="phase-box chapter-heading-button" onClick={handleChapterClick}>
+        <button className="phase-box chapter-heading-button" onClick={() => openChpPopup()}>
           Chapter {chapterIndex}
         </button>
+
+        {isChpPopupOpen && (
+          <ChapterInfoPopup
+            isOpen={isChpPopupOpen}
+            onClose={closeChpPopup}
+            index={chapterIndex}
+          />
+        )}
+
 
                 <div className="arrows">
                             <button className="move-backward" onClick={() => goPreviousChapter()}>⬅</button>
@@ -333,6 +348,10 @@ const StoryCreation = () => {
 
           {phase === "vote" && (
             <button onClick={handleVoting}>Vote</button>
+          )}
+
+           {phase === "loading" && (
+            <button>Loading...</button>
           )}
 
 

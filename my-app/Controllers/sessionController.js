@@ -21,6 +21,16 @@ export const getSessionAgents = () => {
   return currentSession?.getAgents() || [];
 };
 
+export const getPhase = (index) => {
+    console.log(currentSession.phases);
+    if (!currentSession || !currentSession.phases || !currentSession.phases[index]) {
+      return null;
+    }
+
+    return currentSession.phases[index];
+  };
+  
+
 // Persist to localStorage
 export const saveSessionToLocalStorage = () => {
   if (currentSession) {

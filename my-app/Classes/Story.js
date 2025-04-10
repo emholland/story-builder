@@ -8,6 +8,9 @@ class Story {
       this.chapters = []; // Array of generated chapters
     }
 
+    addPhase(title, winner, outline){
+
+    }
     setOutline(outline){
         this.outline = outline;
     }
