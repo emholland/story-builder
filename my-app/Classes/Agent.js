@@ -185,7 +185,7 @@ class Agent {
      * 
      * @param {string} prompt 
      */
-    async createOutline(prompt) {
+    async createOutline(prompt, chapterNum) {
         try {
             // Create outline
             const response = await axios.post('http://localhost:5001/api/openai', {
