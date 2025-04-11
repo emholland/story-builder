@@ -7,6 +7,7 @@ import {
   loadSessionFromLocalStorage,
   generateChaptersForAgentsInParallel,
   callFakeVote,
+  setTotalChapters,
 } from "../../../Controllers/sessionController.js";
 import "./StoryCreationPage.css";
 import "../AgentPopup/TestAgentPopup.css";
@@ -46,6 +47,10 @@ const StoryCreation = () => {
     const prompt = userInput.trim() || "Write a story about a computer science student who learns they have superpowers.";
   
     createNewSession(user, prompt, agents, chapterCount);
+    for (const agent of agents) {
+      agent.setChapterCount(chapterCount);
+    }
+    
     setShowModal(false);
   };
 
