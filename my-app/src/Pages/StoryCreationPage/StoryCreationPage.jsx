@@ -7,7 +7,7 @@ import {
   loadSessionFromLocalStorage,
   generateChaptersForAgentsInParallel,
   callFakeVote,
-  setTotalChapters,
+  //setTotalChapters,
 } from "../../../Controllers/sessionController.js";
 import "./StoryCreationPage.css";
 import "../AgentPopup/TestAgentPopup.css";
