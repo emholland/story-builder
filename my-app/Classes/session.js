@@ -70,6 +70,17 @@ class Session {
 
 
   fakeVote() {
+    const chapters = new Map();
+    this.agents.forEach(async (agent) => {
+      console.log(agent.chapter);
+      chapters.set(agent.chapter, 0);
+    });
+    this.currentChapter++;
+    return chapters.entries().next().value;
+
+
+
+    /*
       const randomIndex = Math.floor(Math.random() * this.agents.length);
       const winningChapter = this.agents[randomIndex].chapterHistory[this.currentChapter];
     
@@ -84,6 +95,7 @@ class Session {
       this.currentChapter++;
 
       return winningChapter;
+      */
   };
 
   // Serialization
