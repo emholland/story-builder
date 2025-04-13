@@ -69,14 +69,22 @@ class Session {
   }
 
 
-  fakeVote() {
-    const chapters = new Map();
+  async fakeVote() {
+    const chaptersMap = new Map();
     this.agents.forEach(async (agent) => {
       console.log(agent.chapter);
-      chapters.set(agent.chapter, 0);
+      chaptersMap.set(agent.chapter, 0);
     });
+
+    for (const agent of this.agents) {
+      let votedChapter = await agent.vote(chaptersMap);
+      chaptersMap.set(votedChapter, chaptersMap.get(votedChapter) + 1);
+    }
+
     this.currentChapter++;
-    return chapters.entries().next().value;
+
+    
+    return chaptersMap.entries().next().value;
 
 
 

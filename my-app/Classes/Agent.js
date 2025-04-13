@@ -46,7 +46,6 @@ class Agent {
         }else{
             try {
                     // Write a chapter using API
-                    console.log("test");
                 const res = await axios.post("http://localhost:5001/api/chat", {
                     prompt: "Write chapter number" + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + this.outline,
                     persona: this.persona, // Using the persona from the Agent instance
@@ -183,11 +182,24 @@ class Agent {
 
     /**
      * 
-     * @param {String} chapters[]
+     * @param {Map} chapters
      */
-    vote(chapterTotal) {
+    async vote(chaptersMap) {
+        const keysIterator = chaptersMap.keys();
+        let chapters = "";
+        let i = 0;
+        for (const key of keysIterator) {
+            chapters = chapters + "Option " + i + " is:\n" + key + "\n";
+            i++;
+        }
+        console.log("Pick your favorite writing sample from the following options. It is very important that your response should only be the exact text of the option you chose and nothing else. \n" + chapters);
+        const response = await axios.post('http://localhost:5001/api/openai', {
+            userPrompt: "Pick your favorite writing sample from the following options. It is very important that your response should only be the exact text of the option you chose and nothing else. \n" + chapters,
+        });
 
-        return votedChapter
+        console.log("output is:\n" + response.data.message)
+
+        return response.data.message;
     }
 
     /**
