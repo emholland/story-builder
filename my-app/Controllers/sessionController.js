@@ -92,8 +92,8 @@ export const generateChaptersForAgentsInParallel = async (onProgress) => {
     // Save once all are updated (optional — or save individually in onProgress)
   };
 
-export const callFakeVote = () => {
-    return(currentSession.fakeVote());
+export const callFakeVote = async () => {
+    return(await currentSession.fakeVote());
 };
 
 

@@ -75,8 +75,8 @@ const StoryCreation = () => {
   };
   
 
-  const handleVoting = () => {
-    const winningChapter = callFakeVote();
+  const handleVoting = async () => {
+    const winningChapter = await callFakeVote();
     if (winningChapter) {
       console.log('Winning chapter added:', winningChapter);
       // TODO: update UI state here if needed

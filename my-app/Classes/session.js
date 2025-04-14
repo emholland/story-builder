@@ -70,21 +70,35 @@ class Session {
 
 
   async fakeVote() {
+    //Make map
     const chaptersMap = new Map();
     this.agents.forEach(async (agent) => {
       console.log(agent.chapter);
       chaptersMap.set(agent.chapter, 0);
     });
 
+    //Put votes into map
     for (const agent of this.agents) {
       let votedChapter = await agent.vote(chaptersMap);
       chaptersMap.set(votedChapter, chaptersMap.get(votedChapter) + 1);
     }
 
+    //Find biggest value in map
+    let winningChapter = "";
+    let mostVotes = 0;
+    for (const [key, value] of chaptersMap) {
+      console.log(key, value);
+      if (value > mostVotes) {
+        mostVotes = value;
+        winningChapter = key;
+      }
+    }
+
     this.currentChapter++;
+    
 
     
-    return chaptersMap.entries().next().value;
+    return winningChapter;
 
 
 

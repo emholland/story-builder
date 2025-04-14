@@ -187,19 +187,17 @@ class Agent {
     async vote(chaptersMap) {
         const keysIterator = chaptersMap.keys();
         let chapters = "";
-        let i = 0;
+        let i = 1;
+        const chapterNumbers = new Map();
         for (const key of keysIterator) {
             chapters = chapters + "Option " + i + " is:\n" + key + "\n";
+            chapterNumbers.set(i, key);
             i++;
         }
-        console.log("Pick your favorite writing sample from the following options. It is very important that your response should only be the exact text of the option you chose and nothing else. \n" + chapters);
         const response = await axios.post('http://localhost:5001/api/openai', {
-            userPrompt: "Pick your favorite writing sample from the following options. It is very important that your response should only be the exact text of the option you chose and nothing else. \n" + chapters,
+            userPrompt: "Pick your favorite writing sample from the following options. Your response should only be a number and nothing else. For example, if you like option 1, your response should be 1. These are the options: \n" + chapters,
         });
-
-        console.log("output is:\n" + response.data.message)
-
-        return response.data.message;
+        return chapterNumbers.get(parseInt(response.data.message));
     }
 
     /**
