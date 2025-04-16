@@ -69,7 +69,40 @@ class Session {
   }
 
 
-  fakeVote() {
+  async fakeVote() {
+    //Make map
+    const chaptersMap = new Map();
+    this.agents.forEach(async (agent) => {
+      console.log(agent.chapter);
+      chaptersMap.set(agent.chapter, 0);
+    });
+
+    //Put votes into map
+    for (const agent of this.agents) {
+      let votedChapter = await agent.vote(chaptersMap);
+      chaptersMap.set(votedChapter, chaptersMap.get(votedChapter) + 1);
+    }
+
+    //Find biggest value in map
+    let winningChapter = "";
+    let mostVotes = 0;
+    for (const [key, value] of chaptersMap) {
+      console.log(key, value);
+      if (value > mostVotes) {
+        mostVotes = value;
+        winningChapter = key;
+      }
+    }
+
+    this.currentChapter++;
+    
+
+    
+    return winningChapter;
+
+
+
+    /*
       const randomIndex = Math.floor(Math.random() * this.agents.length);
       const winningChapter = this.agents[randomIndex].chapterHistory[this.currentChapter];
     
@@ -84,6 +117,7 @@ class Session {
       this.currentChapter++;
 
       return winningChapter;
+      */
   };
 
   // Serialization

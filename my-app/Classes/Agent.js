@@ -46,7 +46,6 @@ class Agent {
         }else{
             try {
                     // Write a chapter using API
-                    
                 const res = await axios.post("http://localhost:5001/api/chat", {
                     prompt: "Write chapter number" + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + this.outline,
                     persona: this.persona, // Using the persona from the Agent instance
@@ -183,6 +182,26 @@ class Agent {
 
     /**
      * 
+     * @param {Map} chapters
+     */
+    async vote(chaptersMap) {
+        const keysIterator = chaptersMap.keys();
+        let chapters = "";
+        let i = 1;
+        const chapterNumbers = new Map();
+        for (const key of keysIterator) {
+            chapters = chapters + "Option " + i + " is:\n" + key + "\n";
+            chapterNumbers.set(i, key);
+            i++;
+        }
+        const response = await axios.post('http://localhost:5001/api/openai', {
+            userPrompt: "Pick your favorite writing sample from the following options. Your response should only be a number and nothing else. For example, if you like option 1, your response should be 1. These are the options: \n" + chapters,
+        });
+        return chapterNumbers.get(parseInt(response.data.message));
+    }
+
+    /**
+     * 
      * @param {string} prompt 
      */
     async createOutline(prompt, chapterNum) {
@@ -192,6 +211,8 @@ class Agent {
                 userPrompt: "Create an outline, no loner than, 100 words, for a story about " + prompt + " The story will be " + this.totalChapters + " chapters in total and each chapter will be 50 words. Make sure to include what happens in each chapter and what characters appear.",
             });
             this.outline = response.data.message;
+            this.chapterHistory.push(this.outline);
+            this.chapter = this.outline;
             console.log(this.outline);
             return this.outline;
     
