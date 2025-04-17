@@ -95,29 +95,13 @@ class Session {
     }
 
     this.currentChapter++;
-    
 
-    
+    //Add winning chapter to array
+    for (const agent of this.agents) {
+      agent.addVotedChapter(winningChapter);
+    }
+
     return winningChapter;
-
-
-
-    /*
-      const randomIndex = Math.floor(Math.random() * this.agents.length);
-      const winningChapter = this.agents[randomIndex].chapterHistory[this.currentChapter];
-    
-      this.phases[this.currentChapter].setWinner(this.agents[randomIndex]);
-
-      if(this.currentChapter == 0){
-        this.story.outline = winningChapter;
-        this.parseOutlineBuildPhases(winningChapter);
-      }else{
-        this.story.addChapter(winningChapter)
-      }
-      this.currentChapter++;
-
-      return winningChapter;
-      */
   };
 
   // Serialization

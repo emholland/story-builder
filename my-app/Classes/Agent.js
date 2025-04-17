@@ -5,6 +5,7 @@ class Agent {
     constructor(persona, aiInstance) {
         this.persona = persona; 
         this.chapterHistory = [];
+        this.votedChapterHistory = [];
         this.chapter = "";
         this.aiInstance = aiInstance;
         this.outline = "";
@@ -182,6 +183,14 @@ class Agent {
 
     /**
      * 
+     * @param {string} winningChapter
+     */
+    addVotedChapter(winningChapter) {
+        this.votedChapterHistory.push(winningChapter);
+    }
+
+    /**
+     * 
      * @param {Map} chapters
      */
     async vote(chaptersMap) {
@@ -211,7 +220,6 @@ class Agent {
                 userPrompt: "Create an outline, no loner than, 100 words, for a story about " + prompt + " The story will be " + this.totalChapters + " chapters in total and each chapter will be 50 words. Make sure to include what happens in each chapter and what characters appear.",
             });
             this.outline = response.data.message;
-            this.chapterHistory.push(this.outline);
             this.chapter = this.outline;
             console.log(this.outline);
             return this.outline;
