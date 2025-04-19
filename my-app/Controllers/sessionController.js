@@ -4,11 +4,35 @@ import Session from "../Classes/Session";
 import Agent from "../Classes/Agent";
 import { db } from "../firebase"; // adjust path if needed
 import { collection, addDoc, setDoc, doc, Timestamp } from "firebase/firestore";
-import { personas } from "../Classes/Personas.js"
+import { personas } from "../data/Personas.js";
+
 
 
 let currentSession = null;
 let pastSession = null;
+
+const agents = [];
+
+const addAgentToSession = (persona, aiInstance) => {
+  const newAgent = new Agent(persona, aiInstance);
+  agents.push(newAgent);
+  return newAgent; // for UI to update
+};
+
+const getAgents = () => {
+  return agents;
+};
+
+const resetAgents = () => {
+  agents.length = 0;
+};
+
+export {
+  addAgentToSession,
+  getAgents,
+  resetAgents,
+  agents // optional: direct export
+};
 
 // Create a new session instance
 export const createNewSession = (title, user, prompt, agents = [], numberOfChapters) => {
@@ -162,8 +186,8 @@ export const fetchPastSessionByTitle = async (title) => {
   const session = fakeSessions.find(session => session.storyTitle === title);
   if (!session) return null;
 
-  // Inject profile into agents
-  session.agents = session.agents.map(agent => ({
+   // Inject profile into agents
+   session.agents = session.agents.map(agent => ({
     ...agent,
     profile: personas[agent.persona] || null,
   }));

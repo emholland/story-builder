@@ -1,6 +1,6 @@
 import axios from 'axios';
 import OpenAI from 'openai';
-import { personas } from "../Classes/Personas.js";
+import { personas } from "../data/Personas.js";
 
 
 class Agent {
@@ -14,7 +14,7 @@ class Agent {
         this.chapterCount = 0;
         this.totalChapters = 0;
         this.votingReasoning = [];
-        this.profile = personas[yhis.persona]; // attach profile
+        this.profile = personas[this.persona]; // attach profile
     }
 
     async generateOutline(prompt){

@@ -6,7 +6,8 @@ import {
   createNewSession,
   loadSessionFromLocalStorage,
   generateChaptersForAgentsInParallel,
-  callFakeVote
+  callFakeVote,
+  getAgents
 } from "../../../Controllers/sessionController.js";
 import "./StoryCreationPage.css";
 import "../AgentPopup/TestAgentPopup.css";
@@ -40,6 +41,7 @@ const StoryCreation = () => {
 
   useEffect(() => {
     setShowModal(true);
+    setAgents(getAgents());
   }, []);
 
   const handleStartSession = () => {
@@ -189,10 +191,15 @@ const StoryCreation = () => {
         
       };
 
-  const updateAgents = (newAgent) => {
-    const nAgent = new Agent(newAgent.persona, newAgent.aiInstance);
-    setAgents((prev) => [...prev, nAgent]);
-  };
+        const updateAgents = () => {
+            const freshAgents = [...getAgents()]; // 👈 Force a new array reference
+            console.log("Updated Agents:", freshAgents);
+            setAgents(freshAgents);
+          
+        };
+
+      
+      
 
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen);
@@ -222,74 +229,86 @@ const StoryCreation = () => {
   return (
     <div className="story-create-page">
       <div className="black-board">
-        {showModal && (
+      {showModal && (
           <div className="modal-overlay">
             <div className="modal-box">
               <h2>Welcome to Story Builder!</h2>
               <p>Let’s get started on your new story.</p>
 
-              <div className="title-textbox">
+              {/* Title & Chapter Count */}
+              <div className="title-chapter-row">
+              <div className="title-input-container">
+                <label>Title:</label>
                 <textarea
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Enter Title Here!"
+                  className="title-input"
                 />
-              </div>
-
-              <div className="agent-settings">
-                <div className="add-agents">
-                  <AddAgent isOpen={isPopupOpen} onClose={togglePopup} updateAgents={updateAgents}>
-                    <h2>Add Agent</h2>
-                  </AddAgent>
                 </div>
 
-                <div className="agent-display">
-                  <h3>AI Agents List</h3>
-                  <ul>
-                    {agents.length > 0 ? (
-                      agents.map((agent, index) => (
-                        <li key={index}>
-                          <strong>AI:</strong> {agent.aiInstance}
-                          <strong> &nbsp; Persona:</strong> {agent.persona}...
-                          <br />
-                          {agent.chapterHistory[chapterIndex]}
-                        </li>
-                      ))
-                    ) : (
-                      <p>No agents have been added yet</p>
-                    )}
-                  </ul>
+                <div className="chapter-input-group">
+                  <label htmlFor="quantity" className="chapter-number-label">Chapters:</label>
+                  <input
+                    className="chapter-number-input"
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    min="1"
+                    max="15"
+                    value={chapterCount}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value) || 1;
+                      setChapterCount(value);
+                      const buttons = Array.from({ length: value+1 }, (_, i) => i);
+                      setChapterButtons(buttons);
+                    }}
+                  />
                 </div>
               </div>
 
-              <label htmlFor="quantity" className="chapter-number-label">Number of Chapters:</label>
-              <input
-                className="chapter-number-input"
-                type="number"
-                id="quantity"
-                name="quantity"
-                min="1"
-                max="15"
-                value={chapterCount}
-                onChange={(e) => {
-                  const value = parseInt(e.target.value) || 1;
-                  setChapterCount(value);
-                  const buttons = Array.from({ length: value+1 }, (_, i) => i );
-                  setChapterButtons(buttons);
-                }}
-              />
-
+              {/* Story Prompt */}
               <textarea
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
-                placeholder="Provide agents with key details required for the story. You can be as descriptive as you want"
+                placeholder="Enter story details or setup..."
+                className="story-details-textarea"
               />
+
+              {/* Agent List Box */}
+              <div className="agent-display improved-agent-box">
+                <div className="agent-box-header">
+                  <h3>AI Agents</h3>
+                  <div className="add-agents">
+                    <AddAgent isOpen={isPopupOpen} onClose={togglePopup} updateAgents={updateAgents}>
+                      <h2>Add Agent</h2>
+                    </AddAgent>
+                  </div>
+                </div>
+
+                <ul>
+                  {agents.length > 0 ? (
+                    agents.map((agent, index) => (
+                      <li key={index}>
+                        <strong>AI:</strong> {agent.aiInstance}
+                        <strong> &nbsp; Persona:</strong> {agent.persona}
+                        <br />
+                      </li>
+                    ))
+                  ) : (
+                    <p>No agents have been added yet</p>
+                  )}
+                </ul>
+              </div>
+
+              {/* Final CTA */}
               <button className="start-session-button" onClick={handleStartSession}>
                 Start Session
               </button>
             </div>
           </div>
         )}
+
 
         <button className="phase-box chapter-heading-button" onClick={() => openChpPopup()}>
           Chapter {chapterIndex}
