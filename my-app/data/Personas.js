@@ -1,5 +1,5 @@
-const stevenKing = {
-    name: "Steven King",
+const stephenKing = {
+    name: "Stephen King",
     description: "Master of horror and suspense.",
     picture: "/images/stevenking.png",
   };
@@ -17,7 +17,7 @@ const stevenKing = {
   };
   
   export const personas = {
-    "Steven King": stevenKing,
+    "Stephen King": stephenKing,
     "Dr. Suess": drsuess,
     "Shakespeare": shakespeare,
   };
