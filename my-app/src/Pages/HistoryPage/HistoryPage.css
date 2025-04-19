@@ -124,3 +124,71 @@
     color: #fde047;
   }
   
+  .agent-strip {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    overflow-x: auto;
+    margin-top: 1.5rem;
+    padding-bottom: 1rem;
+  }
+  
+  .agent-box {
+    min-width: 140px;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    color: #f1f5f9;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .agent-box:hover {
+    transform: translateY(-4px);
+    background-color: #3a3a3a;
+  }
+  
+  .agent-box img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .agent-box span {
+    font-size: 0.95rem;
+    display: block;
+    margin-top: 0.25rem;
+  }
+  
+  .phase-column {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .phase-box-history {
+    background-color: #292929;
+    padding: 1.25rem;
+    border-radius: 12px;
+    border-left: 4px solid #facc15;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+  
+  .phase-box-history h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    color: #f1f5f9;
+  }
+  
+  .phase-box-history p {
+    margin: 0.25rem 0;
+    color: #d4d4d4;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
