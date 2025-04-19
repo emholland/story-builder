@@ -10,8 +10,8 @@ let currentSession = null;
 let pastSession = null;
 
 // Create a new session instance
-export const createNewSession = (user, prompt, agents = [], numberOfChapters) => {
-  currentSession = new Session(user, prompt, agents, numberOfChapters);
+export const createNewSession = (title, user, prompt, agents = [], numberOfChapters) => {
+  currentSession = new Session(title, user, prompt, agents, numberOfChapters);
   saveSessionToLocalStorage();
   return currentSession;
 };

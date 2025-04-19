@@ -17,6 +17,7 @@ import ChapterInfoPopup from "../../Components/ChapterInfoPopup.jsx";
 
 //eval
 const StoryCreation = () => {
+  const [title, setTitle] = useState("");
   const [userInput, setUserInput] = useState("");
   const [prompt, setPrompt] = useState("Write a story about a computer science student who learns they have superpowers.");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -45,7 +46,7 @@ const StoryCreation = () => {
     const user = ""; // you can later grab this from login context
     const prompt = userInput.trim() || "Write a story about a computer science student who learns they have superpowers.";
   
-    createNewSession(user, prompt, agents, chapterCount);
+    createNewSession(title, user, prompt, agents, chapterCount);
     for (const agent of agents) {
       agent.setChapterCount(chapterCount);
     }
@@ -226,6 +227,14 @@ const StoryCreation = () => {
             <div className="modal-box">
               <h2>Welcome to Story Builder!</h2>
               <p>Let’s get started on your new story.</p>
+
+              <div className="title-textbox">
+                <textarea
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Enter Title Here!"
+                />
+              </div>
 
               <div className="agent-settings">
                 <div className="add-agents">

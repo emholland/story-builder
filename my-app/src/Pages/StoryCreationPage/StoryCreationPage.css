@@ -305,7 +305,8 @@ h3 {
   
   .chapter-number-input {
     width: 100%;
-    max-width: 180px;
+    max-width: 70px;
+    max-height: 30px;
     padding: 10px 14px;
     font-size: 1rem;
     font-weight: 500;
@@ -328,7 +329,7 @@ h3 {
   .modal-box textarea {
     width: 100%;
     max-width: 700px;
-    height: 120px;
+    height: 200px;
     padding: 1rem;
     margin-top: 1rem;
     border: 1px solid #fde800;
@@ -354,11 +355,15 @@ h3 {
   .add-agents button {
     padding-top: .5rem;
     margin-top: 0px;
-    height: 60px;
+    height:40px;
     border-radius: 8px;
     font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+  }
+
+  .add-agents button h2{
+    font-size: small;
   }
 
   
@@ -370,5 +375,14 @@ h3 {
   .markdown-output.streamed {
     border-top: 1px solid #555;
     margin-top: 1rem;
+  }
+
+  .title-textbox{
+    height: 10%;
+  }
+  .title-textbox textarea{
+    width:100%;
+    height: 80%;
+    text-align: center;
   }
   
