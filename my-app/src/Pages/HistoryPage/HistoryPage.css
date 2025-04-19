@@ -1,0 +1,126 @@
+/* HistoryPage.css */
+.history-container {
+    padding: 4rem 2rem;
+    background-color: #121212;
+    color: #f1f5f9;
+    min-height: 100vh;
+    display: flex;
+  }
+  
+  .sidebar {
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 2rem;
+    position: relative;
+  }
+  
+  .menu-toggle {
+    background-color: #1f2937;
+    color: #facc15;
+    border: none;
+    padding: 0.5rem;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .menu-toggle::before,
+  .menu-toggle::after,
+  .menu-toggle span {
+    content: '';
+    display: block;
+    height: 2px;
+    width: 20px;
+    background-color: #facc15;
+    position: absolute;
+    transition: 0.3s;
+  }
+  
+  .menu-toggle span {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .menu-toggle::before {
+    top: 10px;
+  }
+  
+  .menu-toggle::after {
+    bottom: 10px;
+  }
+  
+  .dropdown-menu {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+    border: 1px solid #333;
+    border-radius: 8px;
+    background-color: #1e1e1e;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 50px;
+    width: 200px;
+    z-index: 10;
+  }
+  
+  .dropdown-menu li button {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    color: #cbd5e1;
+    cursor: pointer;
+    font-size: 0.95rem;
+  }
+  
+  .dropdown-menu li button:hover {
+    background-color: #2d2d2d;
+    color: #facc15;
+  }
+  
+  .main-history {
+    flex-grow: 1;
+  }
+  
+  .session-card {
+    background-color: #1f1f1f;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .session-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: #f8f8f8;
+  }
+  
+  .session-card p {
+    margin: 0.25rem 0;
+    color: #cbd5e1;
+  }
+  
+  .session-card a {
+    display: inline-block;
+    margin-top: 0.75rem;
+    color: #facc15;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .session-card a:hover {
+    color: #fde047;
+  }
+  

@@ -5,8 +5,9 @@ import Phase from "./Phase.js"
 
 class Session {
     // Constructor
-    constructor(user, prompt, agents = [], numberOfChapters) {
+    constructor(title, user, prompt, agents = [], numberOfChapters) {
       this.user = user;
+      this.title = title;
       this.story = new Story(numberOfChapters);
       this.prompt = prompt;
       this.numberOfChapters = numberOfChapters; 
