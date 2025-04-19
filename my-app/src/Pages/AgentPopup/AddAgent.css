@@ -1,5 +1,5 @@
 .popup-container { 
-    margin-top: 20px;
+  margin: 0px;
 }
 /* Overlay background (dimmed behind the popup) */
 .popup-overlay {
@@ -29,17 +29,25 @@
   
   /* Close button inside the popup */
   .close-button {
-    max-width: 10%;
-    max-height: 10%;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
     background: none;
     border: none;
-    font-size: 5px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #222;
     cursor: pointer;
-    color: #333;
+    padding: 0;
+    line-height: 1;
+
+    background-color: white;
   }
+  
+ 
+  
   
   /* Style for the "Add" button */
   .add-agent-button {

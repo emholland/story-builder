@@ -56,7 +56,7 @@ const AddAgent = ({ children, updateAgents }) => {
         <div className="popup-overlay">
           <div className="popup-content">
             <button className="close-button" onClick={togglePopup}>
-              &times;
+              x
             </button>
 
             <div className="agent-settings">
