@@ -95,12 +95,17 @@ class Session {
       }
     }
 
-    this.currentChapter++;
+    if(this.currentChapter === 0){
+      this.parseOutlineBuildPhases(winningChapter);
+    }
 
     //Add winning chapter to array
-    for (const agent of this.agents) {
-      agent.addVotedChapter(winningChapter);
-    }
+
+    this.phases[this.currentChapter].setText(winningChapter);
+    
+    this.story.addChapter(winningChapter);
+
+    this.currentChapter++;
 
     return winningChapter;
   };

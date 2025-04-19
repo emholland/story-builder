@@ -87,6 +87,7 @@ export const resetSession = () => {
 };
 
 export const generateChaptersForAgentsInParallel = async (onProgress) => {
+    console.log(currentSession);
     currentSession.agents.forEach(async (agent) => {
         if(currentSession.currentChapter == 0){
             try {
