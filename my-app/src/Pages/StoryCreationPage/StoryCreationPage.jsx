@@ -10,7 +10,6 @@ import {
   getAgents
 } from "../../../Controllers/sessionController.js";
 import "./StoryCreationPage.css";
-import "../AgentPopup/TestAgentPopup.css";
 import AddAgent from "../AgentPopup/AddAgent.jsx";
 import Evaluation from "../../Components/Evaluation/Evaluate.jsx";
 import ReactMarkdown from "react-markdown";
@@ -33,6 +32,7 @@ const StoryCreation = () => {
   const [chapterButtons, setChapterButtons] = useState([]);
   const [storyIdea, setStoryIdea] = useState("");
   const [lastUsedPrompt, setLastUsedPrompt] = useState("");
+  const [button, setButton] = useState("generate");
   const [phase, setPhase] = useState("generate");
 
   const [isChpPopupOpen, setIsChpPopupOpen] = useState(false);
@@ -63,7 +63,11 @@ const StoryCreation = () => {
   
 
   const handleGenerateChapters = async () => {
-    setPhase("loading");
+    if(phase === "vote" && button === "generate"){
+      setChapterIndex((prev) => prev + 1);
+    }
+    setPhase("generate");
+    setButton("loading");
   
     await generateChaptersForAgentsInParallel((agent, chapter) => {
       const updatedAgent = cloneAgent(agent);
@@ -74,22 +78,28 @@ const StoryCreation = () => {
       );
     });
 
-    setPhase("vote");
+    setButton("vote");
   };
   
 
   const handleVoting = async () => {
-    const winningChapter = await callFakeVote();
-    if (winningChapter) {
-      console.log('Winning chapter added:', winningChapter);
-      // TODO: update UI state here if needed
-    } else {
-      console.log('No agents available to vote.');
-    }
-    setPhase("generate");
-    setChapterIndex(chapterIndex+1);
+    setPhase("vote");
+    setButton("loading");
+  
+    await callFakeVote((updatedAgent) => {
+      const cloned = cloneAgent(updatedAgent);
+      setAgents((prevAgents) =>
+        prevAgents.map((a) =>
+          a.persona === cloned.persona ? cloned : a
+        )
+      );
+    });
 
+    console.log(agents);
+  
+    setButton("generate");
   };
+  
   
   
 
@@ -281,20 +291,31 @@ const StoryCreation = () => {
                   <h3>AI Agents</h3>
                   <div className="add-agents">
                     <AddAgent isOpen={isPopupOpen} onClose={togglePopup} updateAgents={updateAgents}>
-                      <h2>Add Agent</h2>
+                      Add Agent
                     </AddAgent>
                   </div>
                 </div>
 
+
                 <ul>
                   {agents.length > 0 ? (
-                    agents.map((agent, index) => (
-                      <li key={index}>
-                        <strong>AI:</strong> {agent.aiInstance}
-                        <strong> &nbsp; Persona:</strong> {agent.persona}
-                        <br />
-                      </li>
-                    ))
+                    <div className="agent-strip-sc">
+                    {agents.map((agent, index) => (
+                      <div
+                        key={index}
+                        className="agent-box-sc"
+                        onClick={() => setSelectedAgent(agent)}
+                      >
+                        <img
+                          src={agent.profile?.picture || `https://api.dicebear.com/7.x/adventurer/svg?seed=${agent.persona}`}
+                          alt={agent.persona}
+                          className="agent-avatar-sc"
+                        />
+                        <span>{agent.persona}</span>
+                      </div>
+                    ))}
+                  </div>
+                  
                   ) : (
                     <p>No agents have been added yet</p>
                   )}
@@ -323,11 +344,10 @@ const StoryCreation = () => {
         )}
 
 
-                <div className="arrows">
-                            <button className="move-backward" onClick={() => goPreviousChapter()}>⬅</button>
-                            <div className="chapter-button-list">
-                                {chapterButtons.map((num) => (
-                                    <button
+                <div className="chapter-controls">
+                    <button className="chapter-button" onClick={() => goPreviousChapter()}>⬅</button>
+                      {chapterButtons.map((num) => (
+                          <button
                                     key={num}
                                     className="chapter-button"
                                     onClick={ () => goToChapter(num)}
@@ -335,38 +355,96 @@ const StoryCreation = () => {
                                         {num}
                                     </button>
                                 ))}
-                            </div>
-
-                            <button className="move-forward" onClick={() => goNextChapter()}>➡</button>
+                            <button className="chapter-button" onClick={() => goNextChapter()}>➡</button>
                         </div>
 
-        <h3>AI Agents Chat</h3>
-        <ul className="agent-display-output">
-          {agents.map((agent, index) => (
-            <li key={index}>
-              <button className="test-button" onClick={() => checkAccuracy(agent)}>Check Agent Accuracy</button>
-              {isAccuracyPopupVisible && (
-                  <div className="popup-overlay" onClick={() => setIsAccuracyPopupVisible(false)}>
-                  <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-                      <button className="close-button" onClick={() => setIsAccuracyPopupVisible(false)}>✕</button>
-                      <h2>Agent Accuracy</h2>
-                      <p className="accuracy-response">{accuracyResult}</p>
-                  </div>
-                   </div>
-                                                          )}
-              <strong>AI:</strong> {agent.aiInstance}
-              <strong> &nbsp; Persona:</strong> {agent.persona}...
-              <div className="markdown-output">
-                <ReactMarkdown>{agent.chapterHistory[chapterIndex]}</ReactMarkdown>
-              </div>
-              {chapterIndex === agent.chapterHistory.length - 1 && aiResponse && (
-                <div className="markdown-output streamed">
-                  <ReactMarkdown>{aiResponse}</ReactMarkdown>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
+                        <div className="dialogue-container">
+                          <div className="dialogue-layout">
+                            {agents.map((agent, index) => {
+                              const isLeft = index % 2 === 0;
+                              return (
+                                <div key={index} className="dialogue-row">
+                                  {isLeft ? (
+                                    <>
+                                      <div className="agent-side left">
+                                        <img
+                                          className="agent-avatar"
+                                          src={agent.profile?.picture || `https://api.dicebear.com/7.x/adventurer/svg?seed=${agent.persona}`}
+                                          alt={agent.persona}
+                                        />
+                                        <div className="speech-bubble left">
+                                        <strong>{agent.persona}</strong>
+                                        {phase === "generate" && (
+                                          <ReactMarkdown>
+                                          {typeof agent.chapterHistory?.[chapterIndex] === "string"
+                                            ? agent.chapterHistory[chapterIndex]
+                                            : "*...*"}
+                                        </ReactMarkdown>
+                                        
+                                        )}
+
+                                        {phase === "vote" && (
+                                          <ReactMarkdown>
+                                          {typeof agent.votingReasoning?.[chapterIndex] === "string"
+                                            ? agent.votingReasoning[chapterIndex]
+                                            : "*...*"}
+                                        </ReactMarkdown>
+                                        
+                                        )}
+                                        </div>
+                                      </div>
+                                      <div className="agent-side right empty" />
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div className="agent-side left empty" />
+                                      <div className="agent-side right">
+                                        <div className="speech-bubble right">
+                                          <strong>{agent.persona}</strong>
+
+                                          {phase === "generate" && (
+                                            <ReactMarkdown>
+                                            {typeof agent.chapterHistory?.[chapterIndex] === "string"
+                                            ? agent.chapterHistory[chapterIndex]
+                                            : "*...*"}
+                                          </ReactMarkdown>
+                                          
+                                          )}
+
+                                          {phase === "vote" && (
+                                            <ReactMarkdown>
+                                            {typeof agent.votingReasoning?.[chapterIndex] === "string"
+                                            ? agent.votingReasoning[chapterIndex]
+                                              : "*...*"}
+                                          </ReactMarkdown>
+                                          
+                                          )}
+
+                                        </div>
+                                        <img
+                                          className="agent-avatar"
+                                          src={agent.profile?.picture || `https://api.dicebear.com/7.x/adventurer/svg?seed=${agent.persona}`}
+                                          alt={agent.persona}
+                                        />
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+
+  {isAccuracyPopupVisible && (
+    <div className="popup-overlay" onClick={() => setIsAccuracyPopupVisible(false)}>
+      <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+        <button className="close-button" onClick={() => setIsAccuracyPopupVisible(false)}>✕</button>
+        <h2>Agent Accuracy</h2>
+        <p className="accuracy-response">{accuracyResult}</p>
+      </div>
+    </div>
+  )}
+</div>
+
 
         <div className="user-box">User Info</div>
 
@@ -374,27 +452,21 @@ const StoryCreation = () => {
 
           <div className="controls">
 
-          {phase === "generate" && (
+          {button === "generate" && (
             <button onClick={handleGenerateChapters}>Generate Chapters</button>
           )}
 
-          {phase === "vote" && (
+          {button === "vote" && (
             <button onClick={handleVoting}>Vote</button>
           )}
 
-           {phase === "loading" && (
+           {button === "loading" && (
             <button>Loading...</button>
           )}
 
 
           </div>
 
-        </div>
-
-        <div className="evaluation-box">
-          {agents.length > 0 && (
-            <Evaluation aiLoading={agents[0].chapterHistory[chapterIndex]} />
-          )}
         </div>
       </div>
     </div>
