@@ -1,7 +1,7 @@
 const stephenKing = {
     name: "Stephen King",
     description: "Master of horror and suspense.",
-    picture: "/images/stevenking.png",
+    picture: "/images/stephenking.png",
   };
   
   const drsuess = {

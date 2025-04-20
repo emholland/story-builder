@@ -166,7 +166,7 @@ const fakeSessions = [
     prompt: "A child wakes up on a spaceship",
     createdAt: "2024-02-20T08:45:00Z",
     agents: [
-      { persona: "Steven King", aiInstance: "openai", profile: "Dr. Suess"},
+      { persona: "Stephen King", aiInstance: "openai", profile: "Dr. Suess"},
       { persona: "Dr. Suess", aiInstance: "openai" }
     ],
     phases: [
