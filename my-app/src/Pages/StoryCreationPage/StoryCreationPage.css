@@ -203,6 +203,7 @@ h3 {
 }
 
 .modal-box textarea {
+  overflow: hidden;
   resize: none;
 }
 
