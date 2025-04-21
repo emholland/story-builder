@@ -18,13 +18,16 @@
 /* The content area of the popup */
 .popup-content {
   background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  width: 300px; /* Can be responsive */
+  padding: 30px;
+  border-radius: 10px;
+  width: 800px; 
+  max-width: 95%; 
+  max-height: 90vh; 
+  overflow-y: auto;
   position: relative;
   color: black;
-  font-family: Arial, sans-serif; /* Ensures consistent font throughout */
-  max-width: 90%; /* Ensure the popup doesn't overflow on small screens */
+  font-family: Arial, sans-serif; 
+  max-width: 90%; 
 }
 
 /* Close button inside the popup */

@@ -191,7 +191,7 @@ class Agent {
     }
     static printFinalStory(votedChapterHistory){
         return votedChapterHistory.join("\n\n");
-    }
+    }    
 
     /**
      * 
