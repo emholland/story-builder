@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types'; // For prop validation
 import './AddAgent.css';
+import axios from "axios";
+import { getAuth } from "firebase/auth";
+import { saveAgentToFirebase } from "../../../Controllers/sessionController.js";
 import { addAgentToSession } from "../../../Controllers/sessionController"; 
 
 
@@ -25,7 +28,17 @@ const AddAgent = ({ children, updateAgents }) => {
       return;
     }
   
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      alert("User not authenticated.");
+      return;
+    }
+
     const newAgent = addAgentToSession(selectedOption, selectedAI); //
+    saveAgentToFirebase(selectedOption, selectedAI, user.uid) // saves agent to the database
+    
     updateAgents(); // still tells React to refresh its copy
     setSelectedOption("");
     setSelectedAI("");
