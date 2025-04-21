@@ -30,13 +30,15 @@ class Agent {
     async generateChapter(outline, chapter) {
         if(this.aiInstance == "openai"){
             try {
+                console.log("Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline) + ". With the context of this last chapter: " + JSON.stringify(this.chapter));
                 // Write a chapter using API
                 const response = await axios.post('http://localhost:5001/api/openai', {
-                    userPrompt: "Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + outline + ". With the context of this last chapter: " + chapter,
+                    userPrompt: "Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline) + ". With the context of this last chapter: " + JSON.stringify(this.chapter),
                     persona: this.persona, // Using the persona from the Agent instance
                 });
                 this.chapter = response.data.message;
                 this.chapterHistory = [...this.chapterHistory, this.chapter];
+                this.chapterCount++;
         
                 // Return the completion response from OpenAI
                 return this.chapter; // Assuming the backend sends 'message' in the response
@@ -49,11 +51,12 @@ class Agent {
             try {
                     // Write a chapter using API
                 const res = await axios.post("http://localhost:5001/api/chat", {
-                    prompt: "Write chapter number" + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + this.outline,
+                    prompt: "Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline) + ". With the context of this last chapter: " + JSON.stringify(this.chapter),
                     persona: this.persona, // Using the persona from the Agent instance
                 });
                 this.chapter = res.data.choices[0].message.content;
                 this.chapterHistory = [...this.chapterHistory, this.chapter];
+                this.chapterCount++;
                 return this.chapter // Assuming the backend sends 'message' in the response
                 
                 
