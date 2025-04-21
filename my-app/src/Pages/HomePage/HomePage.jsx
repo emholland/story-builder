@@ -48,6 +48,23 @@ const HomePage = ({ navAgent }) => {
         </div>
       </header>
 
+
+      {/* History Section (Centered) */}
+      <div className="history-info-section">
+        <div className="history-info-card">
+          <h3>Explore Your Story Sessions</h3>
+          <p>
+            Visit your history to review past sessions, read previous story versions,
+            and track the agents that contributed to each chapter.
+          </p>
+          <button onClick={() => navigate('/history')} className="history-button">
+            View History
+          </button>
+        </div>
+      </div>
+
+
+
     </div>
   );
 };

@@ -5,8 +5,9 @@ import Phase from "./Phase.js"
 
 class Session {
     // Constructor
-    constructor(user, prompt, agents = [], numberOfChapters) {
+    constructor(title, user, prompt, agents = [], numberOfChapters) {
       this.user = user;
+      this.title = title;
       this.story = new Story(numberOfChapters);
       this.prompt = prompt;
       this.numberOfChapters = numberOfChapters; 
@@ -69,21 +70,44 @@ class Session {
   }
 
 
-  fakeVote() {
-      const randomIndex = Math.floor(Math.random() * this.agents.length);
-      const winningChapter = this.agents[randomIndex].chapterHistory[this.currentChapter];
-    
-      this.phases[this.currentChapter].setWinner(this.agents[randomIndex]);
+  async fakeVote() {
+    //Make map
+    const chaptersMap = new Map();
+    this.agents.forEach(async (agent) => {
+      console.log(agent.chapter);
+      chaptersMap.set(agent.chapter, 0);
+    });
 
-      if(this.currentChapter == 0){
-        this.story.outline = winningChapter;
-        this.parseOutlineBuildPhases(winningChapter);
-      }else{
-        this.story.addChapter(winningChapter)
+    //Put votes into map
+    for (const agent of this.agents) {
+      let votedChapter = await agent.vote(chaptersMap);
+      chaptersMap.set(votedChapter, chaptersMap.get(votedChapter) + 1);
+    }
+
+    //Find biggest value in map
+    let winningChapter = "";
+    let mostVotes = 0;
+    for (const [key, value] of chaptersMap) {
+      console.log(key, value);
+      if (value > mostVotes) {
+        mostVotes = value;
+        winningChapter = key;
       }
-      this.currentChapter++;
+    }
 
-      return winningChapter;
+    if(this.currentChapter === 0){
+      this.parseOutlineBuildPhases(winningChapter);
+    }
+
+    //Add winning chapter to array
+
+    this.phases[this.currentChapter].setText(winningChapter);
+    
+    this.story.addChapter(winningChapter);
+
+    this.currentChapter++;
+
+    return winningChapter;
   };
 
   // Serialization

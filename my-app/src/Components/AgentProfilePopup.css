@@ -1,0 +1,89 @@
+/* AgentProfilePopup.css */
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .popup-box {
+    background-color: #1f1f1f;
+    color: #f1f5f9;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow-y: auto;
+    max-height: 90vh;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    color: #facc15;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .agent-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .agent-profile-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #facc15;
+  }
+  
+  .agent-profile-info h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #facc15;
+  }
+  
+  .agent-profile-info p {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.95rem;
+    color: #d1d5db;
+  }
+  
+  .agent-chapters {
+    margin-top: 1.5rem;
+  }
+  
+  .agent-chapters h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .agent-chapters ol {
+    list-style: decimal inside;
+    padding-left: 0;
+    margin: 0;
+  }
+  
+  .agent-chapters li {
+    margin-bottom: 0.75rem;
+    background-color: #292929;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    color: #e5e7eb;
+    line-height: 1.4;
+  }
