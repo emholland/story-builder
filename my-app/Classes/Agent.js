@@ -189,6 +189,9 @@ class Agent {
     addVotedChapter(winningChapter) {
         this.votedChapterHistory.push(winningChapter);
     }
+    static printFinalStory(votedChapterHistory){
+        return votedChapterHistory.join("\n\n");
+    }
 
     /**
      * 

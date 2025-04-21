@@ -21,6 +21,9 @@ const StoryCreation = () => {
   const [prompt, setPrompt] = useState("Write a story about a computer science student who learns they have superpowers.");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isAccuracyPopupVisible, setIsAccuracyPopupVisible] = useState(false); // State to control accuracy popup visibility
+  const [isFinalStoryPopupVisible, setIsFinalStoryPopupVisible] = useState(false);//State to control accuracy popup visibility
+  const [votedChapterHistory, setVotedChapterHistory] = useState([]);
+  const [finalStory, setFinalStory] = useState([]);
   const [accuracyResult, setAccuracyResult] = useState('');
   const [agents, setAgents] = useState([]);
   const [aiResponse, setAIResponse] = useState("");
@@ -208,6 +211,18 @@ const StoryCreation = () => {
     }
   };
 
+  const printFinalStoryPopup = () => {
+    try {
+      const FinalStoryArray = Agent.printFinalStory(votedChapterHistory); 
+      setFinalStory(FinalStoryArray); 
+      setIsFinalStoryPopupVisible(true);
+    } catch (error) {
+      console.error("No Story found", error);
+    }
+  };
+  
+
+
   const openChpPopup = () => {
     console.log("open phase info for: " + chapterIndex);
     setIsChpPopupOpen(true);
@@ -216,6 +231,8 @@ const StoryCreation = () => {
   const closeChpPopup = () => {
     setIsChpPopupOpen(false);
   };
+
+
 
 
   return (
@@ -368,6 +385,32 @@ const StoryCreation = () => {
             <Evaluation aiLoading={agents[0].chapterHistory[chapterIndex]} />
           )}
         </div>
+    {chapterIndex === chapterCount && (
+  <>
+    <button className="final-story-button" onClick={printFinalStoryPopup}>
+      Read Your Final Story
+    </button>
+    {isFinalStoryPopupVisible && (
+      <div className="popup-overlay" onClick={() => setIsFinalStoryPopupVisible(false)}>
+        <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+          <button className="close-button" onClick={() => setIsFinalStoryPopupVisible(false)}>✕</button>
+          <h2>Your Story</h2>
+          <div className="final-story">
+            {Array.isArray(finalStory) ? (
+              finalStory.map((chapter, index) => (
+                <p key={index}>{chapter}</p>
+              ))
+            ) : (
+              <p>{finalStory}</p>
+            )}
+          </div>
+        </div>
+      </div>
+    )}
+  </>
+)}
+
+      
       </div>
     </div>
   );
