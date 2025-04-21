@@ -2,11 +2,11 @@
 
 import Session from "../Classes/session";
 import Agent from "../Classes/Agent";
+import User from "../Classes/User";
 import { db } from "../firebase"; // adjust path if needed
 import { collection, addDoc, setDoc, doc, Timestamp } from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { personas } from "../data/Personas.js";
-
-
 
 let currentSession = null;
 let pastSession = null;
@@ -32,6 +32,36 @@ export {
   getAgents,
   resetAgents,
   agents // optional: direct export
+};
+
+const auth = getAuth();
+
+export const loginUser = async (email, password) => {
+  try {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+  
+    return { success: true, user: new User(user.email, password, user.uid) };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+};
+
+export const registerUser = async (email, password) => {
+  try {
+    const { user } = await createUserWithEmailAndPassword(auth, email, password);
+
+    console.log("(1) Email:", user.email);
+    console.log("(2) Password:", password); // not saved to firebase, just debug display
+    console.log("(3) UID:", user.uid);
+
+    const userData = new User(user.email, password, user.uid).toJSON(); // password is not submitted to firebase
+
+    await setDoc(doc(db, "Users", user.uid), userData);                 // saves user data (email and uid) to firebase
+
+    return { success: true, user: userData };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
 };
 
 // Create a new session instance
@@ -125,6 +155,42 @@ export const callFakeVote = async () => {
 
 
 //firebase stuff 
+export const saveAgentToFirebase = async (persona, aiInstance, userId) => {
+  if (!persona || !aiInstance || !userId) {
+    console.error("Missing required fields to save agent.");
+    return { success: false, message: "Persona, AI instance, and user ID are required." };
+  }
+
+  const agentData = {
+    agent_persona: persona,
+    chapterHistory: [],
+    aiInstance,
+    outline: "",
+    totalChapters: 0,
+    date: Timestamp.now(),
+    agent_vote: {
+      agent_id: null,
+      target_id: null,
+    },
+  };
+
+  try {
+    const agentRef = await addDoc(collection(db, "Users", userId, "Agents"), agentData);
+    const agentId = agentRef.id;
+
+    // Optional: update the agent with its ID after it's created
+    // await updateDoc(agentRef, { agent_id: agentId });
+
+    return {
+      success: true,
+      message: "Agent created and saved successfully",
+      agent: { ...agentData, agentId },
+    };
+  } catch (error) {
+    console.error("Error saving agent:", error);
+    return { success: false, message: "Failed to save agent." };
+  }
+};
 
 export const saveSessionToFirebase = async () => {
     if (!currentSession) return;
