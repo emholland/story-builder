@@ -5,8 +5,9 @@ import Phase from "./Phase.js"
 
 class Session {
     // Constructor
-    constructor(user, prompt, agents = [], numberOfChapters) {
+    constructor(title, user, prompt, agents = [], numberOfChapters) {
       this.user = user;
+      this.title = title;
       this.story = new Story(numberOfChapters);
       this.prompt = prompt;
       this.numberOfChapters = numberOfChapters; 
@@ -94,12 +95,17 @@ class Session {
       }
     }
 
-    this.currentChapter++;
+    if(this.currentChapter === 0){
+      this.parseOutlineBuildPhases(winningChapter);
+    }
 
     //Add winning chapter to array
-    for (const agent of this.agents) {
-      agent.addVotedChapter(winningChapter);
-    }
+
+    this.phases[this.currentChapter].setText(winningChapter);
+    
+    this.story.addChapter(winningChapter);
+
+    this.currentChapter++;
 
     return winningChapter;
   };

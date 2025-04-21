@@ -128,6 +128,7 @@
     font-size: 3rem;
     font-weight: 700;
     margin-bottom: 1rem;
+    color: #131313;
   }
   
   .hero-subtitle {
@@ -172,4 +173,49 @@
     color: #e2e8f0;
     line-height: 1.8;
   }
+
+  .history-info-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 1rem;
+    background-color: #787761;
+    text-align: center;
+  }
+  
+  .history-info-card {
+    background-color: #2d2d2d;
+    padding: 2rem 3rem;
+    border-radius: 1rem;
+    max-width: 600px;
+    color: #f1f5f9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+  
+  .history-info-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .history-info-card p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: #cbd5e1;
+  }
+  
+  .history-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #e8f1bc;
+    color: #0f172a;
+    font-weight: bold;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .history-button:hover {
+    background-color: #f8e838;
+  }
+  
   
