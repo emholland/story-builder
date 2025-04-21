@@ -12,11 +12,9 @@ function FinalStoryPage() {
          <div className="final-story-container">
         <h1>Your Final Story!</h1>
         <div className="story-box">
-            <div className="story-content">
         {finalStory?.split("\n\n").map((paragraph, index) => (
           <p key={index}>{paragraph}</p>
         ))}
-        </div>
       </div>
         </div>
   );

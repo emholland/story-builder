@@ -30,10 +30,9 @@
 
 .story-box p {
   margin-bottom: 20px;
+  color: whitesmoke; 
+  margin-bottom: 0.5em;
 }
-.story-content {
-  color: white !important;
-  font-weight: 500;
-  margin-top: 10px;
-}
+
+
 
