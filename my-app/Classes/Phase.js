@@ -18,6 +18,10 @@ class Phase {
     setWinner(winner){
         this.winner = winner;
     }
+
+    setText(text){
+      this.text = text;
+  }
   
     toJSON() {
       return {

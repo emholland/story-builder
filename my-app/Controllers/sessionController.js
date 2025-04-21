@@ -1,13 +1,38 @@
 // controllers/sessionController.js
 
-import Session from "../Classes/Session";
+import Session from "../Classes/session";
 import Agent from "../Classes/Agent";
 import User from "../Classes/User";
 import { db } from "../firebase"; // adjust path if needed
 import { collection, addDoc, setDoc, doc, Timestamp } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { personas } from "../data/Personas.js";
 
 let currentSession = null;
+let pastSession = null;
+
+const agents = [];
+
+const addAgentToSession = (persona, aiInstance) => {
+  const newAgent = new Agent(persona, aiInstance);
+  agents.push(newAgent);
+  return newAgent; // for UI to update
+};
+
+const getAgents = () => {
+  return agents;
+};
+
+const resetAgents = () => {
+  agents.length = 0;
+};
+
+export {
+  addAgentToSession,
+  getAgents,
+  resetAgents,
+  agents // optional: direct export
+};
 
 const auth = getAuth();
 
@@ -40,8 +65,8 @@ export const registerUser = async (email, password) => {
 };
 
 // Create a new session instance
-export const createNewSession = (user, prompt, agents = [], numberOfChapters) => {
-  currentSession = new Session(user, prompt, agents, numberOfChapters);
+export const createNewSession = (title, user, prompt, agents = [], numberOfChapters) => {
+  currentSession = new Session(title, user, prompt, agents, numberOfChapters);
   saveSessionToLocalStorage();
   return currentSession;
 };
@@ -92,6 +117,7 @@ export const resetSession = () => {
 };
 
 export const generateChaptersForAgentsInParallel = async (onProgress) => {
+    console.log(currentSession);
     currentSession.agents.forEach(async (agent) => {
         if(currentSession.currentChapter == 0){
             try {
@@ -123,8 +149,8 @@ export const generateChaptersForAgentsInParallel = async (onProgress) => {
     // Save once all are updated (optional — or save individually in onProgress)
   };
 
-export const callFakeVote = () => {
-    return(currentSession.fakeVote());
+export const callFakeVote = async () => {
+    return(await currentSession.fakeVote());
 };
 
 
@@ -183,4 +209,55 @@ export const saveSessionToFirebase = async () => {
       console.error("Error saving session to Firebase:", e);
     }
   };
-  
+
+// controllers/sessionController.js
+
+// Temporary in-memory session store
+const fakeSessions = [
+  {
+    storyTitle: "The AI Revolt",
+    prompt: "A world where AI takes over but helps humanity",
+    createdAt: "2024-03-12T10:15:00Z",
+    agents: [
+      { persona: "Dr. Suess", aiInstance: "openai", profile: "Dr. Suess" },
+      { persona: "Shakespeare", aiInstance: "openai" }
+    ],
+    phases: [
+      { number: 1, title: "Rise", winner: "Asimov", outlineSnippet: "AI begins to gain awareness", text: "AI systems started coordinating..." },
+      { number: 2, title: "Alliance", winner: "Tolkien", outlineSnippet: "Humans and AI unite", text: "Together they forged a pact..." }
+    ]
+  },
+  {
+    storyTitle: "Lost in the Stars",
+    prompt: "A child wakes up on a spaceship",
+    createdAt: "2024-02-20T08:45:00Z",
+    agents: [
+      { persona: "Stephen King", aiInstance: "openai", profile: "Dr. Suess"},
+      { persona: "Dr. Suess", aiInstance: "openai" }
+    ],
+    phases: [
+      { number: 1, title: "Awakening", winner: "Steven King", outlineSnippet: "Child opens eyes to unknown", text: "The hum of the ship was the first thing she heard..." }
+    ]
+  }
+];
+
+// Return a list of titles for display in dropdown
+export const fetchUsersPastSessions = async () => {
+  await new Promise((res) => setTimeout(res, 150));
+  return fakeSessions.map(session => session.storyTitle);
+};
+
+// Return full session object based on title
+export const fetchPastSessionByTitle = async (title) => {
+  await new Promise((res) => setTimeout(res, 150));
+  const session = fakeSessions.find(session => session.storyTitle === title);
+  if (!session) return null;
+
+   // Inject profile into agents
+   session.agents = session.agents.map(agent => ({
+    ...agent,
+    profile: personas[agent.persona] || null,
+  }));
+
+  return session;
+};

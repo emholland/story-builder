@@ -1,15 +1,20 @@
 import axios from 'axios';
 import OpenAI from 'openai';
+import { personas } from "../data/Personas.js";
+
 
 class Agent {
     constructor(persona, aiInstance) {
         this.persona = persona; 
         this.chapterHistory = [];
+        this.votedChapterHistory = [];
         this.chapter = "";
         this.aiInstance = aiInstance;
         this.outline = "";
         this.chapterCount = 0;
         this.totalChapters = 0;
+        this.votingReasoning = [];
+        this.profile = personas[this.persona]; // attach profile
     }
 
     async generateOutline(prompt){
@@ -46,7 +51,6 @@ class Agent {
         }else{
             try {
                     // Write a chapter using API
-                    
                 const res = await axios.post("http://localhost:5001/api/chat", {
                     prompt: "Write chapter number" + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + this.outline,
                     persona: this.persona, // Using the persona from the Agent instance
@@ -183,15 +187,53 @@ class Agent {
 
     /**
      * 
+     * @param {string} winningChapter
+     */
+    addVotedChapter(winningChapter) {
+        this.votedChapterHistory.push(winningChapter);
+    }
+
+    /**
+     * 
+     * @param {Map} chapters
+     */
+    async vote(chaptersMap) {
+        const keysIterator = chaptersMap.keys();
+        let chapters = "";
+        let i = 1;
+        //Prompt agent
+        const chapterNumbers = new Map();
+        for (const key of keysIterator) {
+            chapters = chapters + "Option " + i + " is:\n" + key + "\n";
+            chapterNumbers.set(i, key);
+            i++;
+        }
+        const response = await axios.post('http://localhost:5001/api/openai', {
+            userPrompt: "Pick your favorite writing sample from the following options. Your response should be a number following by an explanation of your thoughts on each of the options. For example, if you like option 1, your response should be 1 and then your reasoning. These are the options: \n" + chapters,
+            persona: this.persona,
+        });
+        
+        //Get analysis from response
+        const firstIntegerIndex = response.data.message.search(/\d/);
+        const analysis = response.data.message.substring(firstIntegerIndex + 1);
+        console.log("analysis is: \n" + analysis);
+        this.votingReasoning.push(analysis);
+
+        return chapterNumbers.get(parseInt(response.data.message));
+    }
+
+    /**
+     * 
      * @param {string} prompt 
      */
     async createOutline(prompt, chapterNum) {
         try {
             // Create outline
             const response = await axios.post('http://localhost:5001/api/openai', {
-                userPrompt: "Create an outline, no loner than, 100 words, for a story about " + prompt + " The story will be " + this.totalChapters + " chapters in total and each chapter will be 50 words. Make sure to include what happens in each chapter and what characters appear.",
+                userPrompt: "Create an outline, no longer than, 100 words, for a story about " + prompt + " The story will be " + this.totalChapters + " chapters in total and each chapter will be 50 words. Make sure to include what happens in each chapter and what characters appear.",
             });
             this.outline = response.data.message;
+            this.chapter = this.outline;
             console.log(this.outline);
             return this.outline;
     
