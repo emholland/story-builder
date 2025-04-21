@@ -1,6 +1,7 @@
 .popup-container { 
   margin-top: 20px;
 }
+
 /* Overlay background (dimmed behind the popup) */
 .popup-overlay {
   position: fixed;
@@ -51,7 +52,7 @@
   font-weight: 500;
   color: #333;
 }
-.accuracy-response {
+.final-story{
   color: #333 !important;
   font-weight: 500;
   margin-top: 10px;

@@ -10,6 +10,7 @@ import {
 } from "../../../Controllers/sessionController.js";
 import "./StoryCreationPage.css";
 import "../AgentPopup/TestAgentPopup.css";
+import "../FinalStoryPage/FinalStoryPage.css";
 import AddAgent from "../AgentPopup/AddAgent.jsx";
 import Evaluation from "../../Components/Evaluation/Evaluate.jsx";
 import ReactMarkdown from "react-markdown";
@@ -387,7 +388,7 @@ const StoryCreation = () => {
         </div>
   
         <>
-    <button className="final-story-button" onClick={printFinalStoryPopup}>
+    <button className="final-story-button" onClick={() => printFinalStoryPopup()}>
       Read Your Final Story
     </button>
 
@@ -395,7 +396,7 @@ const StoryCreation = () => {
       <div className="popup-overlay" onClick={() => setIsFinalStoryPopupVisible(false)}>
         <div className="popup-content" onClick={(e) => e.stopPropagation()}>
           <button className="close-button" onClick={() => setIsFinalStoryPopupVisible(false)}>✕</button>
-          <h2>Your Story</h2>
+          <h2>Your Final Story!</h2>
           <div className="final-story">
             <p>{finalStory}</p>
           </div>
