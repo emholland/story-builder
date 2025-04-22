@@ -19,7 +19,8 @@ export default function EvaluationComponent({ aiLoading }) {
     setShowModal(true);
 
     // 2. TEXT WebSocket (for markdown explanation)
-    const textSocket = new WebSocket("ws://localhost:5001");
+    const wsUrl = `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}`;
+    const textSocket = new WebSocket(wsUrl);
     textSocketRef.current = textSocket;
 
     textSocket.onopen = () => {
@@ -51,7 +52,7 @@ export default function EvaluationComponent({ aiLoading }) {
     };
 
     // 3. NUMBER WebSocket (for Evalbar score)
-    const numberSocket = new WebSocket("ws://localhost:5001");
+    const numberSocket = new WebSocket(wsUrl);
     numberSocketRef.current = numberSocket;
 
     numberSocket.onopen = () => {
