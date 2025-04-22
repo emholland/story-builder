@@ -26,7 +26,7 @@ const AddAgent = ({ children, updateAgents }) => {
       
     try {
       // Send the agent data to the backend
-      const response = await axios.post('http://localhost:5001/api/agents', agentData, {
+      const response = await axios.post('/api/agents', agentData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -43,7 +43,7 @@ const AddAgent = ({ children, updateAgents }) => {
 
     setDeepSeekLoading(true);
     try {
-        const res = await axios.post("http://localhost:5001/api/chat", {
+        const res = await axios.post('/api/chat', {
             prompt: userInput, // Append user input to the global prompt
         });
 
