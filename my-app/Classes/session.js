@@ -5,8 +5,9 @@ import Phase from "./Phase.js"
 
 class Session {
     // Constructor
-    constructor(user, prompt, agents = [], numberOfChapters) {
+    constructor(title, user, prompt, agents = [], numberOfChapters) {
       this.user = user;
+      this.title = title;
       this.story = new Story(numberOfChapters);
       this.prompt = prompt;
       this.numberOfChapters = numberOfChapters; 
@@ -27,6 +28,7 @@ class Session {
   
     parseOutlineBuildPhases(outline) {
       if (!outline || typeof outline !== 'string') return [];
+      console.log(outline);
   
       // Try to split based on common outline patterns
      const split = outline.split("**");
@@ -37,6 +39,7 @@ class Session {
      let phaseIndex = 1;
 
      for(let i = 3; i<=(this.numberOfChapters*3); i+=2){
+     console.log("Input to parseOutlineBuildPhases:", winningChapter);
       this.phases[phaseIndex].setTitle(split[i]);
       console.log(title);
       phaseIndex++;
@@ -87,19 +90,26 @@ class Session {
     let winningChapter = "";
     let mostVotes = 0;
     for (const [key, value] of chaptersMap) {
-      console.log(key, value);
+      //console.log(key, value);
+       console.log(`key: ${key}, value: ${value}`);
       if (value > mostVotes) {
         mostVotes = value;
         winningChapter = key;
+        console.log("WINNER IS:", winningChapter)
       }
     }
 
-    this.currentChapter++;
+    if(this.currentChapter === 0){
+      this.parseOutlineBuildPhases(winningChapter);
+    }
 
     //Add winning chapter to array
-    for (const agent of this.agents) {
-      agent.addVotedChapter(winningChapter);
-    }
+
+    this.phases[this.currentChapter].setText(winningChapter);
+    
+    this.story.addChapter(winningChapter);
+
+    this.currentChapter++;
 
     return winningChapter;
   };
