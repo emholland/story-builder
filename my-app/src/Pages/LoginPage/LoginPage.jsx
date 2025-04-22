@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../../../firebase.js"; // Ensure correct Firebase import
 import Email from "../../Components/LoginComponents/Email.jsx";
 import Password from "../../Components/LoginComponents/Password.jsx";
-//import CreateAccountButton from "../../Components/LoginComponents/CreateAccountButton.jsx";
-import { handleAuthentication } from "../../Components/LoginComponents/Authenication.jsx";
+import { loginUser, registerUser } from "../../../Controllers/sessionController.js";
 import "./LoginPage.css";
 
 const fetchImages = async () => {
@@ -39,12 +38,23 @@ const LoginPage = () => {
     loadImage();
   }, []);
 
-  const handleLogin = () => {
-    handleAuthentication(email, password, "login", navigate, setMessages);
+  const handleLogin = async () => {
+    const result = await loginUser(email, password);
+    if (result.success) {
+      setMessages((prev) => [...prev, { type: "success", message: "Logged in successfully!" }]);
+      navigate("/dashboard");
+    } else {
+      setMessages((prev) => [...prev, { type: "error", message: result.error }]);
+    }
   };
 
-  const handleCreateAccount = () => {
-    handleAuthentication(email, password, "create", null, setMessages);
+  const handleCreateAccount = async () => {
+    const result = await registerUser(email, password);
+    if (result.success) {
+      setMessages((prev) => [...prev, { type: "success", message: "Account created! Now, log in." }]);
+    } else {
+      setMessages((prev) => [...prev, { type: "error", message: result.error }]);
+    }
   };
 
   return (

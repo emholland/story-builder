@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types'; // For prop validation
 import './AddAgent.css';
 import axios from "axios";
+import { getAuth } from "firebase/auth";
+import { saveAgentToFirebase } from "../../../Controllers/sessionController.js";
+import { addAgentToSession } from "../../../Controllers/sessionController"; 
+
 
 
 const AddAgent = ({ children, updateAgents }) => {
@@ -58,16 +62,27 @@ const AddAgent = ({ children, updateAgents }) => {
 };
 
   const addAgent = () => {
-    console.log("Adding agent:", selectedOption); // Log to see what was selected
-    const agentData = { persona: selectedOption, aiInstance: selectedAI };
+    if (!selectedOption || !selectedAI) {
+      alert("Please select both a persona and an AI.");
+      return;
+    }
+  
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-    handleSubmit(agentData);
+    if (!user) {
+      alert("User not authenticated.");
+      return;
+    }
 
+    const newAgent = addAgentToSession(selectedOption, selectedAI); //
+    saveAgentToFirebase(selectedOption, selectedAI, user.uid) // saves agent to the database
+    
+    updateAgents(); // still tells React to refresh its copy
     setSelectedOption("");
     setSelectedAI("");
-    setIsOpen(false); // Close the popup after adding
-
-  }
+    setIsOpen(false);
+  };
 
   const options = [
     { value: 'Dr. Suess', label: 'Dr. Suess' },
@@ -93,7 +108,7 @@ const AddAgent = ({ children, updateAgents }) => {
         <div className="popup-overlay">
           <div className="popup-content">
             <button className="close-button" onClick={togglePopup}>
-              &times;
+              x
             </button>
 
             <div className="agent-settings">
