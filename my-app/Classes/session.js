@@ -28,6 +28,7 @@ class Session {
   
     parseOutlineBuildPhases(outline) {
       if (!outline || typeof outline !== 'string') return [];
+      console.log(outline);
   
       // Try to split based on common outline patterns
      const split = outline.split("**");
@@ -38,6 +39,7 @@ class Session {
      let phaseIndex = 1;
 
      for(let i = 3; i<=(this.numberOfChapters*3); i+=2){
+     console.log("Input to parseOutlineBuildPhases:", winningChapter);
       this.phases[phaseIndex].setTitle(split[i]);
       console.log(title);
       phaseIndex++;
@@ -88,10 +90,12 @@ class Session {
     let winningChapter = "";
     let mostVotes = 0;
     for (const [key, value] of chaptersMap) {
-      console.log(key, value);
+      //console.log(key, value);
+       console.log(`key: ${key}, value: ${value}`);
       if (value > mostVotes) {
         mostVotes = value;
         winningChapter = key;
+        console.log("WINNER IS:", winningChapter)
       }
     }
 
