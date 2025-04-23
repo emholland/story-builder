@@ -16,7 +16,6 @@
  import axios from "axios";
  import dotenv from "dotenv";
  import { OpenAI } from "openai";
- import Agent from "./Classes/Agent.js";
  import { WebSocketServer } from 'ws';
  import path from "path";
  import { fileURLToPath } from "url";
@@ -83,24 +82,6 @@ const __dirname = path.dirname(__filename);
          console.error("Error fetching completion:", error);
          res.status(500).json({ error: 'Failed to fetch completion' });
      }
- });
- 
- let agents = [];
- 
- app.post('/api/agents', (req, res) => {
-     const { persona, aiInstance } = req.body;
- 
-     if (!persona) {
-         return res.status(400).json({ message: 'Persona is required' });
-     }
- 
-     const newAgent = new Agent(persona, aiInstance);
-     agents.push(newAgent);
- 
-     res.status(201).json({
-         message: 'Agent created successfully',
-         agent: newAgent,
-     });
  });
  
  const server = app.listen(port, () => {

@@ -39,7 +39,7 @@ class Session {
      let phaseIndex = 1;
 
      for(let i = 3; i<=(this.numberOfChapters*3); i+=2){
-     console.log("Input to parseOutlineBuildPhases:", winningChapter);
+     console.log("Input to parseOutlineBuildPhases:", outline);
       this.phases[phaseIndex].setTitle(split[i]);
       console.log(title);
       phaseIndex++;
@@ -73,47 +73,57 @@ class Session {
 
 
   async fakeVote() {
-    //Make map
     const chaptersMap = new Map();
-    this.agents.forEach(async (agent) => {
-      console.log(agent.chapter);
-      chaptersMap.set(agent.chapter, 0);
-    });
-
-    //Put votes into map
+  
+    // Build initial vote map
     for (const agent of this.agents) {
-      let votedChapter = await agent.vote(chaptersMap);
-      chaptersMap.set(votedChapter, chaptersMap.get(votedChapter) + 1);
-    }
-
-    //Find biggest value in map
-    let winningChapter = "";
-    let mostVotes = 0;
-    for (const [key, value] of chaptersMap) {
-      //console.log(key, value);
-       console.log(`key: ${key}, value: ${value}`);
-      if (value > mostVotes) {
-        mostVotes = value;
-        winningChapter = key;
-        console.log("WINNER IS:", winningChapter)
+      if (agent.chapter) {
+        chaptersMap.set(agent.chapter, 0);
+      } else {
+        console.warn(`${agent.persona} has no chapter`);
       }
     }
-
-    if(this.currentChapter === 0){
+  
+    // Have each agent vote
+    for (const agent of this.agents) {
+      const votedChapter = await agent.vote(chaptersMap);
+      if (!votedChapter || !chaptersMap.has(votedChapter)) {
+        console.warn(`Invalid vote from ${agent.persona}`);
+        continue;
+      }
+      chaptersMap.set(votedChapter, chaptersMap.get(votedChapter) + 1);
+    }
+  
+    // Determine winner
+    let winningChapter = "";
+    let mostVotes = 0;
+  
+    for (const [chapter, votes] of chaptersMap) {
+      console.log(`key: ${chapter}, value: ${votes}`);
+      if (votes > mostVotes) {
+        mostVotes = votes;
+        winningChapter = chapter;
+      }
+    }
+  
+    console.log(" WINNING CHAPTER IS:", winningChapter);
+  
+    if (!winningChapter) {
+      throw new Error("No winning chapter selected. All votes may have failed.");
+    }
+  
+    // Call follow-up logic
+    if (this.currentChapter === 0) {
       this.parseOutlineBuildPhases(winningChapter);
     }
-
-    //Add winning chapter to array
-
+  
     this.phases[this.currentChapter].setText(winningChapter);
-    
     this.story.addChapter(winningChapter);
-
     this.currentChapter++;
-
+  
     return winningChapter;
-  };
-
+  }
+  
   // Serialization
   toJSON() {
     return {
