@@ -1,6 +1,6 @@
 // controllers/sessionController.js
 
-import Session from "../Classes/Session.js";
+import Session from "../Classes/session.js";
 import Agent from "../Classes/Agent";
 import User from "../Classes/User";
 import { db } from "../firebase"; // adjust path if needed
