@@ -195,11 +195,13 @@ class Agent {
      */
     addVotedChapter(winningChapter) {
         this.votedChapterHistory.push(winningChapter);
+        console.log("pushed: " + this.votedChapterHistory[0]);
     }
-    static printFinalStory(votedChapterHistory){
-        console.log(votedChapterHistory.join("\n"));
-        return votedChapterHistory.join("\n\n");
-    }    
+    
+    getVotedChapterHistory() {
+        console.log(this.votedChapterHistory.join("\n\n"))
+        return this.votedChapterHistory.join("\n\n");
+      };
 
     /**
      * 

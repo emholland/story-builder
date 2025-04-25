@@ -153,6 +153,11 @@ export const callFakeVote = async () => {
     return(await currentSession.fakeVote());
 };
 
+const getVotedChapterHistory = () => {
+  console.log(agents[0].votedChapterHistory.join("\n\n"))
+  return agents[0].votedChapterHistory.join("\n\n");
+};
+
 
 //firebase stuff 
 export const saveAgentToFirebase = async (persona, aiInstance, userId) => {

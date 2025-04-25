@@ -111,10 +111,16 @@ class Session {
     if (!winningChapter) {
       throw new Error("No winning chapter selected. All votes may have failed.");
     }
-  
+  /*
     // Call follow-up logic
     if (this.currentChapter === 0) {
       this.parseOutlineBuildPhases(winningChapter);
+    }
+      */
+
+    // Store voted Chapters
+    for (const agent of this.agents) {
+      agent.addVotedChapter(winningChapter);
     }
   
     this.phases[this.currentChapter].setText(winningChapter);

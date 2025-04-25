@@ -38,7 +38,6 @@ const StoryCreation = () => {
   const [phase, setPhase] = useState("generate");
   const navigate = useNavigate();//Navigate to Final Story Page
   const [votedChapterHistory, setVotedChapterHistory] = useState([]);
-  const finalStory = Agent.printFinalStory(votedChapterHistory);
 
   const [isChpPopupOpen, setIsChpPopupOpen] = useState(false);
 
@@ -474,18 +473,18 @@ const StoryCreation = () => {
           </div>
 
         </div>
-        {votedChapterHistory.length === chapterCount + 1 && (
   <>
     <button
       className="final-story-button"
       onClick={() => {
+        const finalStory = agents[0].getVotedChapterHistory();
         console.log("Final story before navigation:", finalStory);
         navigate("/finalstory", { state: { finalStory } });
       }}
     >Read Your Final Story
     </button>
   </>
-)}
+
 
 
         
