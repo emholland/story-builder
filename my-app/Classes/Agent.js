@@ -195,11 +195,9 @@ class Agent {
      */
     addVotedChapter(winningChapter) {
         this.votedChapterHistory.push(winningChapter);
-        console.log("pushed: " + this.votedChapterHistory[0]);
     }
     
     getVotedChapterHistory() {
-        console.log(this.votedChapterHistory.join("\n\n"))
         return this.votedChapterHistory.join("\n\n");
       };
 
@@ -228,6 +226,7 @@ class Agent {
         const analysis = response.data.message.substring(firstIntegerIndex + 1);
         console.log("analysis is: \n" + analysis);
         this.votingReasoning.push(analysis);
+        
 
         return chapterNumbers.get(parseInt(response.data.message));
     }
