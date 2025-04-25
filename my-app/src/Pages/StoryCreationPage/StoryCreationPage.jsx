@@ -10,10 +10,12 @@ import {
   getAgents
 } from "../../../Controllers/sessionController.js";
 import "./StoryCreationPage.css";
+import "../FinalStoryPage/FinalStoryPage.css";
 import AddAgent from "../AgentPopup/AddAgent.jsx";
 import Evaluation from "../../Components/Evaluation/Evaluate.jsx";
 import ReactMarkdown from "react-markdown";
 import ChapterInfoPopup from "../../Components/ChapterInfoPopup.jsx";
+
 
 //eval
 const StoryCreation = () => {
@@ -34,6 +36,9 @@ const StoryCreation = () => {
   const [lastUsedPrompt, setLastUsedPrompt] = useState("");
   const [button, setButton] = useState("generate");
   const [phase, setPhase] = useState("generate");
+  const navigate = useNavigate();//Navigate to Final Story Page
+  const [votedChapterHistory, setVotedChapterHistory] = useState([]);
+  const finalStory = Agent.printFinalStory(votedChapterHistory);
 
   const [isChpPopupOpen, setIsChpPopupOpen] = useState(false);
 
@@ -234,6 +239,7 @@ const StoryCreation = () => {
   const closeChpPopup = () => {
     setIsChpPopupOpen(false);
   };
+
 
 
   return (
@@ -468,6 +474,21 @@ const StoryCreation = () => {
           </div>
 
         </div>
+        {votedChapterHistory.length === chapterCount + 1 && (
+  <>
+    <button
+      className="final-story-button"
+      onClick={() => {
+        console.log("Final story before navigation:", finalStory);
+        navigate("/finalstory", { state: { finalStory } });
+      }}
+    >Read Your Final Story
+    </button>
+  </>
+)}
+
+
+        
       </div>
     </div>
   );

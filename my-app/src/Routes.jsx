@@ -8,6 +8,7 @@ import HomePage from "./Pages/HomePage/HomePage.jsx";
 import AgentScreen from "./Pages/StoryCreationPage/AgentScreen.jsx";
 import StoryCreation from "./Pages/StoryCreationPage/StoryCreationPage.jsx";
 import HistoryPage from "./Pages/HistoryPage/HistoryPage.jsx";
+import FinalStoryPage from "./Pages/FinalStoryPage/FinalStoryPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -19,6 +20,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/dashboard" element={<StoryCreation/>} /> {/* Dashboard page */}
         <Route path="/agent" element={<AgentScreen/>} /> {/* AgentScreen page */}
         <Route path="/history" element={<HistoryPage/>} /> {/* History page */}
+        <Route path="/finalstory" element={<FinalStoryPage />} /> {/* Final page */}
       </Routes>
     </Router>
   </StrictMode>

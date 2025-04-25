@@ -197,6 +197,7 @@ class Agent {
         this.votedChapterHistory.push(winningChapter);
     }
     static printFinalStory(votedChapterHistory){
+        console.log(votedChapterHistory.join("\n"));
         return votedChapterHistory.join("\n\n");
     }    
 
