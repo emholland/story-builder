@@ -332,7 +332,7 @@ const StoryCreation = () => {
 
 
         <button className="phase-box chapter-heading-button" onClick={() => openChpPopup()}>
-          Chapter {chapterIndex}
+            {chapterIndex === 0 ? "Outline" : `Chapter ${chapterIndex}`}
         </button>
 
         {isChpPopupOpen && (
