@@ -119,11 +119,17 @@ class Session {
         this.winningAgents.push(agent);
       }
     }
-
-
+    
+    /*
     // Call follow-up logic
     if (this.currentChapter === 0) {
       this.parseOutlineBuildPhases(winningChapter);
+    }
+    */
+
+    // Store voted Chapters
+    for (const agent of this.agents) {
+      agent.addVotedChapter(winningChapter);
     }
   
     this.phases[this.currentChapter].setText(winningChapter);
