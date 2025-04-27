@@ -43,6 +43,7 @@ const StoryCreation = () => {
 
   const textSocketRef = useRef(null);
 
+  
   useEffect(() => {
     setShowModal(true);
     setAgents(getAgents());
@@ -452,6 +453,11 @@ const StoryCreation = () => {
 
 
         <div className="user-box">User Info</div>
+        <div className="History-Box">
+        <button onClick={() => navigate('/history')} className="history-button">
+            View History
+          </button>
+        </div>
 
         <div className="agent-text-container">
 
