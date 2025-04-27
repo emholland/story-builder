@@ -13,6 +13,7 @@ class Session {
       this.numberOfChapters = numberOfChapters; 
       this.currentChapter = 0;
       this.agents = agents;
+      this.winningAgents = [];
       this.phases = [];
       for(let i=0; i<=numberOfChapters; i++){
         const nPhase = new Phase(i);
@@ -111,12 +112,20 @@ class Session {
     if (!winningChapter) {
       throw new Error("No winning chapter selected. All votes may have failed.");
     }
-  /*
+
+    // Find winning agent
+    for (const agent of this.agents) {
+      if (agent.chapter == winningChapter) {
+        this.winningAgents.push(agent);
+      }
+    }
+    
+    /*
     // Call follow-up logic
     if (this.currentChapter === 0) {
       this.parseOutlineBuildPhases(winningChapter);
     }
-      */
+    */
 
     // Store voted Chapters
     for (const agent of this.agents) {
