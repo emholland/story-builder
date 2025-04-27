@@ -196,9 +196,17 @@ class Agent {
     addVotedChapter(winningChapter) {
         this.votedChapterHistory.push(winningChapter);
     }
-    static printFinalStory(votedChapterHistory){
-        return votedChapterHistory.join("\n\n");
-    }    
+    
+    getVotedChapterHistory() {
+        const trimmedArray = [];
+
+        for (let i = 1; i < this.votedChapterHistory.length; i++) {
+            trimmedArray.push(this.votedChapterHistory[i]);
+  }
+
+         this.votedChapterHistory = trimmedArray.join("\n\n");
+        return this.votedChapterHistory;
+      };
 
     /**
      * 
@@ -225,6 +233,7 @@ class Agent {
         const analysis = response.data.message.substring(firstIntegerIndex + 1);
         console.log("analysis is: \n" + analysis);
         this.votingReasoning.push(analysis);
+        
 
         return chapterNumbers.get(parseInt(response.data.message));
     }
