@@ -47,38 +47,6 @@ sidebar_position: 2
 
 ---
 
-## Agent Story Outline and Chapters
-
-### `POST /Users/{userId}/Sessions/{sessionId}/Agents/{agentId}/Outline`
-- Creates and stores a story outline in the `Outline` subcollection under the agent.
-
-### `GET /Users/{userId}/Sessions/{sessionId}/Agents/{agentId}/Outline`
-- Retrieves the story outline from the `Outline` subcollection under the agent.
-
-### `POST /Users/{userId}/Sessions/{sessionId}/Agents/{agentId}/Chapters`
-- Creates and stores a chapter in the `Chapters` subcollection under the agent.
-
-### `GET /Users/{userId}/Sessions/{sessionId}/Agents/{agentId}/Chapters`
-- Retrieves all chapters from the `Chapters` subcollection under the agent.
-
----
-
-## Final Story Outline and Chapters
-
-### `POST /Users/{userId}/Sessions/{sessionId}/Stories/{storyId}/Outline`
-- Creates and stores a final story outline in the `Outline` subcollection under the story.
-
-### `GET /Users/{userId}/Sessions/{sessionId}/Stories/{storyId}/Outline`
-- Retrieves the final story outline from the `Outline` subcollection under the story.
-
-### `POST /Users/{userId}/Sessions/{sessionId}/Stories/{storyId}/Chapters`
-- Creates and stores a final chapter in the `Chapters` subcollection under the story.
-
-### `GET /Users/{userId}/Sessions/{sessionId}/Stories/{storyId}/Chapters`
-- Retrieves all final chapters from the `Chapters` subcollection under the story.
-
----
-
 ## AI Integration
 
 ### `POST /api/chat`
