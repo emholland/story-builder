@@ -22,14 +22,6 @@ sidebar_position: 4
 * If the user selects a story to read, then they will be shown the first page of the story. They can go forward or backward by clicking the next page or previous page options.
 * The user can leave read mode by clicking the exit button. They will then be brought back to the page where they can select to read completed stories or create a new story. 
 
-
-- ***add more Function Requirements***
-- ***describe what each functional requirement does in detail***
-- ***EXAMPLE: User must login...***
-  - ***does the login interface have anything different?***
-  - ***is their session saved?***
-  - ***this is the specfics needed that I mentioned earlier***
-
 ## Non-Functional Requirements
 
 *	Has at least three AI agents that can write stories.

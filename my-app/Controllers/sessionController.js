@@ -177,9 +177,7 @@ export const saveAgentToFirebase = async (persona, aiInstance, userId) => {
   try {
     const agentRef = await addDoc(collection(db, "Users", userId, "Agents"), agentData);
     const agentId = agentRef.id;
-
-    // Optional: update the agent with its ID after it's created
-    // await updateDoc(agentRef, { agent_id: agentId });
+    await updateDoc(agentRef, { agent_id: agentId });
 
     return {
       success: true,
