@@ -26,7 +26,7 @@ const HomePage = ({ navAgent }) => {
         <div className="navbar-content">
           <h1 className="logo">Story Builder</h1>
           <div className="nav-links">
-            <a href="#how-it-works">How It Works</a>
+            
             <a className="sign-up" onClick={() => navigate('/login')}>Sign-up/Login</a>
           </div>
         </div>

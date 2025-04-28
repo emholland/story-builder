@@ -20,6 +20,7 @@
     flex-direction: column;
   }
   
+ 
   /* Navigation Bar */
   .navbar {
     position: fixed;
@@ -206,7 +207,7 @@
   .history-button {
     padding: 0.75rem 1.5rem;
     background-color: #e8f1bc;
-    color: #0f172a;
+    color: #f8e838;
     font-weight: bold;
     border: none;
     border-radius: 0.5rem;
@@ -218,4 +219,8 @@
     background-color: #f8e838;
   }
   
-  
+  .hero-title {
+    color: white;
+  }
+
+ 
