@@ -8,7 +8,7 @@ import { saveAgentToFirebase } from "../../../Controllers/sessionController.js";
 const AddAgent = ({ children, updateAgents }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
-  const [selectedAI, setSelectedAI] = useState("");
+  const [selectedAI, setSelectedAI] = useState("openai");
   const [userInput, setUserInput] = useState("");
         // our user text string for inputs
   const [deepSeekResponse, setDeepSeekResponse] = useState("");
@@ -124,21 +124,7 @@ const AddAgent = ({ children, updateAgents }) => {
                     ))}
                     </select>
                 </div>
-            
-                <div className="dropdown-container">
-                    <label className="dropdown-label">AI:</label>
-                    <select
-                    value={selectedAI}
-                    onChange={handleAIChange}
-                    className="dropdown-select"
-                    >
-                    <option value=""> Select an AI</option>
-                    <option value={"deepseek"}> DeepSeek</option>
-                    <option value={"openai"}>OpenAI</option>
-                    
 
-                    </select>
-                </div>
                 {/*
                 <div>
                 <input className='textBar'
