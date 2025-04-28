@@ -188,6 +188,7 @@ h3 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .modal-box h2 {
@@ -431,5 +432,40 @@ h3 {
 .markdown-output.streamed {
   border-top: 1px solid #555;
   margin-top: 1rem;
+}
+
+
+.home-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: #faf6cb; /* matches your modal button style */
+  color: #222;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.3s ease;
+  z-index: 10001; /* ensure it's above modal content */
+}
+
+.home-button:hover {
+  background-color: #f4ea8e; /* slightly darker yellow on hover */
+}
+
+.bottom-button-row {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;
+  gap: 1rem; /* space between buttons */
+  padding: 1.5rem 0;
+  position: fixed; /* stick to bottom */
+  bottom: 0;
+  width: 100%;
+  background-color: #fff9f2; /* match your soft background */
+  border-top: 1px solid #ddd; /* optional light border line */
+  z-index: 1000;
 }
 

@@ -179,8 +179,14 @@ const StoryCreation = () => {
       {showModal && (
           <div className="modal-overlay">
             <div className="modal-box">
+            <button onClick={() => navigate(`/`)} className="home-button">
+                Home
+              </button>
+
               <h2>Welcome to Story Builder!</h2>
               <p>Let’s get started on your new story.</p>
+
+            
 
               {/* Title & Chapter Count */}
               <div className="title-chapter-row">
@@ -384,6 +390,8 @@ const StoryCreation = () => {
 
 
         <div className="user-box">User Info</div>
+
+        <div className="bottom-button-row">
         <div className="History-Box">
         <button onClick={() => navigate(`/history/${user_id}`)} className="history-button">
             View History
@@ -423,6 +431,7 @@ const StoryCreation = () => {
   </>
   <div>
   <button onClick={handleLogout} className="logout-button">Log Out</button>
+  </div>
   </div>
 
         

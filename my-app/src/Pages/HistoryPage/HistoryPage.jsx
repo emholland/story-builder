@@ -49,6 +49,9 @@ const HistoryPage = () => {
           </ul>
         )}
       </div>
+      <button onClick={() => navigate(`/`)} className="home-button">
+        Home
+      </button>
 
       {/* Main display area */}
       <div className="main-history">
