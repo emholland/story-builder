@@ -179,9 +179,6 @@ const StoryCreation = () => {
       {showModal && (
           <div className="modal-overlay">
             <div className="modal-box">
-            <button onClick={() => navigate(`/`)} className="home-button">
-                Home
-              </button>
 
               <h2>Welcome to Story Builder!</h2>
               <p>Let’s get started on your new story.</p>
