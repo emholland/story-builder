@@ -33,6 +33,7 @@ const StoryCreation = () => {
   const [chapterIndex, setChapterIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [chapterCount, setChapterCount] = useState(0);
+  const [chapterTot, setChapterTot] = useState(0);
   const [chapterButtons, setChapterButtons] = useState([]);
   const [storyIdea, setStoryIdea] = useState("");
   const [lastUsedPrompt, setLastUsedPrompt] = useState("");
@@ -44,6 +45,9 @@ const StoryCreation = () => {
   const [isChpPopupOpen, setIsChpPopupOpen] = useState(false);
 
   const textSocketRef = useRef(null);
+
+  const [winningChapters, setWinningChapters] = useState([]);
+
 
   
   useEffect(() => {
@@ -64,7 +68,8 @@ const StoryCreation = () => {
     for (const agent of agents) {
       agent.setChapterCount(chapterCount);
     }
-    
+    setChapterTot(chapterCount+1);
+    setChapterCount(0);
     setShowModal(false);
   };
 
@@ -98,7 +103,7 @@ const StoryCreation = () => {
     setPhase("vote");
     setButton("loading");
   
-    await callFakeVote((updatedAgent) => {
+    const winning = await callFakeVote((updatedAgent) => {
       const cloned = cloneAgent(updatedAgent);
       setAgents((prevAgents) =>
         prevAgents.map((a) =>
@@ -106,87 +111,17 @@ const StoryCreation = () => {
         )
       );
     });
-
+  
     console.log(agents);
+
+    setChapterCount(chapterCount+1);
+    console.log(chapterCount);
+
+    setWinningChapters((prev) => [...prev, winning]);
   
     setButton("generate");
   };
   
-  
-  
-
- /* const sendWriterPrompt = (prompt) => {
-    const previousChapter = agents[0]?.chapterHistory.slice(-1)[0] || "";
-  
-    // For chapters after the first, use the last chapter as context
-    const isContinuation = agents[0]?.chapterHistory.length > 0;
-    const continuationPrompt = isContinuation
-      ? `${prompt}\n\nContinue the story based on the previous chapter:\n"${previousChapter}"\nMake sure the story continues naturally.`
-      : prompt;
-  
-    if (!continuationPrompt || !agents.length) return;
-  
-    setLastUsedPrompt(continuationPrompt);
-    setAILoading(true);
-    setAIResponse("");
-  // anything that says localhost is breaking the project in deployment 
-    const textSocket = new WebSocket("ws://localhost:5001");
-    textSocketRef.current = textSocket;
-  
-    textSocket.onopen = () => {
-      textSocket.send(
-        JSON.stringify({
-          provider: "openai",
-          persona: agents[0]?.persona,
-          prompt: continuationPrompt,
-          type: "writer",
-        })
-      );
-  
-      let streamedChapter = "";
-  
-      textSocket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-  
-        if (data.type === "chunk") {
-          streamedChapter += data.content;
-          setAIResponse((prev) => prev + data.content);
-        } else if (data.type === "done") {
-          setAILoading(false);
-  
-          // Only push if the chapter is not a duplicate
-          setAgents((prevAgents) => {
-            const updated = [...prevAgents];
-            if (updated.length > 0) {
-              const last = updated[0].chapterHistory.slice(-1)[0];
-              if (last !== streamedChapter.trim()) {
-                updated[0].chapterHistory.push(streamedChapter.trim());
-              }
-            }
-            console.log(data.content);
-            return updated;
-          });
-  
-          setUserInput(streamedChapter.trim());
-          setChapterIndex((prev) => prev + 1);
-        } else if (data.type === "error") {
-          console.error("WebSocket error:", data.message);
-          setAIResponse("An error occurred while generating the story.");
-          setAILoading(false);
-        }
-      };
-    };
-  };*/
-  
-  
-  
-
-  /*const handleSubmit = () => {
-    if (storyIdea.trim()) {
-      sendWriterPrompt(storyIdea);
-      setStoryIdea("");
-    }
-  };*/
 
   const goPreviousChapter = () => {
     if (chapterIndex > 0) {
@@ -252,11 +187,15 @@ const StoryCreation = () => {
   return (
     <div className="story-create-page">
       <div className="black-board">
+      <button onClick={handleLogout} className="user-box">Log Out</button>
       {showModal && (
           <div className="modal-overlay">
             <div className="modal-box">
+
               <h2>Welcome to Story Builder!</h2>
               <p>Let’s get started on your new story.</p>
+
+            
 
               {/* Title & Chapter Count */}
               <div className="title-chapter-row">
@@ -371,6 +310,18 @@ const StoryCreation = () => {
                             <button className="chapter-button" onClick={() => goNextChapter()}>➡</button>
                         </div>
 
+                        {phase === "vote" && winningChapters[chapterIndex] && (
+                          <div className="winning-chapter-display">
+                            <h3>Winning Text</h3>
+                            <ReactMarkdown>
+                              {winningChapters[chapterIndex]}
+                            </ReactMarkdown>
+                          </div>
+                        )}
+
+
+
+
                         <div className="dialogue-container">
                           <div className="dialogue-layout">
                             {agents.map((agent, index) => {
@@ -457,54 +408,59 @@ const StoryCreation = () => {
     </div>
   )}
 </div>
+        <button onClick={() => navigate(`/`)} className="home-button">
+          Home
+        </button>
 
-<div className= "button-container" style={{marginBottom: "20px", display: "flex", gap:"10px", justifyContent:"center", alignItems:"center"}}>
-        <div className="user-box">User Info</div>
-
-        <div className="agent-text-container">
-
-          <div className="controls">
-
-          {button === "generate" && (
-            <button onClick={handleGenerateChapters}>Generate Chapters</button>
-          )}
-
-          {button === "vote" && (
-            <button onClick={handleVoting}>Vote</button>
-          )}
-
-           {button === "loading" && (
-            <button>Loading...</button>
-          )}
-            </div>
-
-          </div>
-
-  <>
+        <div className="bottom-button-row">
+  { chapterTot === chapterCount ? (
+    // ✅ If finished, only show Read Final Story button
     <button
-      className="final-story-button"
+      className="bottom-button"
       onClick={() => {
         const finalStory = agents[0].getVotedChapterHistory();
         console.log("Final story before navigation:", finalStory);
         navigate("/finalstory", { state: { finalStory } });
       }}
-    >Read Your Final Story
+    >
+      Read Your Final Story
     </button>
-  </>
-  </div>
-  <div className="History-Box">
-        <button onClick={() => navigate(`/history/${user_id}`)} className="history-button">
-            View History
-          </button>
-        </div>
-  <div>
-  <button onClick={handleLogout} className="logout-button">Log Out</button>
-  </div>
+  ) : (
+    // ❗ If not finished yet, show View History + Vote/Generate
+    <>
+      <button
+        className="bottom-button"
+        onClick={() => navigate(`/history/${user_id}`)}
+      >
+        View History
+      </button>
 
+      {button === "generate" && (
+        <button className="bottom-button" onClick={handleGenerateChapters}>
+          Generate Chapters
+        </button>
+      )}
+      
+      {button === "vote" && (
+        <button className="bottom-button" onClick={handleVoting}>
+          Vote
+        </button>
+      )}
+      
+      {button === "loading" && (
+        <button className="bottom-button" disabled>
+          Loading...
+        </button>
+      )}
+    </>
+  )}
+</div>
+
+  
+  </div>
 
         
       </div>
-    </div>
   );
 };
 

@@ -71,6 +71,7 @@ export const createNewSession = (title, user, prompt, agents = [], numberOfChapt
   currentSession = new Session(title, user, prompt, agents, numberOfChapters);
   saveSessionToFirebase(user);
   saveSessionToLocalStorage();
+  resetAgents();
   return currentSession;
 };
 

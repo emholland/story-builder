@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { fetchUsersPastSessions, fetchPastSessionByTitle, user_id } from "../../../Controllers/sessionController";
 import './HistoryPage.css';
 import AgentProfilePopup from "../../Components/AgentProfilePopup.jsx";
+import { useNavigate } from "react-router-dom";
 
 
 const HistoryPage = () => {
@@ -11,6 +12,8 @@ const HistoryPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeSession, setActiveSession] = useState(null);
   const [selectedAgent, setSelectedAgent] = useState(null);
+
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -49,6 +52,9 @@ const HistoryPage = () => {
           </ul>
         )}
       </div>
+      <button onClick={() => navigate(`/`)} className="home-button">
+        Home
+      </button>
 
       {/* Main display area */}
       <div className="main-history">
