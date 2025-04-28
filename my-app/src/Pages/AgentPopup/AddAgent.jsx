@@ -59,8 +59,9 @@ const AddAgent = ({ children, updateAgents }) => {
 };
 
   const addAgent = () => {
-    if (!selectedOption || !selectedAI) {
-      alert("Please select both a persona and an AI.");
+    setSelectedAI("openai");
+    if (!selectedOption ) {
+      alert("Please select both a persona.");
       return;
     }
   
@@ -76,7 +77,6 @@ const AddAgent = ({ children, updateAgents }) => {
     
     updateAgents(); // still tells React to refresh its copy
     setSelectedOption("");
-    setSelectedAI("");
     setIsOpen(false);
   };
 

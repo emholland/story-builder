@@ -176,6 +176,7 @@ const StoryCreation = () => {
   return (
     <div className="story-create-page">
       <div className="black-board">
+      <button onClick={handleLogout} className="user-box">Log Out</button>
       {showModal && (
           <div className="modal-overlay">
             <div className="modal-box">
@@ -390,7 +391,7 @@ const StoryCreation = () => {
 
         <div className="bottom-button-row">
         <div className="History-Box">
-        <button onClick={() => navigate(`/history/${user_id}`)} className="history-button">
+        <button onClick={() => navigate(`/history/${user_id}`)} className="final-story-button">
             View History
           </button>
         </div>
@@ -400,15 +401,15 @@ const StoryCreation = () => {
           <div className="controls">
 
           {button === "generate" && (
-            <button onClick={handleGenerateChapters}>Generate Chapters</button>
+            <button className="bottom-button" onClick={handleGenerateChapters}>Generate Chapters</button>
           )}
 
           {button === "vote" && (
-            <button onClick={handleVoting}>Vote</button>
+            <button className="bottom-button" onClick={handleVoting}>Vote</button>
           )}
 
            {button === "loading" && (
-            <button>Loading...</button>
+            <button className="bottom-button" >Loading...</button>
           )}
 
 
@@ -427,8 +428,9 @@ const StoryCreation = () => {
     </button>
   </>
   <div>
-  <button onClick={handleLogout} className="logout-button">Log Out</button>
+  
   </div>
+  
   </div>
 
         

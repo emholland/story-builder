@@ -469,3 +469,47 @@ h3 {
   z-index: 1000;
 }
 
+.bottom-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #f6f0ad;
+  color: #333;
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.bottom-button:hover {
+  box-shadow: 0 0 12px 4px #fce96a; /* 💡 glowing yellow */
+  transform: translateY(-2px); /* little lift */
+  background-color: #fce96a; /* slightly brighter on hover */
+}
+
+.history-button{
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  color:white;
+}
+
+.history-button:hoover{
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  color:white;
+}
+
