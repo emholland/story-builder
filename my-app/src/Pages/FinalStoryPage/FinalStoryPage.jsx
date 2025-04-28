@@ -17,11 +17,6 @@ function FinalStoryPage() {
           <button onClick={() => navigate(`/history/${user_id}`)} className="history-button">
           View History
         </button>
-          <button onClick={() => navigate(`/dashboard`)} 
-            className="dashboard-button"
-            style={{ backgroundColor: "rgba(85, 85, 85, 0.9)", color: "white" }}>
-          Write a New Story
-        </button>
         <button onClick={() => navigate(`/`)} 
             className="home-button"
             style={{ 
