@@ -100,6 +100,12 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   }
   
+  .session-card h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: #f8f8f8;
+  }
+
   .session-card h3 {
     font-size: 1.4rem;
     margin-bottom: 0.5rem;

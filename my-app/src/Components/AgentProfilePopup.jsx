@@ -5,7 +5,8 @@ import "./AgentProfilePopup.css";
 const AgentProfilePopup = ({ agent, onClose }) => {
   if (!agent) return null;
 
-  const { profile, chapterHistory = [] } = agent;
+  const { profile, chapters = [], outline } = agent;
+  //console.log("Agent profile and chapter history:", profile, chapters);
 
   return (
     <div className="popup-overlay">
@@ -21,12 +22,21 @@ const AgentProfilePopup = ({ agent, onClose }) => {
         </div>
 
         <div className="agent-chapters">
+          <h3>Outline</h3>
+          <li>{outline || "No outline available."}</li>
+        </div>
+
+        <div className="agent-chapters">
           <h3>Chapters by {profile.name}</h3>
-          <ol>
-            {chapterHistory.map((chapter, index) => (
-              <li key={index}>{chapter}</li>
-            ))}
-          </ol>
+            {chapters.length === 0 ? (
+              <p>No chapters found for this agent.</p>
+            ) : (
+              <ol>
+                {chapters.map((chapter, index) => (
+                  <li key={index}>{chapter}</li>
+                ))}
+              </ol>
+            )}
         </div>
       </div>
     </div>

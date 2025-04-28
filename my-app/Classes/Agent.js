@@ -16,6 +16,8 @@ class Agent {
         this.totalChapters = 0;
         this.votingReasoning = [];
         this.profile = personas[this.persona]; // attach profile
+        this.agentid = "";
+        this.chapters = [];
     }
 
     async generateOutline(prompt){
@@ -191,6 +193,14 @@ class Agent {
 
     /**
      * 
+     * @param {string} agentID
+     */
+    setAgentID(agentID) {
+        this.agentid = agentID;
+    }
+
+    /**
+     * 
      * @param {string} winningChapter
      */
     addVotedChapter(winningChapter) {
@@ -202,7 +212,7 @@ class Agent {
 
         for (let i = 1; i < this.votedChapterHistory.length; i++) {
             trimmedArray.push(this.votedChapterHistory[i]);
-  }
+        }
 
          this.votedChapterHistory = trimmedArray.join("\n\n");
         return this.votedChapterHistory;
