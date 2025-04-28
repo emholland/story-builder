@@ -41,6 +41,7 @@ const LoginPage = () => {
   const handleLogin = async () => {
     const result = await loginUser(email, password);
     if (result.success) {
+      localStorage.setItem('isLoggedIn', 'true');
       setMessages((prev) => [...prev, { type: "success", message: "Logged in successfully!" }]);
       navigate("/dashboard");
     } else {

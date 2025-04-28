@@ -162,16 +162,13 @@ export const saveAgentToFirebase = async (persona, aiInstance, userId) => {
   }
 
   const agentData = {
+    agent_id: "",
     agent_persona: persona,
     chapterHistory: [],
-    aiInstance,
+    model: aiInstance,
     outline: "",
-    totalChapters: 0,
+    chapters: "",
     date: Timestamp.now(),
-    agent_vote: {
-      agent_id: null,
-      target_id: null,
-    },
   };
 
   try {
