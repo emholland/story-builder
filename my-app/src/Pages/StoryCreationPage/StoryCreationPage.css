@@ -464,8 +464,8 @@ h3 {
   position: fixed; /* stick to bottom */
   bottom: 0;
   width: 100%;
-  background-color: #fff9f2; /* match your soft background */
-  border-top: 1px solid #ddd; /* optional light border line */
+  background-color: #ffffff0d;
+  
   z-index: 1000;
 }
 
@@ -545,3 +545,4 @@ h3 {
     transform: scale(1);
   }
 }
+
