@@ -14,7 +14,7 @@ module.exports = {
   moduleFileExtensions: ['js', 'jsx'],
   transformIgnorePatterns: [
       '/node_modules/(?!openai)/',
-  ], // Optional: Default behavior, can be removed
+  ],
 };
 
 

@@ -1,12 +1,11 @@
-// babel.config.cjs
 module.exports = {
   presets: [
-    '@babel/preset-env', // For handling modern JavaScript syntax
-    '@babel/preset-react', // If using React
+    '@babel/preset-env', // JavaScript syntax
+    '@babel/preset-react', //React
   ],
   plugins: [
     '@babel/plugin-syntax-import-meta'
     //'@babel/plugin-transform-runtime'
-    //'@babel/plugin-transform-modules-commonjs', // Ensures compatibility with Jest
+    //'@babel/plugin-transform-modules-commonjs',
   ],
 };
