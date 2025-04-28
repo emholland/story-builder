@@ -4,7 +4,7 @@ import Session from "../Classes/session";
 import Agent from "../Classes/Agent";
 import User from "../Classes/User";
 import { db } from "../firebase"; // adjust path if needed
-import { collection, addDoc, setDoc, doc, Timestamp, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc, Timestamp, updateDoc, arrayUnion, getDoc, getDocs, query, where } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { personas } from "../data/Personas.js";
 
@@ -349,13 +349,41 @@ const fakeSessions = [
 ];
 
 // Return a list of titles for display in dropdown
-export const fetchUsersPastSessions = async () => {
-  await new Promise((res) => setTimeout(res, 150));
-  return fakeSessions.map(session => session.storyTitle);
+export const fetchUsersPastSessions = async (user_id) => {
+  console.log("Fetching past sessions for user:", user_id); // Debugging user_id
+
+  if (!user_id) {
+    console.error("User ID is undefined or null");
+    return [];
+  }
+
+  try {
+    // Get the "Sessions" collection for the specific user
+    const sessionsRef = collection(db, "Users", user_id, "Sessions");
+
+    console.log("Sessions reference:", sessionsRef); // Debugging collection reference
+
+    const snapshot = await getDocs(sessionsRef);
+    console.log("Snapshot data:", snapshot); // Debugging snapshot
+
+    if (snapshot.empty) {
+      console.log("No sessions found for this user.");
+      return [];
+    }
+
+    // Map over the snapshot to extract session titles
+    const sessionTitles = snapshot.docs.map(doc => doc.data().title);
+    console.log("Session Titles:", sessionTitles); // Debugging result
+
+    return sessionTitles;
+  } catch (error) {
+    console.error("Error fetching past sessions:", error);
+    return [];
+  }
 };
 
 // Return full session object based on title
-export const fetchPastSessionByTitle = async (title) => {
+/*export const fetchPastSessionByTitle = async (title) => {
   await new Promise((res) => setTimeout(res, 150));
   const session = fakeSessions.find(session => session.storyTitle === title);
   if (!session) return null;
@@ -367,4 +395,47 @@ export const fetchPastSessionByTitle = async (title) => {
   }));
 
   return session;
+};*/
+
+export const fetchPastSessionByTitle = async (title) => {
+  try {
+    const sessionsRef = collection(db, "Users", user_id, "Sessions");
+    const q = query(sessionsRef, where("title", "==", title));
+
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) {
+      console.log("No session found with that title.");
+      return null;
+    }
+
+    // Assuming there is only one session with this title, take the first document
+    const sessionDoc = snapshot.docs[0];
+    const sessionData = sessionDoc.data();
+    console.log("Session data:", sessionData);
+    console.log("Session Data Agents:", sessionData.agents); // Check agents data
+
+    // Fetch chapters from each agent's document in the "Agents" collection
+    const agentsWithChapters = await Promise.all(
+      sessionData.agents.map(async (agent) => {
+        const agentRef = doc(db, "Users", user_id, "Agents", agent.agent_id);
+        const agentSnapshot = await getDoc(agentRef);
+        const agentData = agentSnapshot.data();
+        console.log("Agent Data:", agentData);
+
+        return {
+          ...agent,
+          profile: personas[agent.persona] || null,
+          chapters: agentData ? agentData.chapters || [] : [], // If agent data exists, fetch chapters
+          outline: agentData ? agentData.outline || "" : "",
+        };
+      })
+    );
+
+    sessionData.agents = agentsWithChapters; // Add the chapters to the agents
+
+    return sessionData;
+  } catch (error) {
+    console.error("Error fetching session by title:", error);
+    return null;
+  }
 };

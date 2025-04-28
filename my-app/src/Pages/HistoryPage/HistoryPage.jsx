@@ -1,7 +1,7 @@
 // HistoryPage.jsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchUsersPastSessions, fetchPastSessionByTitle } from "../../../Controllers/sessionController";
+import { fetchUsersPastSessions, fetchPastSessionByTitle, user_id } from "../../../Controllers/sessionController";
 import './HistoryPage.css';
 import AgentProfilePopup from "../../Components/AgentProfilePopup.jsx";
 
@@ -15,11 +15,13 @@ const HistoryPage = () => {
 
   useEffect(() => {
     const loadTitles = async () => {
-      const titles = await fetchUsersPastSessions();
-      setSessionTitles(titles);
+      if (user_id) {
+        const titles = await fetchUsersPastSessions(user_id);
+        setSessionTitles(titles);
+      }
     };
     loadTitles();
-  }, []);
+  }, [user_id]);
   
 
   const handleSessionSelect = async (title) => {
@@ -55,9 +57,10 @@ const HistoryPage = () => {
           <p>Select a session from the menu to view details.</p>
         ) : (
           <div className="session-card">
-            <h2>{activeSession.storyTitle}</h2>
+            <h2>{activeSession.title}</h2>
             <p><strong>Prompt:</strong> {activeSession.prompt}</p>
-            <p><strong>Date:</strong> {activeSession.createdAt || "Unknown"}</p>
+            <p><strong>Date:</strong> {activeSession.date.toDate().toLocaleString() || "Unknown"}</p> {/* Date conversion */}
+            <p><strong>Number of Chapters:</strong> {activeSession.numberOfChapters}</p>
 
             {/* Agent list */}
             <div className="agent-container">
@@ -67,6 +70,7 @@ const HistoryPage = () => {
                     <div key={index} className="agent-box" onClick={() => setSelectedAgent(agent)}>
                         <img src={agent.profile?.picture || `https://api.dicebear.com/7.x/adventurer/svg?seed=${agent.persona}`} alt={agent.persona} />
                         <span>{agent.persona}</span>
+                        <p><strong>Agent ID:</strong> {agent.agent_id}</p>
                     </div>
                     ))}
 
@@ -78,17 +82,11 @@ const HistoryPage = () => {
             )}
 
 
-            {/* Phase list */}
-            <div className="phase-column">
-                <h3>Chapters</h3>
-              {activeSession.phases?.map((phase, index) => (
-                <div key={index} className="phase-box-history">
-                  <h4>Chapter {phase.number}: {phase.title}</h4>
-                  <p><strong>Winner:</strong> {phase.winner}</p>
-                  <p><strong>Outline Snippet:</strong> {phase.outlineSnippet}</p>
-                  <p>{phase.text}</p>
-                </div>
-              ))}
+            {/* Story Details */}
+            <div className="story-details">
+              <h3>Story Details</h3>
+              <p><strong>Outline:</strong> {activeSession.story?.outline}</p>
+              <p><strong>Chapters:</strong> {activeSession.story?.chapters}</p>
             </div>
           </div>
           

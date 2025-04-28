@@ -19,7 +19,7 @@ createRoot(document.getElementById("root")).render(
         <Route path="/login" element={<LoginPage/>} /> {/* Login page */}
         <Route path="/dashboard" element={<StoryCreation/>} /> {/* Dashboard page */}
         <Route path="/agent" element={<AgentScreen/>} /> {/* AgentScreen page */}
-        <Route path="/history" element={<HistoryPage/>} /> {/* History page */}
+        <Route path="/history/:user_id" element={<HistoryPage/>} /> {/* History page */}
         <Route path="/finalstory" element={<FinalStoryPage />} /> {/* Final page */}
       </Routes>
     </Router>
