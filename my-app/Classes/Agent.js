@@ -212,7 +212,7 @@ class Agent {
 
         for (let i = 1; i < this.votedChapterHistory.length; i++) {
             trimmedArray.push(this.votedChapterHistory[i]);
-  }
+        }
 
          this.votedChapterHistory = trimmedArray.join("\n\n");
         return this.votedChapterHistory;

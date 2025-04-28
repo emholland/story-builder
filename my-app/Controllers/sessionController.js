@@ -4,7 +4,7 @@ import Session from "../Classes/session";
 import Agent from "../Classes/Agent";
 import User from "../Classes/User";
 import { db } from "../firebase"; // adjust path if needed
-import { collection, addDoc, setDoc, doc, Timestamp, updateDoc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc, Timestamp, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { personas } from "../data/Personas.js";
 
@@ -69,6 +69,7 @@ export const registerUser = async (email, password) => {
 // Create a new session instance
 export const createNewSession = (title, user, prompt, agents = [], numberOfChapters) => {
   currentSession = new Session(title, user, prompt, agents, numberOfChapters);
+  saveSessionToFirebase(user);
   saveSessionToLocalStorage();
   return currentSession;
 };
@@ -158,12 +159,33 @@ export const generateChaptersForAgentsInParallel = async (onProgress) => {
 };
 
 
+//firebase stuff 
+
 export const callFakeVote = async () => {
-    return(await currentSession.fakeVote());
+  const winningChapter = await currentSession.fakeVote();
+
+  const sessionDoc = doc(db, "Users", user_id, "Sessions", session_id);
+
+  const sessionSnap = await getDoc(sessionDoc);
+  if (!sessionSnap.exists()) {
+      throw new Error("Session does not exist");
+  }
+
+  const sessionData = sessionSnap.data();
+
+  if (!sessionData.story.outline) {
+    await updateDoc(sessionDoc, {
+        "story.outline": winningChapter                 // first winner to story.outline
+    });
+  } else {                                              // subsequent winners to story.chapters array
+      await updateDoc(sessionDoc, {
+          "story.chapters": arrayUnion(winningChapter)
+      });
+  }
+
+  return winningChapter;
 };
 
-
-//firebase stuff 
 export const saveAgentToFirebase = async (persona, aiInstance, userId) => {
   if (!persona || !aiInstance || !userId) {
     console.error("Missing required fields to save agent.");
@@ -198,23 +220,48 @@ export const saveAgentToFirebase = async (persona, aiInstance, userId) => {
   }
 };
 
-export const saveSessionToFirebase = async () => {
-    if (!currentSession) return;
-  
-    const sessionData = currentSession.toJSON();
-  
-    try {
-      const sessionRef = await addDoc(collection(db, "Sessions"), {
-        ...sessionData,
-        createdAt: Timestamp.now(),
-      });
-  
-      console.log("Session saved to Firebase with ID:", sessionRef.id);
-      return sessionRef.id;
-    } catch (e) {
-      console.error("Error saving session to Firebase:", e);
-    }
+export const saveSessionToFirebase = async (userId) => {
+  console.log("DEBUG -- currentSession:", currentSession);
+  console.log("DEBUG -- userId:", userId);
+  if (!currentSession || !userId) {
+    console.error("Missing required fields to save session.");
+    return { success: false, message: "Current session and user ID are required." };
+  }
+
+  const sessionData = {
+    session_id: "", 
+    title: currentSession.title,
+    user: currentSession.user,
+    prompt: currentSession.prompt,
+    agents: currentSession.agents.map(agent => ({
+      agent_id: agent.agentid,
+      persona: agent.persona,
+      model: agent.aiInstance,
+    })),
+    numberOfChapters: currentSession.numberOfChapters,
+    story: {
+    outline: currentSession.story.outline || "",
+    chapters: currentSession.story.chapters || [],
+    },
+    date: Timestamp.now(),
   };
+
+  console.log(sessionData);
+  try {
+    const sessionRef = await addDoc(collection(db, "Users", userId, "Sessions"), sessionData);
+    const session_ID = sessionRef.id;
+    currentSession.sessionid = session_ID;
+    await updateDoc(sessionRef, { session_id: session_ID });
+    session_id = session_ID;
+
+    console.log("Session ID list: ", session_id);
+
+    return { success: true, message: "Session created and saved successfully", session: { ...sessionData, session_ID } };
+  } catch (error) {
+    console.error("Error saving session:", error);
+    return { success: false, message: "Failed to save session." };
+  }
+};
 
   export const updateAgentsOutline = async (user_id) => {
     console.log("USERID: ", user_id);

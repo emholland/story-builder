@@ -7,7 +7,9 @@ import {
   loadSessionFromLocalStorage,
   generateChaptersForAgentsInParallel,
   callFakeVote,
-  getAgents
+  getAgents,
+  saveSessionToFirebase,
+  user_id
 } from "../../../Controllers/sessionController.js";
 import "./StoryCreationPage.css";
 import "../FinalStoryPage/FinalStoryPage.css";
@@ -55,7 +57,7 @@ const StoryCreation = () => {
   };
 
   const handleStartSession = () => {
-    const user = ""; // you can later grab this from login context
+    const user = user_id;
     const prompt = userInput.trim() || "Write a story about a computer science student who learns they have superpowers.";
   
     createNewSession(title, user, prompt, agents, chapterCount);

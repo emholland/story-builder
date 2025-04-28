@@ -4,9 +4,6 @@ import './AddAgent.css';
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { saveAgentToFirebase } from "../../../Controllers/sessionController.js";
-//import { addAgentToSession } from "../../../Controllers/sessionController"; 
-
-
 
 const AddAgent = ({ children, updateAgents }) => {
   const [isOpen, setIsOpen] = useState(false);
