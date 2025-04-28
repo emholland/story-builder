@@ -8,7 +8,12 @@ const HomePage = ({ navAgent }) => {
   const navigate = useNavigate(); // Get the navigate function
 
   const goToStoryCreation = () => {
-    navigate('/dashboard'); // 👈 Goes to your <StoryCreation /> route
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (isLoggedIn) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login');
+    }
   };
 
   return (

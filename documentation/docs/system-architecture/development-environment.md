@@ -55,11 +55,11 @@ The project uses **GitHub Actions** for automated testing and deployment.
 - **VITE_FIREBASE_MESSAGING_SENDER_ID**= aaaaaaaa
 - **VITE_FIREBASE_APP_ID**= aaaaaaaa
 - **VITE_FIREBASE_MEASUREMENT_ID**= aaaaaaaa
+- **VITE_API_URL**=http://localhost:5001
 
 ## Optional Software ##
 - Docusaurus
 - Figma
 - Jira
 - Miro
-- Google Docs
-- Gmail
+- Google Docs/Drive

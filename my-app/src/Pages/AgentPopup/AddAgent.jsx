@@ -68,15 +68,14 @@ const AddAgent = ({ children, updateAgents }) => {
     }
   
     const auth = getAuth();
-    const user = auth.currentUser;
 
-    if (!user) {
+    if (!auth.currentUser) {
       alert("User not authenticated.");
       return;
     }
 
     const newAgent = addAgentToSession(selectedOption, selectedAI); //
-    saveAgentToFirebase(selectedOption, selectedAI, user.uid) // saves agent to the database
+    saveAgentToFirebase(selectedOption, selectedAI, auth.currentUser.uid) // saves agent to the database
     
     updateAgents(); // still tells React to refresh its copy
     setSelectedOption("");

@@ -32,7 +32,9 @@ To manage releases, we follow **semantic versioning**. The version number is div
 
 This versioning scheme helps us track progress, manage releases, and maintain stability across versions.
 
-**Current Version**: 0.0.0 (as of 03/18/2025)
+**Old Version**: 1.0.0 (as of 03/18/2025)
+**Old Version**: 2.0.0 (as of 4/6/2025)
+**Current Version**: 3.0.0 (as of 4/24/2025)
 
 ### Branch Merging
 
