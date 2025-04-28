@@ -34,7 +34,12 @@ class Phase {
     }
   
     static fromJSON(json) {
-      return new Phase(json);
+      const phase = new Phase(json.number);
+      phase.setTitle(json.title);
+      phase.setWinner(json.winner);
+      phase.setOutlineSnippet(json.outlineSnippet);
+      phase.setText(json.text);
+      return phase;
     }
   }
   
