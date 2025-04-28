@@ -46,6 +46,9 @@ const StoryCreation = () => {
 
   const textSocketRef = useRef(null);
 
+  const [winningChapters, setWinningChapters] = useState([]);
+
+
   
   useEffect(() => {
     setShowModal(true);
@@ -100,7 +103,7 @@ const StoryCreation = () => {
     setPhase("vote");
     setButton("loading");
   
-    await callFakeVote((updatedAgent) => {
+    const winning = await callFakeVote((updatedAgent) => {
       const cloned = cloneAgent(updatedAgent);
       setAgents((prevAgents) =>
         prevAgents.map((a) =>
@@ -108,14 +111,17 @@ const StoryCreation = () => {
         )
       );
     });
-
+  
     console.log(agents);
 
     setChapterCount(chapterCount+1);
     console.log(chapterCount);
+
+    setWinningChapters((prev) => [...prev, winning]);
   
     setButton("generate");
   };
+  
 
   const goPreviousChapter = () => {
     if (chapterIndex > 0) {
@@ -303,6 +309,18 @@ const StoryCreation = () => {
                                 ))}
                             <button className="chapter-button" onClick={() => goNextChapter()}>➡</button>
                         </div>
+
+                        {phase === "vote" && winningChapters[chapterIndex] && (
+                          <div className="winning-chapter-display">
+                            <h3>Winning Text</h3>
+                            <ReactMarkdown>
+                              {winningChapters[chapterIndex]}
+                            </ReactMarkdown>
+                          </div>
+                        )}
+
+
+
 
                         <div className="dialogue-container">
                           <div className="dialogue-layout">
