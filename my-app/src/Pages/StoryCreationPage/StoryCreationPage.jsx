@@ -458,13 +458,8 @@ const StoryCreation = () => {
   )}
 </div>
 
-
+<div className= "button-container" style={{marginBottom: "20px", display: "flex", gap:"10px", justifyContent:"center", alignItems:"center"}}>
         <div className="user-box">User Info</div>
-        <div className="History-Box">
-        <button onClick={() => navigate(`/history/${user_id}`)} className="history-button">
-            View History
-          </button>
-        </div>
 
         <div className="agent-text-container">
 
@@ -481,11 +476,10 @@ const StoryCreation = () => {
            {button === "loading" && (
             <button>Loading...</button>
           )}
-
+            </div>
 
           </div>
 
-        </div>
   <>
     <button
       className="final-story-button"
@@ -497,9 +491,16 @@ const StoryCreation = () => {
     >Read Your Final Story
     </button>
   </>
+  </div>
+  <div className="History-Box">
+        <button onClick={() => navigate(`/history/${user_id}`)} className="history-button">
+            View History
+          </button>
+        </div>
   <div>
   <button onClick={handleLogout} className="logout-button">Log Out</button>
   </div>
+
 
         
       </div>
