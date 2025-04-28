@@ -387,9 +387,9 @@ const StoryCreation = () => {
     </div>
   )}
 </div>
-
-
-        <div className="user-box">User Info</div>
+        <button onClick={() => navigate(`/`)} className="home-button">
+          Home
+        </button>
 
         <div className="bottom-button-row">
         <div className="History-Box">

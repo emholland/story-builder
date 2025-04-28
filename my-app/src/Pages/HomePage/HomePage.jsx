@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom"; // Import useNavigate for routing
 import AgentScreen from "../StoryCreationPage/AgentScreen";
 import './HomePage.css'; // Import custom styles
+import {
+  user_id
+} from "../../../Controllers/sessionController.js";
 
 const HomePage = ({ navAgent }) => {
   const navigate = useNavigate(); // Get the navigate function
@@ -62,7 +65,7 @@ const HomePage = ({ navAgent }) => {
             Visit your history to review past sessions, read previous story versions,
             and track the agents that contributed to each chapter.
           </p>
-          <button onClick={() => navigate('/history')} className="history-button">
+          <button onClick={() => navigate(`/history/${user_id}`)} className="history-button">
             View History
           </button>
         </div>
