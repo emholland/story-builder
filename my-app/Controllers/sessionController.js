@@ -4,12 +4,16 @@ import Session from "../Classes/session";
 import Agent from "../Classes/Agent";
 import User from "../Classes/User";
 import { db } from "../firebase"; // adjust path if needed
-import { collection, addDoc, setDoc, doc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc, Timestamp, updateDoc } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { personas } from "../data/Personas.js";
 
 let currentSession = null;
 let pastSession = null;
+let user_id;
+let session_id = "";
+let story_id = "";
+let agent_ids = [];
 
 const agents = [];
 
@@ -31,7 +35,11 @@ export {
   addAgentToSession,
   getAgents,
   resetAgents,
-  agents // optional: direct export
+  agents, // optional: direct export
+  agent_ids,
+  story_id,
+  session_id,
+  user_id
 };
 
 const auth = getAuth();
@@ -39,7 +47,8 @@ const auth = getAuth();
 export const loginUser = async (email, password) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
-  
+    user_id = auth.currentUser.uid;
+    console.log("User ID:", user_id);
     return { success: true, user: new User(user.email, password, user.uid) };
   } catch (error) {
     return { success: false, error: error.message };

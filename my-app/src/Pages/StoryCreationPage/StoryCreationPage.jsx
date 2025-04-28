@@ -49,6 +49,11 @@ const StoryCreation = () => {
     setAgents(getAgents());
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    navigate("/");
+  };
+
   const handleStartSession = () => {
     const user = ""; // you can later grab this from login context
     const prompt = userInput.trim() || "Write a story about a computer science student who learns they have superpowers.";
@@ -490,8 +495,9 @@ const StoryCreation = () => {
     >Read Your Final Story
     </button>
   </>
-
-
+  <div>
+  <button onClick={handleLogout} className="logout-button">Log Out</button>
+  </div>
 
         
       </div>
