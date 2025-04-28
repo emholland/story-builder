@@ -33,6 +33,7 @@ const StoryCreation = () => {
   const [chapterIndex, setChapterIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [chapterCount, setChapterCount] = useState(0);
+  const [chapterTot, setChapterTot] = useState(0);
   const [chapterButtons, setChapterButtons] = useState([]);
   const [storyIdea, setStoryIdea] = useState("");
   const [lastUsedPrompt, setLastUsedPrompt] = useState("");
@@ -64,7 +65,8 @@ const StoryCreation = () => {
     for (const agent of agents) {
       agent.setChapterCount(chapterCount);
     }
-    
+    setChapterTot(chapterCount+1);
+    setChapterCount(0);
     setShowModal(false);
   };
 
@@ -108,6 +110,9 @@ const StoryCreation = () => {
     });
 
     console.log(agents);
+
+    setChapterCount(chapterCount+1);
+    console.log(chapterCount);
   
     setButton("generate");
   };
@@ -390,52 +395,54 @@ const StoryCreation = () => {
         </button>
 
         <div className="bottom-button-row">
-        <div className="History-Box">
-        <button onClick={() => navigate(`/history/${user_id}`)} className="final-story-button">
-            View History
-          </button>
-        </div>
-
-        <div className="agent-text-container">
-
-          <div className="controls">
-
-          {button === "generate" && (
-            <button className="bottom-button" onClick={handleGenerateChapters}>Generate Chapters</button>
-          )}
-
-          {button === "vote" && (
-            <button className="bottom-button" onClick={handleVoting}>Vote</button>
-          )}
-
-           {button === "loading" && (
-            <button className="bottom-button" >Loading...</button>
-          )}
-
-
-          </div>
-
-        </div>
-  <>
+  { chapterTot === chapterCount ? (
+    // ✅ If finished, only show Read Final Story button
     <button
-      className="final-story-button"
+      className="bottom-button"
       onClick={() => {
         const finalStory = agents[0].getVotedChapterHistory();
         console.log("Final story before navigation:", finalStory);
         navigate("/finalstory", { state: { finalStory } });
       }}
-    >Read Your Final Story
+    >
+      Read Your Final Story
     </button>
-  </>
-  <div>
-  
-  </div>
+  ) : (
+    // ❗ If not finished yet, show View History + Vote/Generate
+    <>
+      <button
+        className="bottom-button"
+        onClick={() => navigate(`/history/${user_id}`)}
+      >
+        View History
+      </button>
+
+      {button === "generate" && (
+        <button className="bottom-button" onClick={handleGenerateChapters}>
+          Generate Chapters
+        </button>
+      )}
+      
+      {button === "vote" && (
+        <button className="bottom-button" onClick={handleVoting}>
+          Vote
+        </button>
+      )}
+      
+      {button === "loading" && (
+        <button className="bottom-button" disabled>
+          Loading...
+        </button>
+      )}
+    </>
+  )}
+</div>
+
   
   </div>
 
         
       </div>
-    </div>
   );
 };
 

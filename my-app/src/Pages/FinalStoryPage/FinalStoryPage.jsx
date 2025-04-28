@@ -12,9 +12,6 @@ function FinalStoryPage() {
     
     return (
          <div className="final-story-container">
-          <button onClick={() => navigate(`/`)} className="home-button">
-            Home
-          </button>
         <h1>Your Final Story!</h1>
         <div className= "button-container" style={{marginBottom: "20px", display: "flex", gap:"10px"}}>
           <button onClick={() => navigate(`/history/${user_id}`)} className="history-button">
