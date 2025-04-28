@@ -16,6 +16,8 @@ class Agent {
         this.totalChapters = 0;
         this.votingReasoning = [];
         this.profile = personas[this.persona]; // attach profile
+        this.agentid = "";
+        this.chapters = [];
     }
 
     async generateOutline(prompt){
@@ -187,6 +189,14 @@ class Agent {
      */
     setChapterCount(chapterTotal) {
         this.totalChapters = chapterTotal;
+    }
+
+    /**
+     * 
+     * @param {string} agentID
+     */
+    setAgentID(agentID) {
+        this.agentid = agentID;
     }
 
     /**

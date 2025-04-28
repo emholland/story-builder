@@ -4,7 +4,7 @@ import './AddAgent.css';
 import axios from "axios";
 import { getAuth } from "firebase/auth";
 import { saveAgentToFirebase } from "../../../Controllers/sessionController.js";
-import { addAgentToSession } from "../../../Controllers/sessionController"; 
+//import { addAgentToSession } from "../../../Controllers/sessionController"; 
 
 
 
@@ -74,7 +74,7 @@ const AddAgent = ({ children, updateAgents }) => {
       return;
     }
 
-    const newAgent = addAgentToSession(selectedOption, selectedAI); //
+    //const newAgent = addAgentToSession(selectedOption, selectedAI); //
     saveAgentToFirebase(selectedOption, selectedAI, auth.currentUser.uid) // saves agent to the database
     
     updateAgents(); // still tells React to refresh its copy
