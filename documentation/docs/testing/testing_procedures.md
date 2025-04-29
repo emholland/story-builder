@@ -83,6 +83,12 @@ Given that the system encounters an issue while assigning a persona,
 When a user attempts to select a persona,
 Then the system should return an appropriate error message and allow the user to retry.
 
+# Coverage Report
+Here’s the coverage summary:
+![Coverage Report](https://github.com/user-attachments/assets/7f2c2b22-69ca-4c4c-bf7b-34f811a35222)
+![Classes Report](https://github.com/user-attachments/assets/7e11c5a5-eb07-4407-9926-cf2d6014196f)
+![Data Report](https://github.com/user-attachments/assets/f534d5b6-6309-4d37-a13c-65cdcf7d487a)
+
 
 ## Acceptance Tests
 
