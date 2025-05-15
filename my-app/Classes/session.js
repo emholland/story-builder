@@ -190,27 +190,27 @@ class Session {
       for (let aIndex = 0; aIndex < this.agents.length; aIndex++) {
         const agent = this.agents[aIndex];
   
+        // Format previous responses with agent persona labels
         const debateSoFar = priorResponses
-          .map((r, i) => `Agent ${this.agents[i].persona} said:\n${r}`)
+          .map((r, i) => `🧠 ${this.agents[i].persona} said:\n${r}`)
           .join("\n\n");
   
-        // 🔁 Use agent's method now
+        // Use agent method with formatted prior responses
         const response = await agent.debateProposal(currentProposal, debateSoFar);
         agent.debateResponse = response;
   
+        // Track this response in transcript
         priorResponses.push(response);
-        agentLines.push(`Agent ${agent.persona}:\n${response}`);
+        agentLines.push(`**${agent.persona}**:\n${response}`);
       }
   
-      const proposalTranscript = `### Proposal ${pIndex + 1} Debate\n\n${agentLines.join("\n\n")}`;
+      const proposalTranscript = `### 💬 Proposal ${pIndex + 1} Debate\n\n${agentLines.join("\n\n")}`;
       fullTranscriptParts.push(proposalTranscript);
     }
   
-    // ✅ Only set debateTranscript once after all proposals
+    // Append to full transcript instead of replacing
     const newTranscript = fullTranscriptParts.join("\n\n---\n\n");
-
     this.debateTranscript = (this.debateTranscript || "") + "\n\n" + newTranscript;
-
   
     return this.debateTranscript;
   }  

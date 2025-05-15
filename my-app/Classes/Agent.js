@@ -227,6 +227,7 @@ class Agent {
      * @param {Map} chapters
      */
     async vote(chaptersMap, debateTranscript) {
+        this.debateResponse = "";
         const chapterNumbers = new Map();
         let chapters = "";
         let i = 1;
@@ -291,16 +292,32 @@ class Agent {
     }
 
     async debateProposal(proposalText, priorDebate = "") {
-        const prompt = `
-      You are ${this.persona}, an AI author debating a single story proposal.
-      
-      Proposal:
-      ${proposalText}
-      
-      ${priorDebate ? `--- Previous agent responses ---\n${priorDebate}` : ''}
-      
-      Offer your critique of the proposal. If other agents have spoken, you may reference or respond to their arguments.
-      `;
+        this.debateResponse = "";
+const prompt = `
+You are ${this.persona}, one of several AI author personas participating in a collaborative story debate.
+
+Here is the proposal under discussion:
+---
+${proposalText}
+---
+
+${
+  priorDebate
+    ? `Below are comments from the other agents who have spoken so far. Respond to their points directly, by name, as if you are sitting at a roundtable discussion:\n\n${priorDebate}\n\n`
+    : ''
+}
+
+Now contribute your own thoughts to the conversation:
+- Build on earlier ideas, challenge them, or add new insights — just like a thoughtful colleague would.
+- Keep your tone conversational, collaborative, and human-like.
+- Use natural transitions like "I agree with Shakespeare on that point..." or "King raises a good question, but I think..."
+- Don’t restate the full proposal — focus on discussing it like a fellow writer would.
+- End with a question or idea to keep the discussion going.
+
+Keep it respectful, focused, and vivid.
+`;
+
+
       
         try {
           const res = await API.post("/api/openai", {

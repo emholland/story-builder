@@ -130,6 +130,7 @@ const StoryCreation = () => {
   
       if (next === agents.length) {
         setButton("vote");
+        setProposalIndex(0);
       } else {
         setButton("debate");
       }
@@ -504,12 +505,6 @@ const StoryCreation = () => {
       >
         Debate Proposal {proposalIndex + 1}
       </button>
-
-      {debatedProposals[proposalIndex] && (
-        <div className="debate-transcript-box">
-          <ReactMarkdown>{debatedProposals[proposalIndex]}</ReactMarkdown>
-        </div>
-      )}
     </div>
   </div>
 )}
