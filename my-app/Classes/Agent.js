@@ -224,31 +224,49 @@ class Agent {
      * 
      * @param {Map} chapters
      */
-    async vote(chaptersMap) {
-        const keysIterator = chaptersMap.keys();
+    async vote(chaptersMap, debateTranscript) {
+        const chapterNumbers = new Map();
         let chapters = "";
         let i = 1;
-        //Prompt agent
-        const chapterNumbers = new Map();
-        for (const key of keysIterator) {
-            chapters = chapters + "Option " + i + " is:\n" + key + "\n";
-            chapterNumbers.set(i, key);
-            i++;
+      
+        for (const [chapterText] of chaptersMap.entries()) {
+          chapters += `Option ${i} is:\n${chapterText}\n\n`;
+          chapterNumbers.set(i, chapterText);
+          i++;
         }
+      
+      
+        const prompt = `
+      You are an AI author persona known as "${this.persona}". Below are several story continuations written by different authors. A debate has already occurred, and your own points are included below for context.
+      
+      --- DEBATE CONTEXT ---
+      ${debateTranscript}
+      ----------------------
+      
+      Your task: Pick your favorite writing sample from the following options. Respond with the number of the best option and your reasoning for the choice. For example: "2 - I preferred option 2 because..."
+      
+      --- OPTIONS ---
+      ${chapters}
+      `;
+      
         const response = await API.post('/api/openai', {
-            userPrompt: "Pick your favorite writing sample from the following options. Your response should be a number following by an explanation of your thoughts on each of the options. For example, if you like option 1, your response should be 1 and then your reasoning. These are the options: \n" + chapters,
-            persona: this.persona,
+          userPrompt: prompt,
+          persona: this.persona,
         });
-        
-        //Get analysis from response
-        const firstIntegerIndex = response.data.message.search(/\d/);
-        const analysis = response.data.message.substring(firstIntegerIndex + 1);
-        console.log("analysis is: \n" + analysis);
+      
+        const message = response.data.message;
+        const firstIntegerIndex = message.search(/\d/);
+        const voteNumber = parseInt(message[firstIntegerIndex]);
+        const analysis = message.substring(firstIntegerIndex + 1).trim();
+      
+        console.log(`Agent ${this.persona} voted for option ${voteNumber}`);
+        console.log("Reasoning:\n" + analysis);
+      
         this.votingReasoning.push(analysis);
-        
-
-        return chapterNumbers.get(parseInt(response.data.message));
-    }
+      
+        return chapterNumbers.get(voteNumber);
+      }
+      
 
     /**
      * 

@@ -22,6 +22,7 @@ class Session {
       }
       
       this.story;
+      this.debateTranscript = "";
       // ...
     }
   
@@ -87,7 +88,7 @@ class Session {
   
     // Have each agent vote
     for (const agent of this.agents) {
-      const votedChapter = await agent.vote(chaptersMap);
+      const votedChapter = await agent.vote(chaptersMap, this.debateTranscript);
       if (!votedChapter || !chaptersMap.has(votedChapter)) {
         console.warn(`Invalid vote from ${agent.persona}`);
         continue;
@@ -175,10 +176,21 @@ class Session {
   async debate() {
     const proposals = this.agents.map(agent => agent.chapter);
   
-    await Promise.all(
+    // Step 1: Collect all responses
+    const responses = await Promise.all(
       this.agents.map(agent => agent.debateAllProposals(proposals))
     );
+  
+    // Step 2: Build a full transcript
+    const transcript = responses
+      .map((resp, index) => `Agent ${this.agents[index].persona} says:\n${resp}`)
+      .join("\n\n");
+
+      this.debateTranscript = transcript;
+  
+ 
   }
+  
   
 }
 
