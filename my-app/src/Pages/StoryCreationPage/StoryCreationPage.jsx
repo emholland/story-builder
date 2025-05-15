@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Agent from "../../../Classes/Agent";
 import {
   createNewSession,
   loadSessionFromLocalStorage,
+  getSessionAgents,
   generateChaptersForAgentsInParallel,
   callFakeVote,
   getAgents,
   saveSessionToFirebase,
-  user_id
+  user_id,
+  runDebatePhase 
 } from "../../../Controllers/sessionController.js";
 import "./StoryCreationPage.css";
 import "../FinalStoryPage/FinalStoryPage.css";
@@ -95,10 +95,28 @@ const StoryCreation = () => {
       );
     });
 
-    setButton("vote");
+    setButton("debate");
   };
-  
 
+  // ADD THIS NEW FUNCTION in StoryCreation component
+  const handleDebate = async () => {
+    setPhase("debate");
+    setButton("loading");
+  
+    try {
+      const transcript = await runDebatePhase(); // this just triggers debate()
+
+      const updatedAgents = getSessionAgents();
+      console.log("Debate responses:", updatedAgents.map(a => a.debateResponse));
+      setAgents([...updatedAgents]);
+
+      setButton("vote");
+    } catch (err) {
+      console.error("Debate failed:", err);
+      setButton("generate");
+    }
+  };
+    
   const handleVoting = async () => {
     setPhase("vote");
     setButton("loading");
@@ -355,6 +373,12 @@ const StoryCreation = () => {
                                         </ReactMarkdown>
                                         
                                         )}
+
+{phase === "debate" && (
+  <ReactMarkdown>
+    {agent.debateResponse || "*...*"}
+  </ReactMarkdown>
+)}
                                         </div>
                                       </div>
                                       <div className="agent-side right empty" />
@@ -374,6 +398,12 @@ const StoryCreation = () => {
                                           </ReactMarkdown>
                                           
                                           )}
+
+{phase === "debate" && (
+  <ReactMarkdown>
+    {agent.debateResponse || "*...*"}
+  </ReactMarkdown>
+)}
 
                                           {phase === "vote" && (
                                             <ReactMarkdown>
@@ -439,6 +469,12 @@ const StoryCreation = () => {
         <button className="bottom-button" onClick={handleGenerateChapters}>
           Generate Chapters
         </button>
+      )}
+
+      {button === "debate" && (
+              <button className="bottom-button" onClick={handleDebate}>
+                Debate
+              </button>
       )}
       
       {button === "vote" && (

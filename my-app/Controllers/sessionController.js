@@ -21,6 +21,8 @@ const getAgents = () => {
   return agents;
 };
 
+
+
 const resetAgents = () => {
   agents.length = 0;
 };
@@ -32,7 +34,7 @@ export {
   agent_ids,
   story_id,
   session_id,
-  user_id
+  user_id,
 };
 
 const auth = getAuth();
@@ -383,20 +385,16 @@ export const fetchUsersPastSessions = async (user_id) => {
   }
 };
 
-// Return full session object based on title
-/*export const fetchPastSessionByTitle = async (title) => {
-  await new Promise((res) => setTimeout(res, 150));
-  const session = fakeSessions.find(session => session.storyTitle === title);
-  if (!session) return null;
-
-   // Inject profile into agents
-   session.agents = session.agents.map(agent => ({
-    ...agent,
-    profile: personas[agent.persona] || null,
-  }));
-
-  return session;
-};*/
+export const runDebatePhase = async () => {
+  try {
+    const transcript = await currentSession.debate();
+    console.log("Debate phase completed.");
+    return transcript;
+  } catch (err) {
+    console.error("Error during debate phase:", err);
+    throw err;
+  }
+};
 
 export const fetchPastSessionByTitle = async (title) => {
   try {
@@ -439,4 +437,6 @@ export const fetchPastSessionByTitle = async (title) => {
     console.error("Error fetching session by title:", error);
     return null;
   }
+
+  
 };

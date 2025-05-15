@@ -18,6 +18,8 @@ class Agent {
         this.profile = personas[this.persona]; // attach profile
         this.agentid = "";
         this.chapters = [];
+        this.debateResponse = ""; // individual response
+
     }
 
     async generateOutline(prompt){
@@ -268,6 +270,23 @@ class Agent {
             throw new Error('Failed to generate completion');
         }
     }
+    async debateAllProposals(proposals) {
+        try {
+          const res = await API.post("/api/debate", {
+            persona: this.persona,
+            proposals: proposals
+          });
+      
+          this.debateResponse = res.data.message;
+          return res.data.message;
+        } catch (error) {
+          console.error("Debate failed:", error.response?.data || error.message);
+          this.debateResponse = "Unable to complete debate.";
+          return this.debateResponse;
+        }
+      }
+       
 }
+
 
 export default Agent;

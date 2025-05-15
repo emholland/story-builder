@@ -171,6 +171,15 @@ class Session {
       return agent;
     });
   }
+
+  async debate() {
+    const proposals = this.agents.map(agent => agent.chapter);
+  
+    await Promise.all(
+      this.agents.map(agent => agent.debateAllProposals(proposals))
+    );
+  }
+  
 }
 
   

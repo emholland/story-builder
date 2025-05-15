@@ -31,34 +31,6 @@ const __dirname = path.dirname(__filename);
  app.use(cors());
  app.use(express.json());
  
-
- app.post("/api/chat", async (req, res) => {
-     const { prompt, persona } = req.body;
-     const fullPrompt = "You are a helpful assitant that writes like " + persona + ". " + prompt;
- 
-     try {
-         const response = await axios.post(
-             "https://api.deepseek.com/v1/chat/completions",
-             {
-                 model: "deepseek-chat",
-                 messages: [{ role: "user", content: fullPrompt }],
-             },
-             {
-                 headers: {
-                     "Content-Type": "application/json",
-                     "Authorization": `Bearer ${process.env.DEEPSEEK_API_KEY}`,
-                 },
-             }
-         );
- 
-         console.log("deepseek: ", response.data);
-         res.json(response.data);
-     } catch (error) {
-         console.error("DeepSeek API Error:", error.response?.data || error.message);
-         res.status(500).json({ error: error.response?.data || error.message });
-     }
- });
- 
  const openai = new OpenAI({
      apiKey: process.env.OPENAI_API_KEY,
  });
@@ -87,6 +59,44 @@ const __dirname = path.dirname(__filename);
  const server = app.listen(port, () => {
      console.log(`Server is running on port ${port}`);
  });
+
+ app.post('/api/debate', async (req, res) => {
+  try {
+      const { proposals, persona } = req.body;
+
+      if (!Array.isArray(proposals) || proposals.length === 0 || !persona) {
+          return res.status(400).json({ error: 'Missing proposals array or persona' });
+      }
+
+      const systemPrompt = `You are a writing assistant who speaks like ${persona}. You are participating in a story-writing debate.`;
+
+      const userPrompt = `
+Here are several story proposals:
+
+${proposals.map((p, i) => `Proposal ${i + 1}:\n${p}`).join("\n\n")}
+
+Debate the strengths and weaknesses of each proposal. Focus on tone, creativity, and alignment with previous story context. Be critical but constructive.
+`;
+
+      const completion = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: userPrompt },
+          ],
+      });
+
+      const debateResponse = completion.choices?.[0]?.message?.content?.trim();
+
+      res.json({ message: debateResponse });
+
+  } catch (error) {
+      console.error("Debate error:", error.response?.data || error.message);
+      res.status(500).json({ error: 'Failed to fetch debate response' });
+  }
+});
+
+
  
  const wss = new WebSocketServer({ server });
  
@@ -164,67 +174,7 @@ const __dirname = path.dirname(__filename);
      ws.send(JSON.stringify({ type: "done" }));
  }
  
- async function handleDeepSeekFakeStream(ws, prompt, persona, type) {
-    const systemPrompt =
-     type === "writer"
-     ? `You are a helpful assistant that writes like ${persona}. Write a story based on the prompt below in that author's writing style in about 100 words. Only return the story:\n\n`
-     : persona
-     ? `You are a helpful assistant that writes like ${persona}.`
-     : "You are a helpful assistant.";
-  
-    const userPrompt =
-      type === "evaluate"
-        ? `Evaluate this chapter and return only a markdown-formatted evaluation. Be critical — point out inconsistencies and areas for improvement. Do not include any excess messages, keep each section to a sentence or two:\n\n${prompt}`
-        : prompt;
-  
-    const numberPrompt =
-      type === "numberEval"
-        ? `Evaluate this chapter critically and return ONLY a number between 1 and 100 that reflects its quality. Do not be biased. Use the full range from 80–100, and do not include any explanations or formatting. Only return a number:\n\n${prompt}`
-        : null;
-  
-        const actualPrompt =
-        type === "writer"
-          ? prompt // Use raw story idea
-          : type === "numberEval"
-          ? numberPrompt
-          : userPrompt;
-  
-    try {
-      const response = await axios.post(
-        "https://api.deepseek.com/v1/chat/completions",
-        {
-          model: "deepseek-chat",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: actualPrompt },
-          ],
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.DEEPSEEK_API_KEY}`,
-          },
-        }
-      );
-  
-      const fullText = response.data.choices?.[0]?.message?.content || "No response";
-  
-      for (let i = 0; i < fullText.length; i++) {
-        ws.send(
-          JSON.stringify({
-            type: type === "numberEval" ? "numberEval" : "chunk",
-            content: fullText[i],
-          })
-        );
-        await new Promise((res) => setTimeout(res, 10));
-      }
-  
-      ws.send(JSON.stringify({ type: "done" }));
-    } catch (error) {
-      console.error("DeepSeek streaming error:", error);
-      ws.send(JSON.stringify({ type: "error", message: error.message }));
-    }
-  }
+
   
   // ✅ Serve the built frontend (after all API and WebSocket setup)
 app.use(express.static(path.join(__dirname, "dist")));
