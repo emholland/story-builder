@@ -123,7 +123,6 @@ export const resetSession = () => {
 };
 
 export const generateChaptersForAgentsInParallel = async (onProgress) => {
-  console.log(currentSession);
 
   await Promise.all(currentSession.agents.map(async (agent) => {
       if (currentSession.currentChapter == 0) {
@@ -141,7 +140,7 @@ export const generateChaptersForAgentsInParallel = async (onProgress) => {
           }
       } else {
           try {
-              const chapter = await agent.generateChapter(currentSession.story.outline, currentSession.story.chapters[currentSession.currentChapter]);
+              const chapter = await agent.generateChapter(currentSession.outline, currentSession.story.chapters[currentSession.currentChapter]);
               agent.chapters.push(chapter); 
               if (typeof onProgress === "function") {
                   onProgress(agent, chapter);
@@ -257,7 +256,6 @@ export const saveSessionToFirebase = async (userId) => {
     await updateDoc(sessionRef, { session_id: session_ID });
     session_id = session_ID;
 
-    console.log("Session ID list: ", session_id);
 
     return { success: true, message: "Session created and saved successfully", session: { ...sessionData, session_ID } };
   } catch (error) {
@@ -267,9 +265,6 @@ export const saveSessionToFirebase = async (userId) => {
 };
 
   export const updateAgentsOutline = async (user_id) => {
-    console.log("USERID: ", user_id);
-    console.log("Current Sesh: ", currentSession);
-    console.log("Current Sesh Agents: ", currentSession.agents);
     if (!user_id || !currentSession || !Array.isArray(currentSession.agents) || currentSession.agents.length === 0) {
       console.error("User ID and valid agents array are required to update outlines.");
       return { success: false, message: "Invalid input data." };
@@ -280,16 +275,13 @@ export const saveSessionToFirebase = async (userId) => {
         const agentRef = doc(db, "Users", user_id, "Agents", agent.agentid);
         if (agent.outline) {
           await updateDoc(agentRef, { outline: agent.outline });
-          console.log(`Updated outline for agent ${agent.agentid}:`, agent.outline);
         }
       });
   
       await Promise.all(updatePromises);
   
-      console.log("All agent outlines updated successfully.");
       return { success: true, message: "All agent outlines updated." };
     } catch (error) {
-      console.error("Error updating agent outlines:", error);
       return { success: false, message: "Failed to update agent outlines." };
     }
   };
@@ -305,7 +297,6 @@ export const saveSessionToFirebase = async (userId) => {
         const agentRef = doc(db, "Users", user_id, "Agents", agent.agentid);
         if (agent.chapters) {
           await updateDoc(agentRef, { chapters: agent.chapters });
-          console.log(`Updated chapter for agent ${agent.agentid}:`, agent.chapters);
         }
       });
   
@@ -385,9 +376,9 @@ export const fetchUsersPastSessions = async (user_id) => {
   }
 };
 
-export const runDebatePhase = async () => {
+export const runDebatePhase = async (proposalIndex = null) => {
   try {
-    const transcript = await currentSession.debate();
+    const transcript = await currentSession.debate(proposalIndex);
     console.log("Debate phase completed.");
     return transcript;
   } catch (err) {

@@ -23,6 +23,7 @@ class Session {
       
       this.story;
       this.debateTranscript = "";
+      this.outline = "";
       // ...
     }
   
@@ -75,6 +76,7 @@ class Session {
 
 
   async fakeVote() {
+    console.log(this.debateTranscript);
     const chaptersMap = new Map();
   
     // Build initial vote map
@@ -121,12 +123,12 @@ class Session {
       }
     }
     
-    /*
-    // Call follow-up logic
+
+
     if (this.currentChapter === 0) {
-      this.parseOutlineBuildPhases(winningChapter);
+      this.outline= winningChapter;
     }
-    */
+
 
     // Store voted Chapters
     for (const agent of this.agents) {
@@ -136,6 +138,8 @@ class Session {
     this.phases[this.currentChapter].setText(winningChapter);
     this.story.addChapter(winningChapter);
     this.currentChapter++;
+
+    this.debateTranscript = "";
   
     return winningChapter;
   }
@@ -173,28 +177,45 @@ class Session {
     });
   }
 
-  async debate() {
+  async debate(proposalIndex = null) {
     const proposals = this.agents.map(agent => agent.chapter);
+    const indexes = proposalIndex !== null ? [proposalIndex] : proposals.map((_, i) => i);
+    const fullTranscriptParts = [];
   
-    // Step 1: Collect all responses
-    const responses = await Promise.all(
-      this.agents.map(agent => agent.debateAllProposals(proposals))
-    );
+    for (let pIndex of indexes) {
+      const currentProposal = proposals[pIndex];
+      const priorResponses = [];
+      const agentLines = [];
   
-    // Step 2: Build a full transcript
-    const transcript = responses
-      .map((resp, index) => `Agent ${this.agents[index].persona} says:\n${resp}`)
-      .join("\n\n");
+      for (let aIndex = 0; aIndex < this.agents.length; aIndex++) {
+        const agent = this.agents[aIndex];
+  
+        const debateSoFar = priorResponses
+          .map((r, i) => `Agent ${this.agents[i].persona} said:\n${r}`)
+          .join("\n\n");
+  
+        // 🔁 Use agent's method now
+        const response = await agent.debateProposal(currentProposal, debateSoFar);
+        agent.debateResponse = response;
+  
+        priorResponses.push(response);
+        agentLines.push(`Agent ${agent.persona}:\n${response}`);
+      }
+  
+      const proposalTranscript = `### Proposal ${pIndex + 1} Debate\n\n${agentLines.join("\n\n")}`;
+      fullTranscriptParts.push(proposalTranscript);
+    }
+  
+    // ✅ Only set debateTranscript once after all proposals
+    const newTranscript = fullTranscriptParts.join("\n\n---\n\n");
 
-      this.debateTranscript = transcript;
+    this.debateTranscript = (this.debateTranscript || "") + "\n\n" + newTranscript;
+
   
- 
-  }
-  
-  
+    return this.debateTranscript;
+  }  
 }
 
-  
   export default Session;
   
   

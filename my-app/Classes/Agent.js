@@ -35,13 +35,13 @@ class Agent {
      * @param {string} context - Additional context for continuity.
      * @returns {Promise<string>} - The generated chapter.
      */
-    async generateChapter(outline, chapter) {
+    async generateChapter(winningOutline, winningChapter) {
         if(this.aiInstance == "openai"){
             try {
-                console.log("Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline) + ". With the context of this last chapter: " + JSON.stringify(this.chapter));
+                console.log("Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(winningOutline) + ". With the context of this last chapter: " + JSON.stringify(winningChapter));
                 // Write a chapter using API
                 const response = await API.post('/api/openai', {
-                    userPrompt: "Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline) + ". With the context of this last chapter: " + JSON.stringify(this.chapter),
+                    userPrompt: "Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(winningOutline) + ". With the context of this last chapter: " + JSON.stringify(winningChapter),
                     persona: this.persona, // Using the persona from the Agent instance
                 });
                 this.chapter = response.data.message;
@@ -65,6 +65,7 @@ class Agent {
                 this.chapter = res.data.choices[0].message.content;
                 this.chapterHistory = [...this.chapterHistory, this.chapter];
                 this.chapterCount++;
+            
                 return this.chapter // Assuming the backend sends 'message' in the response
                 
                 
@@ -75,6 +76,7 @@ class Agent {
             }
 
         }
+    
     }
 
         // Get the current item
@@ -280,7 +282,6 @@ class Agent {
             });
             this.outline = response.data.message;
             this.chapter = this.outline;
-            console.log(this.outline);
             return this.outline;
     
         } catch (error) {
@@ -288,19 +289,29 @@ class Agent {
             throw new Error('Failed to generate completion');
         }
     }
-    async debateAllProposals(proposals) {
+
+    async debateProposal(proposalText, priorDebate = "") {
+        const prompt = `
+      You are ${this.persona}, an AI author debating a single story proposal.
+      
+      Proposal:
+      ${proposalText}
+      
+      ${priorDebate ? `--- Previous agent responses ---\n${priorDebate}` : ''}
+      
+      Offer your critique of the proposal. If other agents have spoken, you may reference or respond to their arguments.
+      `;
+      
         try {
-          const res = await API.post("/api/debate", {
+          const res = await API.post("/api/openai", {
             persona: this.persona,
-            proposals: proposals
+            userPrompt: prompt
           });
       
-          this.debateResponse = res.data.message;
           return res.data.message;
-        } catch (error) {
-          console.error("Debate failed:", error.response?.data || error.message);
-          this.debateResponse = "Unable to complete debate.";
-          return this.debateResponse;
+        } catch (err) {
+          console.error(`Debate error for ${this.persona}:`, err.response?.data || err.message);
+          return "Unable to complete debate.";
         }
       }
        
