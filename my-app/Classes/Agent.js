@@ -18,6 +18,8 @@ class Agent {
         this.profile = personas[this.persona]; // attach profile
         this.agentid = "";
         this.chapters = [];
+        this.debateResponse = ""; // individual response
+
     }
 
     async generateOutline(prompt){
@@ -33,13 +35,13 @@ class Agent {
      * @param {string} context - Additional context for continuity.
      * @returns {Promise<string>} - The generated chapter.
      */
-    async generateChapter(outline, chapter) {
+    async generateChapter(winningOutline, winningChapter) {
         if(this.aiInstance == "openai"){
             try {
-                console.log("Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline) + ". With the context of this last chapter: " + JSON.stringify(this.chapter));
+                console.log("Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(winningOutline) + ". With the context of this last chapter: " + JSON.stringify(winningChapter));
                 // Write a chapter using API
                 const response = await API.post('/api/openai', {
-                    userPrompt: "Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(this.outline) + ". With the context of this last chapter: " + JSON.stringify(this.chapter),
+                    userPrompt: "Write chapter number " + this.chapterCount + " ,no longer than 100 words, of a story based on the following story outline: " + JSON.stringify(winningOutline) + ". With the context of this last chapter: " + JSON.stringify(winningChapter),
                     persona: this.persona, // Using the persona from the Agent instance
                 });
                 this.chapter = response.data.message;
@@ -63,6 +65,7 @@ class Agent {
                 this.chapter = res.data.choices[0].message.content;
                 this.chapterHistory = [...this.chapterHistory, this.chapter];
                 this.chapterCount++;
+            
                 return this.chapter // Assuming the backend sends 'message' in the response
                 
                 
@@ -73,6 +76,7 @@ class Agent {
             }
 
         }
+    
     }
 
         // Get the current item
@@ -222,31 +226,50 @@ class Agent {
      * 
      * @param {Map} chapters
      */
-    async vote(chaptersMap) {
-        const keysIterator = chaptersMap.keys();
+    async vote(chaptersMap, debateTranscript) {
+        this.debateResponse = "";
+        const chapterNumbers = new Map();
         let chapters = "";
         let i = 1;
-        //Prompt agent
-        const chapterNumbers = new Map();
-        for (const key of keysIterator) {
-            chapters = chapters + "Option " + i + " is:\n" + key + "\n";
-            chapterNumbers.set(i, key);
-            i++;
+      
+        for (const [chapterText] of chaptersMap.entries()) {
+          chapters += `Option ${i} is:\n${chapterText}\n\n`;
+          chapterNumbers.set(i, chapterText);
+          i++;
         }
+      
+      
+        const prompt = `
+      You are an AI author persona known as "${this.persona}". Below are several story continuations written by different authors. A debate has already occurred, and your own points are included below for context.
+      
+      --- DEBATE CONTEXT ---
+      ${debateTranscript}
+      ----------------------
+      
+      Your task: Pick your favorite writing sample from the following options. Respond with the number of the best option and your reasoning for the choice. For example: "2 - I preferred option 2 because..."
+      
+      --- OPTIONS ---
+      ${chapters}
+      `;
+      
         const response = await API.post('/api/openai', {
-            userPrompt: "Pick your favorite writing sample from the following options. Your response should be a number following by an explanation of your thoughts on each of the options. For example, if you like option 1, your response should be 1 and then your reasoning. These are the options: \n" + chapters,
-            persona: this.persona,
+          userPrompt: prompt,
+          persona: this.persona,
         });
-        
-        //Get analysis from response
-        const firstIntegerIndex = response.data.message.search(/\d/);
-        const analysis = response.data.message.substring(firstIntegerIndex + 1);
-        console.log("analysis is: \n" + analysis);
+      
+        const message = response.data.message;
+        const firstIntegerIndex = message.search(/\d/);
+        const voteNumber = parseInt(message[firstIntegerIndex]);
+        const analysis = message.substring(firstIntegerIndex + 1).trim();
+      
+        console.log(`Agent ${this.persona} voted for option ${voteNumber}`);
+        console.log("Reasoning:\n" + analysis);
+      
         this.votingReasoning.push(analysis);
-        
-
-        return chapterNumbers.get(parseInt(response.data.message));
-    }
+      
+        return chapterNumbers.get(voteNumber);
+      }
+      
 
     /**
      * 
@@ -260,7 +283,6 @@ class Agent {
             });
             this.outline = response.data.message;
             this.chapter = this.outline;
-            console.log(this.outline);
             return this.outline;
     
         } catch (error) {
@@ -268,6 +290,49 @@ class Agent {
             throw new Error('Failed to generate completion');
         }
     }
+
+    async debateProposal(proposalText, priorDebate = "") {
+        this.debateResponse = "";
+const prompt = `
+You are ${this.persona}, one of several AI author personas participating in a collaborative story debate.
+
+Here is the proposal under discussion:
+---
+${proposalText}
+---
+
+${
+  priorDebate
+    ? `Below are comments from the other agents who have spoken so far. Respond to their points directly, by name, as if you are sitting at a roundtable discussion:\n\n${priorDebate}\n\n`
+    : ''
 }
+
+Now contribute your own thoughts to the conversation:
+- Build on earlier ideas, challenge them, or add new insights — just like a thoughtful colleague would.
+- Keep your tone conversational, collaborative, and human-like.
+- Use natural transitions like "I agree with Shakespeare on that point..." or "King raises a good question, but I think..."
+- Don’t restate the full proposal — focus on discussing it like a fellow writer would.
+- End with a question or idea to keep the discussion going.
+
+Keep it respectful, focused, and vivid.
+`;
+
+
+      
+        try {
+          const res = await API.post("/api/openai", {
+            persona: this.persona,
+            userPrompt: prompt
+          });
+      
+          return res.data.message;
+        } catch (err) {
+          console.error(`Debate error for ${this.persona}:`, err.response?.data || err.message);
+          return "Unable to complete debate.";
+        }
+      }
+       
+}
+
 
 export default Agent;

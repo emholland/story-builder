@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Agent from "../../../Classes/Agent";
 import {
   createNewSession,
   loadSessionFromLocalStorage,
+  getSessionAgents,
   generateChaptersForAgentsInParallel,
   callFakeVote,
   getAgents,
   saveSessionToFirebase,
-  user_id
+  user_id,
+  runDebatePhase 
 } from "../../../Controllers/sessionController.js";
 import "./StoryCreationPage.css";
 import "../FinalStoryPage/FinalStoryPage.css";
@@ -23,30 +23,33 @@ import ChapterInfoPopup from "../../Components/ChapterInfoPopup.jsx";
 const StoryCreation = () => {
   const [title, setTitle] = useState("");
   const [userInput, setUserInput] = useState("");
-  const [prompt, setPrompt] = useState("Write a story about a computer science student who learns they have superpowers.");
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isAccuracyPopupVisible, setIsAccuracyPopupVisible] = useState(false); // State to control accuracy popup visibility
   const [accuracyResult, setAccuracyResult] = useState('');
   const [agents, setAgents] = useState([]);
-  const [aiResponse, setAIResponse] = useState("");
-  const [aiLoading, setAILoading] = useState(false);
+
   const [chapterIndex, setChapterIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [chapterCount, setChapterCount] = useState(0);
   const [chapterTot, setChapterTot] = useState(0);
   const [chapterButtons, setChapterButtons] = useState([]);
-  const [storyIdea, setStoryIdea] = useState("");
-  const [lastUsedPrompt, setLastUsedPrompt] = useState("");
+
   const [button, setButton] = useState("generate");
   const [phase, setPhase] = useState("generate");
   const navigate = useNavigate();//Navigate to Final Story Page
-  const [votedChapterHistory, setVotedChapterHistory] = useState([]);
+
 
   const [isChpPopupOpen, setIsChpPopupOpen] = useState(false);
 
-  const textSocketRef = useRef(null);
+
 
   const [winningChapters, setWinningChapters] = useState([]);
+
+  const [proposalIndex, setProposalIndex] = useState(0);
+  const [debatedProposals, setDebatedProposals] = useState([]); // stores each debate text
+  const [isDebating, setIsDebating] = useState(false);
+
 
 
   
@@ -54,6 +57,11 @@ const StoryCreation = () => {
     setShowModal(true);
     setAgents(getAgents());
   }, []);
+
+  useEffect(() => {
+    console.log("Button state changed to:", button);
+  }, [button]);
+    
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
@@ -95,10 +103,44 @@ const StoryCreation = () => {
       );
     });
 
-    setButton("vote");
+    setButton("debate");
+  };
+
+  // ADD THIS NEW FUNCTION in StoryCreation component
+  const handleDebateProposal = async (proposalIndex) => {
+    setPhase("debate");
+    setButton("loading");
+  
+    try {
+      const transcript = await runDebatePhase(proposalIndex); // trigger one-proposal debate
+  
+      const updatedAgents = getSessionAgents();
+      console.log("Debate responses:", updatedAgents.map(a => a.debateResponse));
+      setAgents([...updatedAgents]);
+  
+      // Store the transcript per proposal
+      setDebatedProposals((prev) => {
+        const updated = [...prev];
+        updated[proposalIndex] = transcript;
+        return updated;
+      });
+  
+      const next = proposalIndex + 1;
+      setProposalIndex(next);
+  
+      if (next === agents.length) {
+        setButton("vote");
+        setProposalIndex(0);
+      } else {
+        setButton("debate");
+      }
+    } catch (err) {
+      console.error("Debate failed:", err);
+      setButton("generate");
+    }
   };
   
-
+    
   const handleVoting = async () => {
     setPhase("vote");
     setButton("loading");
@@ -355,6 +397,12 @@ const StoryCreation = () => {
                                         </ReactMarkdown>
                                         
                                         )}
+
+                                        {phase === "debate" && (
+                                          <ReactMarkdown>
+                                            {agent.debateResponse || "*...*"}
+                                          </ReactMarkdown>
+                                        )}
                                         </div>
                                       </div>
                                       <div className="agent-side right empty" />
@@ -373,6 +421,12 @@ const StoryCreation = () => {
                                             : "*...*"}
                                           </ReactMarkdown>
                                           
+                                          )}
+
+                                          {phase === "debate" && (
+                                            <ReactMarkdown>
+                                              {agent.debateResponse || "*...*"}
+                                            </ReactMarkdown>
                                           )}
 
                                           {phase === "vote" && (
@@ -440,6 +494,21 @@ const StoryCreation = () => {
           Generate Chapters
         </button>
       )}
+
+{button === "debate" && (
+  <div className="debate-phase-display">
+    <div className="debate-section">
+      <button
+        className="bottom-button"
+        onClick={() => handleDebateProposal(proposalIndex)}
+        disabled={isDebating}
+      >
+        Debate Proposal {proposalIndex + 1}
+      </button>
+    </div>
+  </div>
+)}
+
       
       {button === "vote" && (
         <button className="bottom-button" onClick={handleVoting}>

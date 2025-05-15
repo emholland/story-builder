@@ -21,6 +21,8 @@ const getAgents = () => {
   return agents;
 };
 
+
+
 const resetAgents = () => {
   agents.length = 0;
 };
@@ -32,7 +34,7 @@ export {
   agent_ids,
   story_id,
   session_id,
-  user_id
+  user_id,
 };
 
 const auth = getAuth();
@@ -121,7 +123,6 @@ export const resetSession = () => {
 };
 
 export const generateChaptersForAgentsInParallel = async (onProgress) => {
-  console.log(currentSession);
 
   await Promise.all(currentSession.agents.map(async (agent) => {
       if (currentSession.currentChapter == 0) {
@@ -139,7 +140,7 @@ export const generateChaptersForAgentsInParallel = async (onProgress) => {
           }
       } else {
           try {
-              const chapter = await agent.generateChapter(currentSession.story.outline, currentSession.story.chapters[currentSession.currentChapter]);
+              const chapter = await agent.generateChapter(currentSession.outline, currentSession.story.chapters[currentSession.currentChapter]);
               agent.chapters.push(chapter); 
               if (typeof onProgress === "function") {
                   onProgress(agent, chapter);
@@ -255,7 +256,6 @@ export const saveSessionToFirebase = async (userId) => {
     await updateDoc(sessionRef, { session_id: session_ID });
     session_id = session_ID;
 
-    console.log("Session ID list: ", session_id);
 
     return { success: true, message: "Session created and saved successfully", session: { ...sessionData, session_ID } };
   } catch (error) {
@@ -265,9 +265,6 @@ export const saveSessionToFirebase = async (userId) => {
 };
 
   export const updateAgentsOutline = async (user_id) => {
-    console.log("USERID: ", user_id);
-    console.log("Current Sesh: ", currentSession);
-    console.log("Current Sesh Agents: ", currentSession.agents);
     if (!user_id || !currentSession || !Array.isArray(currentSession.agents) || currentSession.agents.length === 0) {
       console.error("User ID and valid agents array are required to update outlines.");
       return { success: false, message: "Invalid input data." };
@@ -278,16 +275,13 @@ export const saveSessionToFirebase = async (userId) => {
         const agentRef = doc(db, "Users", user_id, "Agents", agent.agentid);
         if (agent.outline) {
           await updateDoc(agentRef, { outline: agent.outline });
-          console.log(`Updated outline for agent ${agent.agentid}:`, agent.outline);
         }
       });
   
       await Promise.all(updatePromises);
   
-      console.log("All agent outlines updated successfully.");
       return { success: true, message: "All agent outlines updated." };
     } catch (error) {
-      console.error("Error updating agent outlines:", error);
       return { success: false, message: "Failed to update agent outlines." };
     }
   };
@@ -303,7 +297,6 @@ export const saveSessionToFirebase = async (userId) => {
         const agentRef = doc(db, "Users", user_id, "Agents", agent.agentid);
         if (agent.chapters) {
           await updateDoc(agentRef, { chapters: agent.chapters });
-          console.log(`Updated chapter for agent ${agent.agentid}:`, agent.chapters);
         }
       });
   
@@ -383,20 +376,16 @@ export const fetchUsersPastSessions = async (user_id) => {
   }
 };
 
-// Return full session object based on title
-/*export const fetchPastSessionByTitle = async (title) => {
-  await new Promise((res) => setTimeout(res, 150));
-  const session = fakeSessions.find(session => session.storyTitle === title);
-  if (!session) return null;
-
-   // Inject profile into agents
-   session.agents = session.agents.map(agent => ({
-    ...agent,
-    profile: personas[agent.persona] || null,
-  }));
-
-  return session;
-};*/
+export const runDebatePhase = async (proposalIndex = null) => {
+  try {
+    const transcript = await currentSession.debate(proposalIndex);
+    console.log("Debate phase completed.");
+    return transcript;
+  } catch (err) {
+    console.error("Error during debate phase:", err);
+    throw err;
+  }
+};
 
 export const fetchPastSessionByTitle = async (title) => {
   try {
@@ -439,4 +428,6 @@ export const fetchPastSessionByTitle = async (title) => {
     console.error("Error fetching session by title:", error);
     return null;
   }
+
+  
 };
