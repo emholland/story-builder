@@ -452,6 +452,26 @@ const StoryCreation = () => {
                             })}
                           </div>
 
+                          <div className="agent-table-section">
+                            <div className="agent-portrait-row">
+                              {agents.map((agent, index) => (
+                                <div className="agent-behind-table" key={index}>
+                                  <img
+                                    className="agent-headshot"
+                                    src={agent.profile?.picture || `https://api.dicebear.com/7.x/adventurer/svg?seed=${agent.persona}`}
+                                    alt={agent.persona}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                            <img
+                              src="/images/table.png" // make sure this file is in your public folder or use import if it's local
+                              alt="table"
+                              className="table-image"
+                            />
+                          </div>
+
+
   {isAccuracyPopupVisible && (
     <div className="popup-overlay" onClick={() => setIsAccuracyPopupVisible(false)}>
       <div className="popup-content" onClick={(e) => e.stopPropagation()}>

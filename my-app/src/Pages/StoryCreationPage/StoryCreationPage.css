@@ -546,3 +546,49 @@ h3 {
   }
 }
 
+
+.agent-table-section {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.agent-portrait-row {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 20px; /* adjust this to fine-tune the portrait height */
+  width: 100%;
+  z-index: 1;
+}
+
+.agent-behind-table {
+  width: 80px;
+  height: 80px;
+  margin: 0 12px;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+.agent-headshot {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.table-image {
+  width: 100%;
+  max-width: 1000px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+
